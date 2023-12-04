@@ -1,0 +1,10 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+  background: url(assets/bg-theme.png);
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #fafafa;
+}
