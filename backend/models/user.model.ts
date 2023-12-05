@@ -23,6 +23,11 @@ const userSchema = new mongoose.Schema<IUser>({
     type: String,
     default: "student",
   },
+  verification:{
+    "0":String,
+    "1":String,
+    "2":String
+  },
   isBlock: {
     type: Boolean,
     default: false,

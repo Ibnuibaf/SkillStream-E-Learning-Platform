@@ -1,4 +1,8 @@
-// import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import { selectUser, setUser } from "../redux/slices/authSlice";
 const qa = [
   {
     title: "Share Your Knowledge",
@@ -35,41 +39,109 @@ const qa = [
   },
 ];
 function AuthorizePage() {
+  const [step, setStep] = useState(0);
+  const user=useSelector(selectUser)
+  const dispatch=useDispatch()
+  const [Authorization, setAuthorization] = useState<{ [key: string]: string }>(
+    {
+      "0": "",
+      "1": "",
+      "2": "",
+    }
+  );
+    const token=localStorage.getItem("SkillStreamToken")
+    const proceedInstructor=async()=>{
+      try {
+        console.log("Hello are you there");
+        
+        const res=await axios.post('http://localhost:3000/api/user/authorize',{updates:Authorization,id:user?.id},{
+          headers: {
+            Authorization: token,
+          },
+        })
+        if(!res.data.user){
+          toast(res.data.message)
+        }
+        dispatch(setUser({
+          id:res.data.user._id,
+          email:res.data.user.email,
+          avatar:res.data.user.avatar,
+          role:res.data.user.role,
+          name:res.data.user.name
+        }))
+        toast(`${res.data.user.name} is now Instructor`)
+      } catch (error:any) {
+        console.error(error);
+        toast(error.response.data.message)
+      }
+    }
   return (
-    <div className="">
-      <h3 className="flex border rounded-3xl px-2 w-max  m-5 bg-white text-slate-950 font-semibold text-xs">
-        STEP 1 / 3
+    <div className="h-screen">
+      <h3 className="flex border rounded-3xl px-2 w-max  m-5 bg-white text-slate-950 font-semibold text-sm">
+        STEP {step + 1} / 3
       </h3>
-      {qa.map((sec) => {
-        return (
-          <div className="flex justify-center items-center h-full text-start">
-            <div className="border p-7 rounded-xl h-min max-w-md">
-              <div className="">
-                <p className="text-xl font-bold">{sec.title}</p>
-                <p className="mt-3 text-xs">{sec.desc}</p>
-              </div>
-              <div className="mt-4 ">
-                <p className="font-semibold">{sec.question}</p>
-                <div className="text-sm my-3">
-                  {sec.options.map((option) => {
-                    return (
-                      <div className="border gap-2 flex p-2 items-center my-1">
-                        <input
-                          type="radio"
-                          name="q1"
-                          id=""
-                          className="h-4 w-4"
-                        />
-                        <p>{option}</p>
-                      </div>
-                    );
-                  })}
+      <div className="section flex justify-center items-center h-[85%] text-start">
+        <div className="border p-7 rounded-xl h-min max-w-lg">
+          <div className="">
+            <p className="text-2xl font-bold">{qa[step].title}</p>
+            <p className="mt-3 text-sm">{qa[step].desc}</p>
+          </div>
+          <div className="mt-4">
+            <p className="font-semibold text-xl">{qa[step].question}</p>
+            <div className="text-md my-3">
+              {qa[step].options.map((option, index) => (
+                <div
+                  className="border gap-2 flex p-2 items-center my-1"
+                  key={option}
+                >
+                  <input
+                    type="radio"
+                    name={`question_${step}`}
+                    className="h-4 w-4"
+                    value={option}
+                    checked={Authorization[`${step}`] === option}
+                    onChange={(e) =>
+                      setAuthorization({
+                        ...Authorization,
+                        [`${step}`]: e.target.value,
+                      })
+                    }
+                  />
+                  <label htmlFor={`question_${step}_option_${index}`}>
+                    {option}
+                  </label>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
-        );
-      })}
+        </div>
+      </div>
+      <div className="bg-custom-500 py-4 flex justify-between px-10">
+        <button
+          className="border rounded-md h-min py-1 px-3 font-semibold duration-300 hover:bg-white hover:text-slate-950"
+          disabled={step === 0}
+          onClick={() => setStep((prevStep) => prevStep - 1)}
+        >
+          Prev
+        </button>
+        {step == 2 ? (
+          <button
+            className="bg-white border text-slate-950 rounded-md h-min py-1 font-semibold px-3 duration-300 hover:bg-transparent hover:text-white"
+            type="button"
+            onClick={() => {proceedInstructor()}}
+          >
+            Proceed
+          </button>
+        ) : (
+          <button
+            className="bg-white border text-slate-950 rounded-md h-min py-1 font-semibold px-3 duration-300 hover:bg-transparent hover:text-white"
+            disabled={step === 2}
+            onClick={() => setStep((prevStep) => prevStep + 1)}
+          >
+            Next
+          </button>
+        )}
+      </div>
     </div>
   );
 }

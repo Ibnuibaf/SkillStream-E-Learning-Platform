@@ -85,6 +85,17 @@ class UserController{
 			})
         }
     }
+    async updateRole(req:Request,res:Response){
+        try {
+            const response=await this.userUsecase.updateRole(req.body)
+            res.status(response.status).send(response.data)
+        } catch (error) {
+            res.status(500).send({
+				success: false,
+				message: "server error"
+			})
+        }
+    }
 }
 
 

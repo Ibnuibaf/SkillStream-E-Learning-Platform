@@ -116,6 +116,21 @@ class UserRepository {
       };
     }
   }
+  async updateRole(id:string,updates:any) {
+    try {
+      const userDetails = await Users.findByIdAndUpdate(id,{verification:updates,role:"instructor"},{new:true});
+      return {
+        success: true,
+        message: "user details updated",
+        data: userDetails,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to update ${error}`,
+      };
+    }
+  }
 }
 
 export default UserRepository;

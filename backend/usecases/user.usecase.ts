@@ -303,6 +303,28 @@ class UserUsecase {
       };
     }
   }
+  async updateRole(body: any) {
+    try {
+      const { id,updates } = body;
+      const response = await this.userRepository.updateRole(id, updates);
+      return {
+        status: response.success ? 200 : 500,
+        data: {
+          success: response.success,
+          message: response.message,
+          user: response.data,
+        },
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        data: {
+          success: false,
+          message: "server error",
+        },
+      };
+    }
+  }
 }
 
 export default UserUsecase;

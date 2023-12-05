@@ -3,7 +3,7 @@ import InstructorSideBar from '../components/InstructorSideBar'
 
 function InstructorHomePage() {
   return (
-    <div className='min-h-screen flex flex-row '>
+    <div className=''>
         <InstructorSideBar/>
     </div>
   )
