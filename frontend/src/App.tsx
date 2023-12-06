@@ -8,7 +8,9 @@ import SignupPage from "./pages/SignupPage";
 import CoursesPage from "./pages/CoursesPage";
 import ProfilePage from "./pages/ProfilePage";
 import InstructorHomePage from "./pages/InstructorHomePage";
-import AuthorizePage from "./pages/AuthorizePage";
+import AdminDashboardPage from "./pages/AdminDashboardPage";
+import AdminStudentPage from "./pages/AdminStudentPage";
+import AdminInstructorPage from "./pages/AdminInstructorPage";
 function App() {
   return (
     <div className="min-h-screen">
@@ -20,7 +22,9 @@ function App() {
           <Route path="/courses" element={<CoursesPage/>}/>
           <Route path="/profile" element={<ProfilePage/>}/>
           <Route path="/instructor" element={<InstructorHomePage/>}/>
-          <Route path="/auth" element={<AuthorizePage/>}/>
+          <Route path="/admin" element={<AdminDashboardPage/>}/>
+          <Route path="/admin/students" element={<AdminStudentPage/>}/>
+          <Route path="/admin/instructors" element={<AdminInstructorPage/>}/>
         </Routes>
       </BrowserRouter>
       <ToastContainer/>

@@ -19,9 +19,11 @@ class UserUsecase {
   constructor(userRepository: UserRepository) {
     this.userRepository = userRepository;
   }
-  async getUsers() {
+  async getUsers(query:any) {
     try {
-      const response = await this.userRepository.getUsers();
+      console.log(query, "From usecase");
+
+      const response = await this.userRepository.getUsers(query);
       return {
         status: response.success ? 200 : 500,
         data: {
@@ -42,7 +44,6 @@ class UserUsecase {
   }
   async createUser(body: IUserBody) {
     try {
-      console.log(body, "From usecase");
 
       const { email, name, password, confirmPassword } = body;
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -182,6 +183,15 @@ class UserUsecase {
           },
         };
       }
+      if(response.data.isBlock){
+        return {
+          status: 404,
+          data: {
+            success: false,
+            message: "User is blocked by Admin",
+          },
+        };
+      }
       const comparedPassword = await bcrypt.compare(
         password,
         response.data.password
@@ -259,10 +269,11 @@ class UserUsecase {
       };
     }
   }
-  async blockUser(body: { id: string }) {
+  async blockUser(query:any) {
     try {
-      const { id } = body;
-      const response = await this.userRepository.blockUser(id);
+      let { id,isBlock } = query;
+      isBlock=Boolean(isBlock)
+      const response = await this.userRepository.blockUser(id,isBlock);
       return {
         status: response.success ? 200 : 500,
         data: {
@@ -281,10 +292,12 @@ class UserUsecase {
       };
     }
   }
-  async updateUser(body: IUser) {
+  async updateUser(details: any) {
     try {
-      const { id } = body;
-      const response = await this.userRepository.updateUser(id, body);
+      const { _id } = details;
+      console.log(details,"in usecase");
+      
+      const response = await this.userRepository.updateUser(_id, details);
       return {
         status: response.success ? 200 : 500,
         data: {

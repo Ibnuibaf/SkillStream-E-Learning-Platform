@@ -5,11 +5,17 @@ import UserController from "../controllers/user.controller";
 import AuthMiddleware from "../middlewares/auth.middleware";
 
 const Router = express.Router();
-const authMiddleware = new AuthMiddleware()
 const userRepository = new UserRepository();
+const authMiddleware = new AuthMiddleware(userRepository)
 const userUsecase = new UserUsecase(userRepository);
 const userController = new UserController(userUsecase);
 
+Router.get("/",(req:Request,res:Response,next:NextFunction)=>authMiddleware.authUser(req,res,next), (req: Request, res: Response) =>
+  userController.getUsers(req, res)
+);
+Router.patch("/status",(req:Request,res:Response,next:NextFunction)=>authMiddleware.authUser(req,res,next), (req: Request, res: Response) =>
+  userController.updateStatus(req, res)
+);
 Router.get("/find",(req:Request,res:Response,next:NextFunction)=>authMiddleware.authUser(req,res,next), (req: Request, res: Response) =>
   userController.findUser(req, res)
 );

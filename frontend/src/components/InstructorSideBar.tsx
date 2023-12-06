@@ -9,7 +9,7 @@ import {
   MdLogout,
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser, setUser } from "../redux/slices/authSlice";
+import { cleanUser, selectUser, setUser } from "../redux/slices/authSlice";
 // import AuthSection from "./AuthSection";
 import AuthorizePage from "../pages/AuthorizePage";
 import axios from "axios";
@@ -22,9 +22,14 @@ function InstructorSideBar() {
 
   const [role, setRole] = useState(user?.role);
 
+  const logoutUser=()=>{
+      localStorage.removeItem("SkillStreamToken")
+      dispatch(cleanUser())
+      toast("Instructor Logged Out!")
+      navigate('/')
+  }
   useEffect(() => {
-    const token = localStorage.getItem("SkillStreamToken");
-    console.log(token);
+   
 
     const fetchData = async () => {
       try {
@@ -71,7 +76,7 @@ function InstructorSideBar() {
             <div className="flex items-center  h-16 shadow-md">
               <div className="text-3xl flex items-center font-semibold">
                 <img
-                  src="../../public/SkillStream-Logo.png"
+                  src="/SkillStream-Logo.png"
                   alt=""
                   className="h-12"
                 />
@@ -142,7 +147,7 @@ function InstructorSideBar() {
                 </Link>
               </li>
               <li>
-                <button className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-red-700">
+                <button type="button" onClick={logoutUser} className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-red-700">
                   <span className="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-red-700">
                     <MdLogout size={24} />
                   </span>

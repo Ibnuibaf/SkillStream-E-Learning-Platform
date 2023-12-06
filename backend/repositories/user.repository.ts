@@ -2,9 +2,11 @@ import IUser from "../interfaces/user";
 import IUserBody from "../interfaces/userBody";
 import Users from "../models/user.model";
 class UserRepository {
-  async getUsers() {
+  async getUsers(filter:any) {
     try {
-      const users = await Users.find({}, { password: 0 });
+      console.log(filter,"From repository");
+
+      const users = await Users.find(filter, { password: 0 });
       return {
         success: true,
         message: "All users fetched",
@@ -19,7 +21,6 @@ class UserRepository {
   }
   async createUser(details:IUserBody){
     try {
-      console.log(details,"From repository");
       const userDetails=await Users.create(details)
       return {
         success: true,
@@ -55,7 +56,8 @@ class UserRepository {
           email:userDetails.email,
           avatar:userDetails.avatar,
           id:userDetails._id,
-          role:userDetails.role
+          role:userDetails.role,
+          isBlock:userDetails.isBlock
         },
       };
     } catch (error) {
@@ -86,9 +88,9 @@ class UserRepository {
       };
     }
   }
-  async blockUser(id:string) {
+  async blockUser(id:string,status:boolean) {
     try {
-      const userDetails = await Users.findByIdAndUpdate(id,{isBlock:true});
+      const userDetails = await Users.findByIdAndUpdate(id,{isBlock: !status});
       return {
         success: true,
         message: "user has been blocked",
@@ -101,9 +103,17 @@ class UserRepository {
       };
     }
   }
-  async updateUser(id:string,updates:IUser) {
+  async updateUser(id:string,updates:any) {
     try {
+      
       const userDetails = await Users.findByIdAndUpdate(id,updates,{new:true});
+      console.log(userDetails,"hehhehehhehehhe");
+      if(!userDetails){
+        return {
+          success: false,
+          message: "No user found",
+        };
+      }
       return {
         success: true,
         message: "user details updated",

@@ -1,10 +1,15 @@
 import jwt from "jsonwebtoken";
 import { NextFunction, Request, Response } from "express";
 import MyJWTPayLoad from "../interfaces/jwt";
+import UserRepository from '../repositories/user.repository'
 
 class AuthMiddleware {
+  private userRepository: UserRepository;
   private decodeToken(token: string): MyJWTPayLoad {
     return jwt.verify(token, "itssecret") as MyJWTPayLoad;
+  }
+  constructor(userRepository: UserRepository) {
+    this.userRepository = userRepository;
   }
 
   async authUser(req: Request, res: Response, next: NextFunction) {
@@ -19,8 +24,9 @@ class AuthMiddleware {
           },
         };
       }
-      const response = this.decodeToken(token);
-      if (response.id) {
+      const tokenPayload = this.decodeToken(token);
+      const response=await this.userRepository.findUser(tokenPayload.id) 
+      if (response.data?.id && !response.data.isBlock) {
         next();
       } else {
         res.status(500).send({
