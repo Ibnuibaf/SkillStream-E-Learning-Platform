@@ -21,9 +21,8 @@ class UserUsecase {
   }
   async getUsers(query:any) {
     try {
-      console.log(query, "From usecase");
-
-      const response = await this.userRepository.getUsers(query);
+      const {role,search}=query
+      const response = await this.userRepository.getUsers(role,search);
       return {
         status: response.success ? 200 : 500,
         data: {

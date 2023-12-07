@@ -2,11 +2,15 @@ import IUser from "../interfaces/user";
 import IUserBody from "../interfaces/userBody";
 import Users from "../models/user.model";
 class UserRepository {
-  async getUsers(filter:any) {
+  async getUsers(role: string, regex: string) {
     try {
-      console.log(filter,"From repository");
 
-      const users = await Users.find(filter, { password: 0 });
+      const users = regex
+        ? await Users.find(
+            { role: role, email: { $regex: regex } },
+            { password: 0 }
+          )
+        : await Users.find({ role: role }, { password: 0 });
       return {
         success: true,
         message: "All users fetched",
@@ -19,16 +23,16 @@ class UserRepository {
       };
     }
   }
-  async createUser(details:IUserBody){
+  async createUser(details: IUserBody) {
     try {
-      const userDetails=await Users.create(details)
+      const userDetails = await Users.create(details);
       return {
         success: true,
         message: "user details fetched",
         data: {
-          id:userDetails._id,
-          email:userDetails.email,
-          role:userDetails.role
+          id: userDetails._id,
+          email: userDetails.email,
+          role: userDetails.role,
         },
       };
     } catch (error) {
@@ -37,12 +41,11 @@ class UserRepository {
         message: `Failed to fetch ${error}`,
       };
     }
-
   }
   async findUser(id: string) {
     try {
       const userDetails = await Users.findById(id);
-      if(!userDetails){
+      if (!userDetails) {
         return {
           success: false,
           message: `User not found`,
@@ -52,12 +55,12 @@ class UserRepository {
         success: true,
         message: "user details fetched",
         data: {
-          name:userDetails.name,
-          email:userDetails.email,
-          avatar:userDetails.avatar,
-          id:userDetails._id,
-          role:userDetails.role,
-          isBlock:userDetails.isBlock
+          name: userDetails.name,
+          email: userDetails.email,
+          avatar: userDetails.avatar,
+          id: userDetails._id,
+          role: userDetails.role,
+          isBlock: userDetails.isBlock,
         },
       };
     } catch (error) {
@@ -67,10 +70,10 @@ class UserRepository {
       };
     }
   }
-  async authenticateUser(email:string) {
+  async authenticateUser(email: string) {
     try {
-      const userDetails = await Users.findOne({email});
-      if(!userDetails){
+      const userDetails = await Users.findOne({ email });
+      if (!userDetails) {
         return {
           success: true,
           message: "No user found",
@@ -88,9 +91,11 @@ class UserRepository {
       };
     }
   }
-  async blockUser(id:string,status:boolean) {
+  async blockUser(id: string, status: boolean) {
     try {
-      const userDetails = await Users.findByIdAndUpdate(id,{isBlock: !status});
+      const userDetails = await Users.findByIdAndUpdate(id, {
+        isBlock: !status,
+      });
       return {
         success: true,
         message: "user has been blocked",
@@ -103,12 +108,13 @@ class UserRepository {
       };
     }
   }
-  async updateUser(id:string,updates:any) {
+  async updateUser(id: string, updates: any) {
     try {
-      
-      const userDetails = await Users.findByIdAndUpdate(id,updates,{new:true});
-      console.log(userDetails,"hehhehehhehehhe");
-      if(!userDetails){
+      const userDetails = await Users.findByIdAndUpdate(id, updates, {
+        new: true,
+      });
+      console.log(userDetails, "hehhehehhehehhe");
+      if (!userDetails) {
         return {
           success: false,
           message: "No user found",
@@ -126,9 +132,13 @@ class UserRepository {
       };
     }
   }
-  async updateRole(id:string,updates:any) {
+  async updateRole(id: string, updates: any) {
     try {
-      const userDetails = await Users.findByIdAndUpdate(id,{verification:updates,role:"instructor"},{new:true});
+      const userDetails = await Users.findByIdAndUpdate(
+        id,
+        { verification: updates, role: "instructor" },
+        { new: true }
+      );
       return {
         success: true,
         message: "user details updated",

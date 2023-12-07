@@ -70,8 +70,8 @@ function AdminSideBar() {
     setRole(user?.role);
   }, [token, user]);
   return (
-    <>
-      <div className="flex flex-col w-60 bg-gradient-to-r from-gray-900 to-slate-950 rounded-r-3xl overflow-hidden">
+    <div className="sticky top-0 z-50 ">
+      <div className="flex flex-col w-60 bg-gradient-to-r from-gray-900 to-slate-950 overflow-hidden h-screen">
         <div className=" items-center  h-16 shadow-md ">
           <div className="text-3xl flex items-center font-semibold">
             <img src="/SkillStream-Logo.png" alt="" className="h-12" />
@@ -194,7 +194,7 @@ function AdminSideBar() {
           </li>
         </ul>
       </div>
-    </>
+    </div>
   );
 }
 

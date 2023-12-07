@@ -9,7 +9,6 @@ class UserController{
 
     async getUsers(req:Request,res:Response){
         try {
-            console.log(req.query,"From controller");
 
             const response=await this.userUsecase.getUsers(req.query)
             res.status(response.status).send(response.data)

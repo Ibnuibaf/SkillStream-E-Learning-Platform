@@ -1,14 +1,18 @@
-import React from 'react'
-import StudentsTable from '../components/StudentsTable'
-import AdminSideBar from '../components/AdminSideBar'
+import React from "react";
+import StudentsTable from "../components/StudentsTable";
+import AdminSideBar from "../components/AdminSideBar";
 
 function AdminStudentPage() {
   return (
     <div className="min-h-screen flex flex-row ">
-        <AdminSideBar/>
-        <StudentsTable/>
+      <div className="">
+        <AdminSideBar />
+      </div>
+      <div className="w-full ">
+        <StudentsTable />
+      </div>
     </div>
-  )
+  );
 }
 
-export default AdminStudentPage
+export default AdminStudentPage;
