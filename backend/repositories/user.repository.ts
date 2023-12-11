@@ -91,6 +91,30 @@ class UserRepository {
       };
     }
   }
+  async changePassword(email: string, password: string) {
+    try {
+      const userDetails = await Users.updateOne({email:email},{$set:{password:password}}, {
+        new: true,
+      });
+      console.log(userDetails, "hehhehehhehehhe");
+      if (!userDetails) {
+        return {
+          success: false,
+          message: "No user found",
+        };
+      }
+      return {
+        success: true,
+        message: "user details updated",
+        data: userDetails,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to update ${error}`,
+      };
+    }
+  }
   async blockUser(id: string, status: boolean) {
     try {
       const userDetails = await Users.findByIdAndUpdate(id, {

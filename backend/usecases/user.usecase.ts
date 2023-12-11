@@ -109,6 +109,62 @@ class UserUsecase {
       };
     }
   }
+  async changePassword(body: IUserBody) {
+    try {
+
+      const { email, password, confirmPassword } = body;
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        return {
+          status: 500,
+          data: {
+            success: false,
+            message: "Give a valid Email",
+          },
+        };
+      }
+      if (password != confirmPassword || password.length < 6) {
+        return {
+          status: 500,
+          data: {
+            success: false,
+            message: "Retry another password by matching confirmation",
+          },
+        };
+      }
+      const hashedPassword = await bcrypt.hash(password, 10);
+      const response = await this.userRepository.changePassword(
+        email,
+        hashedPassword,
+      );
+      if(!response.data){
+        return {
+          status: 500,
+          data: {
+            success: false,
+            message: response.message,
+          },
+        };
+      }
+
+      return {
+        status: response.success ? 200 : 500,
+        data: {
+          success: response.success,
+          message: response.message,
+          user: response.data
+        },
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        data: {
+          success: false,
+          message: "server error",
+        },
+      };
+    }
+  }
   async sendOTP(email: string) {
     try {
       const otp: string = `${Math.floor(1000 + Math.random() * 9000)}`;
@@ -124,7 +180,7 @@ class UserUsecase {
         to: email,
         subject: "Verify Your Email in SkillStream",
         html: `<p>Hey ${email} Here is your Verification OTP: <br> Your OTP is <b>${otp}</b> </p><br>
-              <i>Otp will Expire in 1 Minute</i>`,
+              <i>Otp will Expire in 30 seconds</i>`,
       };
       transporter.sendMail(mailOptions, (err) => {
         if (err) {

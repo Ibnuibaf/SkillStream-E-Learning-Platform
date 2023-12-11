@@ -1,30 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-// import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-// import { selectUser, setUser } from "../redux/slices/authSlice";
 
-interface IUserDetails {
-  name: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-}
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
 
-function SignupSection() {
+function ForgotPass() {
   const [otpWait, setOtpWait] = useState(false);
-  const [userDetails, setUserDetails] = useState<IUserDetails>({
-    name: "",
+  const token = localStorage.getItem("SkillStreamToken");
+  const [userDetails, setUserDetails] = useState({
     email: "",
     password: "",
     confirmPassword: "",
   });
   const [counter, setCounter] = useState(30);
   const [OTP, setOTP] = useState("");
-  const token = localStorage.getItem("SkillStreamToken");
   const navigate = useNavigate();
   // const dispatch=useDispatch()
 
@@ -52,7 +42,6 @@ function SignupSection() {
         return;
       }
 
-      console.log(res.data.otp);
       localStorage.setItem("otp", res.data.otp);
       toast.success(`OTP send to your email`);
       setTimeout(() => {
@@ -75,7 +64,6 @@ function SignupSection() {
       if (
         !userDetails.confirmPassword ||
         !userDetails.email ||
-        !userDetails.name ||
         !userDetails.password ||
         !OTP
       ) {
@@ -83,9 +71,6 @@ function SignupSection() {
       }
       if (!emailRegex.test(userDetails.email)) {
         return toast("Enter a valid email");
-      }
-      if (!usernameRegex.test(userDetails.name)) {
-        return toast("Only Letters and characters in username");
       }
       if (userDetails.password.length < 6) {
         return toast("Password should contain minimum 6 characters");
@@ -103,22 +88,22 @@ function SignupSection() {
       //   console.log(formData);
 
       const res = await axios.post(
-        "http://localhost:3000/api/user/register",
+        "http://localhost:3000/api/user/recover",
         userDetails
       );
-      if (!res.data.token) {
+      if (!res.data.user) {
         toast(res.data.message);
         return;
       }
-      localStorage.setItem("SkillStreamToken", res.data.token);
-      toast(`User account has been created`);
-      navigate("/");
+      toast(`User password has been updated login to account`);
+      navigate("/login");
     } catch (error: any) {
       console.error("Error submitting data:", error);
 
       toast(error.response.data.message);
     }
   };
+
   useEffect(() => {
     if (token) {
       toast("User already logged In");
@@ -128,10 +113,10 @@ function SignupSection() {
   return (
     <div className="flex justify-center items-center h-[90%]">
       <div className="border-2 w-min p-5">
-        <p className="text-2xl font-bold mb-2">Sign Up</p>
+        <p className="text-2xl font-bold mb-2">Recover Account</p>
         <p className="font-medium mb-5">
-          Empower your journey of knowledge with us, where learning knows no
-          bounds.
+          Guard your keys to the digital realm. Reset, renew, and reclaim your
+          access with a secure password.
         </p>
         <div className=" p-2 w-80">
           <form action="" onSubmit={submitForm}>
@@ -140,49 +125,11 @@ function SignupSection() {
                 type="text"
                 name=""
                 id=""
-                placeholder="Enter your Username"
-                className="w-full py-2 px-3 border bg-transparent"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setUserDetails({ ...userDetails, name: e.target.value })
-                }
-              />
-            </div>
-            <div className="my-5">
-              <input
-                type="text"
-                name=""
-                id=""
                 placeholder="Enter your Email"
                 className="w-full py-2 px-3 border bg-transparent"
+                value={userDetails.email}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                   emailOnChange(e)
-                }
-              />
-            </div>
-            <div className="my-5">
-              <input
-                type="password"
-                name=""
-                id=""
-                placeholder="Enter your password"
-                className="w-full py-2 px-3 border bg-transparent"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setUserDetails({ ...userDetails, password: e.target.value })
-                }
-              />
-            </div>
-            <div className="my-5">
-              <input
-                type="password"
-                name=""
-                id=""
-                placeholder="Confirm your password"
-                className="w-full py-2 px-3 border bg-transparent"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setUserDetails({
-                    ...userDetails,
-                    confirmPassword: e.target.value,
-                  })
                 }
               />
             </div>
@@ -216,16 +163,40 @@ function SignupSection() {
                 <p className="text-gray-400 text-right">OTP valid for 30sec </p>
               )}
             </div>
-            <div className="text-left">
-              <Link to={"/login"} className="underline hover:text-red-700">
-                Already have an account?
-              </Link>
+            <div className="my-5">
+              <input
+                type="password"
+                name=""
+                id=""
+                placeholder="Enter your new password"
+                className="w-full py-2 px-3 border bg-transparent"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setUserDetails({ ...userDetails, password: e.target.value })
+                }
+              />
             </div>
+
+            <div className="my-5">
+              <input
+                type="password"
+                name=""
+                id=""
+                placeholder="Confirm your new password"
+                className="w-full py-2 px-3 border bg-transparent"
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setUserDetails({
+                    ...userDetails,
+                    confirmPassword: e.target.value,
+                  })
+                }
+              />
+            </div>
+
             <button
               type="submit"
               className="mt-9 bg-gradient-to-tr from-red-500 to-red-600 py-2 px-10 rounded-md"
             >
-              Sign Up
+              Recover
             </button>
           </form>
         </div>
@@ -234,4 +205,4 @@ function SignupSection() {
   );
 }
 
-export default SignupSection;
+export default ForgotPass;

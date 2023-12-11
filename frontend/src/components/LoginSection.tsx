@@ -85,7 +85,7 @@ function LoginSection() {
               />
             </div>
             <div className="text-left">
-              <Link to={"/forget"}>
+              <Link to={"/forgot"}>
                 Forget your{" "}
                 <span className="text-red-500 hover:text-red-700 font-medium underline">
                   password?

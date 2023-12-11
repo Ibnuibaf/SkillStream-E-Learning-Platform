@@ -28,6 +28,9 @@ Router.post("/otp", (req: Request, res: Response) =>
 Router.post("/login", (req: Request, res: Response) =>
   userController.loginUser(req, res)
 );
+Router.post("/recover", (req: Request, res: Response) =>
+  userController.changePassword(req, res)
+);
 Router.post("/authorize",(req:Request,res:Response,next:NextFunction)=>authMiddleware.authUser(req,res,next), (req: Request, res: Response) =>
   userController.updateRole(req, res)
 );

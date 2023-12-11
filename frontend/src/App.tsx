@@ -11,6 +11,7 @@ import InstructorHomePage from "./pages/InstructorHomePage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import AdminStudentPage from "./pages/AdminStudentPage";
 import AdminInstructorPage from "./pages/AdminInstructorPage";
+import ForgotPage from "./pages/ForgotPage";
 function App() {
   return (
     <div className="min-h-screen">
@@ -18,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/" element={<LandingPage/>}/>
           <Route path="/login" element={<LoginPage/>}/>
+          <Route path="/forgot" element={<ForgotPage/>}/>
           <Route path="/signup" element={<SignupPage/>}/>
           <Route path="/courses" element={<CoursesPage/>}/>
           <Route path="/profile" element={<ProfilePage/>}/>
