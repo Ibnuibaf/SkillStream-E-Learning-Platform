@@ -8,6 +8,7 @@ interface IUser {
   role?: string;
   isBlock?: boolean;
   verification?: [string];
+  verified?:boolean
 }
 
 export default IUser;

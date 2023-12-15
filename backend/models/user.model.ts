@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema<IUser>({
     type: Boolean,
     default: false,
   },
+  verified:{
+    type: Boolean,
+    default: false
+  }
 });
 
 const userModel = mongoose.model("User", userSchema);

@@ -3,15 +3,19 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 // import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
 // import { selectUser } from "../redux/slices/authSlice";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const passwordRegex =
+  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
 function LoginSection() {
   const token = localStorage.getItem("SkillStreamToken");
   const navigate = useNavigate();
 
   const [loginDetails, setLoginDetails] = useState({ email: "", password: "" });
+  const [validPass, setValidPass] = useState(false);
 
   useEffect(() => {
     if (token) {
@@ -29,8 +33,8 @@ function LoginSection() {
       if (!emailRegex.test(loginDetails.email)) {
         return toast("Enter a valid email");
       }
-      if (loginDetails.password.length < 6) {
-        return toast("Password should contain minimum 6 characters");
+      if (!passwordRegex.test(loginDetails.password)) {
+        return toast("Password should be strong");
       }
 
       const res = await axios.post(
@@ -39,18 +43,27 @@ function LoginSection() {
       );
       console.log("Is it hit here");
       if (!res.data.success) {
-        
         toast.error(res.data.message);
-        return
+        return;
       }
       localStorage.setItem("SkillStreamToken", res.data.token);
       toast("User logged In");
       navigate("/");
-    } catch (error:any) {
+    } catch (error: any) {
       console.error(error.response);
 
       toast(error.response.data.message);
     }
+  };
+
+  
+  const passwordOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (passwordRegex.test(loginDetails.password)) {
+      setValidPass(true);
+    } else {
+      setValidPass(false);
+    }
+    setLoginDetails({ ...loginDetails, password: e.target.value });
   };
 
   return (
@@ -70,19 +83,32 @@ function LoginSection() {
                 placeholder="Enter your Email"
                 className="w-full py-2 px-3 border bg-transparent"
                 value={loginDetails.email}
-                onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setLoginDetails({...loginDetails,email:e.target.value})}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setLoginDetails({ ...loginDetails, email: e.target.value })
+                }
               />
             </div>
-            <div className="my-5">
-              <input
-                type="password"
-                name=""
-                id=""
-                placeholder="Enter your password"
-                className="w-full py-2 px-3 border bg-transparent"
-                value={loginDetails.password}
-                onChange={(e:React.ChangeEvent<HTMLInputElement>)=>setLoginDetails({...loginDetails,password:e.target.value})}
-              />
+            <div className="my-5 text-start">
+              <div className="flex w-full py-2 px-3 border bg-transparent items-center justify-between">
+                <input
+                  type="password"
+                  name=""
+                  id=""
+                  value={loginDetails.password}
+                  placeholder="Enter your password"
+                  className="bg-transparent outline-none"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    passwordOnChange(e)
+                  }
+                  title="Password must contain at least one uppercase, digit and special
+                  character. at least 8 characters."
+                />
+                {validPass ? (
+                  <FaRegThumbsUp color="green" size={18} />
+                ) : (
+                  <FaRegThumbsDown color="red" size={18} />
+                )}
+              </div>
             </div>
             <div className="text-left">
               <Link to={"/forgot"}>

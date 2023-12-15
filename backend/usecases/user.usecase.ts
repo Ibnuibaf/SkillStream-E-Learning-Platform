@@ -19,10 +19,10 @@ class UserUsecase {
   constructor(userRepository: UserRepository) {
     this.userRepository = userRepository;
   }
-  async getUsers(query:any) {
+  async getUsers(query: any) {
     try {
-      const {role,search}=query
-      const response = await this.userRepository.getUsers(role,search);
+      const { role, search } = query;
+      const response = await this.userRepository.getUsers(role, search);
       return {
         status: response.success ? 200 : 500,
         data: {
@@ -43,9 +43,10 @@ class UserUsecase {
   }
   async createUser(body: IUserBody) {
     try {
-
       const { email, name, password, confirmPassword } = body;
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const passwordRegex =
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
       if (!emailRegex.test(email)) {
         return {
           status: 500,
@@ -55,7 +56,7 @@ class UserUsecase {
           },
         };
       }
-      if (password != confirmPassword || password.length < 6) {
+      if (password != confirmPassword || !passwordRegex.test(password)) {
         return {
           status: 500,
           data: {
@@ -64,8 +65,8 @@ class UserUsecase {
           },
         };
       }
-      const emailExist=await this.userRepository.authenticateUser(email)
-      if(emailExist.data){
+      const emailExist = await this.userRepository.authenticateUser(email);
+      if (emailExist.data) {
         return {
           status: 500,
           data: {
@@ -80,7 +81,7 @@ class UserUsecase {
         name,
         password: hashedPassword,
       });
-      if(!response.data){
+      if (!response.data) {
         return {
           status: 500,
           data: {
@@ -89,7 +90,7 @@ class UserUsecase {
           },
         };
       }
-      const token=jwt.sign(response.data,"itssecret")
+      const token = jwt.sign(response.data, "itssecret");
 
       return {
         status: response.success ? 200 : 500,
@@ -111,9 +112,10 @@ class UserUsecase {
   }
   async changePassword(body: IUserBody) {
     try {
-
       const { email, password, confirmPassword } = body;
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      const passwordRegex =
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
       if (!emailRegex.test(email)) {
         return {
           status: 500,
@@ -123,7 +125,7 @@ class UserUsecase {
           },
         };
       }
-      if (password != confirmPassword || password.length < 6) {
+      if (password != confirmPassword || !passwordRegex.test(password)) {
         return {
           status: 500,
           data: {
@@ -135,9 +137,9 @@ class UserUsecase {
       const hashedPassword = await bcrypt.hash(password, 10);
       const response = await this.userRepository.changePassword(
         email,
-        hashedPassword,
+        hashedPassword
       );
-      if(!response.data){
+      if (!response.data) {
         return {
           status: 500,
           data: {
@@ -152,7 +154,7 @@ class UserUsecase {
         data: {
           success: response.success,
           message: response.message,
-          user: response.data
+          user: response.data,
         },
       };
     } catch (error) {
@@ -199,12 +201,12 @@ class UserUsecase {
       });
       return {
         status: 200,
-        data:{
-          success:true,
-          message:"OTP generated and send",
-          otp:otp
-        }
-      }
+        data: {
+          success: true,
+          message: "OTP generated and send",
+          otp: otp,
+        },
+      };
     } catch (error) {
       return {
         status: 500,
@@ -219,7 +221,9 @@ class UserUsecase {
     try {
       const { email, password } = body;
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email) || password.length < 6) {
+      const passwordRegex =
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+      if (!emailRegex.test(email) || !passwordRegex.test(password)) {
         return {
           status: 404,
           data: {
@@ -238,7 +242,7 @@ class UserUsecase {
           },
         };
       }
-      if(response.data.isBlock){
+      if (response.data.isBlock) {
         return {
           status: 404,
           data: {
@@ -261,7 +265,11 @@ class UserUsecase {
         };
       }
       const token = jwt.sign(
-        { id: response.data.id,email:response.data.email, role: response.data.role },
+        {
+          id: response.data.id,
+          email: response.data.email,
+          role: response.data.role,
+        },
         "itssecret"
       );
 
@@ -283,10 +291,10 @@ class UserUsecase {
       };
     }
   }
-  async findUser(headers:IncomingHttpHeaders) {
+  async findUser(headers: IncomingHttpHeaders) {
     try {
-      const token=headers["authorization"]
-      if(!token){
+      const token = headers["authorization"];
+      if (!token) {
         return {
           status: 500,
           data: {
@@ -297,14 +305,14 @@ class UserUsecase {
       }
       const decode = this.decodeToken(token);
       const response = await this.userRepository.findUser(decode.id);
-      if(!response.data){
+      if (!response.data) {
         return {
           status: response.success ? 200 : 500,
           data: {
             success: response.success,
             message: response.message,
           },
-        }
+        };
       }
       return {
         status: response.success ? 200 : 500,
@@ -324,34 +332,34 @@ class UserUsecase {
       };
     }
   }
-  async blockUser(query:any) {
-    try {
-      let { id,isBlock } = query;
-      isBlock=Boolean(isBlock)
-      const response = await this.userRepository.blockUser(id,isBlock);
-      return {
-        status: response.success ? 200 : 500,
-        data: {
-          success: response.success,
-          message: response.message,
-          user: response.data,
-        },
-      };
-    } catch (error) {
-      return {
-        status: 500,
-        data: {
-          success: false,
-          message: "server error",
-        },
-      };
-    }
-  }
+  // async blockUser(query:any) {
+  //   try {
+  //     let { id,isBlock } = query;
+  //     isBlock=Boolean(isBlock)
+  //     const response = await this.userRepository.blockUser(id,isBlock);
+  //     return {
+  //       status: response.success ? 200 : 500,
+  //       data: {
+  //         success: response.success,
+  //         message: response.message,
+  //         user: response.data,
+  //       },
+  //     };
+  //   } catch (error) {
+  //     return {
+  //       status: 500,
+  //       data: {
+  //         success: false,
+  //         message: "server error",
+  //       },
+  //     };
+  //   }
+  // }
   async updateUser(details: any) {
     try {
       const { _id } = details;
-      console.log(details,"in usecase");
-      
+      console.log(details, "in usecase");
+
       const response = await this.userRepository.updateUser(_id, details);
       return {
         status: response.success ? 200 : 500,
@@ -373,7 +381,7 @@ class UserUsecase {
   }
   async updateRole(body: any) {
     try {
-      const { id,updates } = body;
+      const { id, updates } = body;
       const response = await this.userRepository.updateRole(id, updates);
       return {
         status: response.success ? 200 : 500,

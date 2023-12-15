@@ -10,6 +10,8 @@ interface UserType{
     email:string
     avatar:string
     role:string
+    isBlock:boolean
+    verified:boolean
 }
 
 const initialState: AuthState={

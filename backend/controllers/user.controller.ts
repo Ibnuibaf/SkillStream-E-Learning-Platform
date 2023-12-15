@@ -74,17 +74,17 @@ class UserController {
       });
     }
   }
-  async blockUser(req: Request, res: Response) {
-    try {
-      const response = await this.userUsecase.blockUser(req.query);
-      res.status(response.status).send(response.data);
-    } catch (error) {
-      res.status(500).send({
-        success: false,
-        message: "server error",
-      });
-    }
-  }
+  // async blockUser(req: Request, res: Response) {
+  //   try {
+  //     const response = await this.userUsecase.blockUser(req.query);
+  //     res.status(response.status).send(response.data);
+  //   } catch (error) {
+  //     res.status(500).send({
+  //       success: false,
+  //       message: "server error",
+  //     });
+  //   }
+  // }
   async updateUser(req: Request, res: Response) {
     try {
       const response = await this.userUsecase.updateUser(req.body);

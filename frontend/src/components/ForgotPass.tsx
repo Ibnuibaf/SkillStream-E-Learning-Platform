@@ -1,9 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const passwordRegex =
+        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
 function ForgotPass() {
   const [otpWait, setOtpWait] = useState(false);
@@ -15,6 +18,7 @@ function ForgotPass() {
   });
   const [counter, setCounter] = useState(30);
   const [OTP, setOTP] = useState("");
+  const [validPass, setValidPass] = useState(false);
   const navigate = useNavigate();
   // const dispatch=useDispatch()
 
@@ -57,6 +61,14 @@ function ForgotPass() {
     setOTP("");
     localStorage.removeItem("otp");
     setUserDetails({ ...userDetails, email: e.target.value });
+  };
+  const passwordOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (passwordRegex.test(userDetails.password)) {
+      setValidPass(true);
+    } else {
+      setValidPass(false);
+    }
+    setUserDetails({ ...userDetails, password: e.target.value });
   };
   const submitForm = async (e: React.FormEvent) => {
     try {
@@ -163,17 +175,28 @@ function ForgotPass() {
                 <p className="text-gray-400 text-right">OTP valid for 30sec </p>
               )}
             </div>
-            <div className="my-5">
-              <input
-                type="password"
-                name=""
-                id=""
-                placeholder="Enter your new password"
-                className="w-full py-2 px-3 border bg-transparent"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setUserDetails({ ...userDetails, password: e.target.value })
-                }
-              />
+            
+            <div className="my-5 text-start">
+              <div className="flex w-full py-2 px-3 border bg-transparent items-center justify-between">
+                <input
+                  type="password"
+                  name=""
+                  id=""
+                  value={userDetails.password}
+                  placeholder="Enter your password"
+                  className="bg-transparent outline-none"
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    passwordOnChange(e)
+                  }
+                  title="Password must contain at least one uppercase, digit and special
+                  character. at least 8 characters."
+                />
+                {validPass ? (
+                  <FaRegThumbsUp color="green" size={18} />
+                ) : (
+                  <FaRegThumbsDown color="red" size={18} />
+                )}
+              </div>
             </div>
 
             <div className="my-5">

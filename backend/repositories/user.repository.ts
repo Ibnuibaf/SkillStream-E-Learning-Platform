@@ -61,6 +61,7 @@ class UserRepository {
           id: userDetails._id,
           role: userDetails.role,
           isBlock: userDetails.isBlock,
+          verified: userDetails.verified
         },
       };
     } catch (error) {
@@ -115,23 +116,23 @@ class UserRepository {
       };
     }
   }
-  async blockUser(id: string, status: boolean) {
-    try {
-      const userDetails = await Users.findByIdAndUpdate(id, {
-        isBlock: !status,
-      });
-      return {
-        success: true,
-        message: "user has been blocked",
-        data: userDetails,
-      };
-    } catch (error) {
-      return {
-        success: false,
-        message: `Failed to block ${error}`,
-      };
-    }
-  }
+  // async blockUser(id: string, status: boolean) {
+  //   try {
+  //     const userDetails = await Users.findByIdAndUpdate(id, {
+  //       isBlock: !status,
+  //     });
+  //     return {
+  //       success: true,
+  //       message: "user has been blocked",
+  //       data: userDetails,
+  //     };
+  //   } catch (error) {
+  //     return {
+  //       success: false,
+  //       message: `Failed to block ${error}`,
+  //     };
+  //   }
+  // }
   async updateUser(id: string, updates: any) {
     try {
       const userDetails = await Users.findByIdAndUpdate(id, updates, {
