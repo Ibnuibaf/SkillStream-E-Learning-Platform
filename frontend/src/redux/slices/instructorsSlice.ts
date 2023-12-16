@@ -13,6 +13,7 @@ interface UserType{
     role:string
     isBlock:boolean
     verification:object
+    verified:boolean
 }
 
 const initialState: InstructorsState={

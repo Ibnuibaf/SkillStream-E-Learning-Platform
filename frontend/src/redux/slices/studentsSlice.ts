@@ -12,6 +12,7 @@ interface UserType{
     avatar:string
     role:string
     isBlock:boolean
+    verified:boolean
 }
 
 const initialState: StudentsState={

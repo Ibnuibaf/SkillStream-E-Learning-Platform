@@ -358,9 +358,41 @@ class UserUsecase {
   async updateUser(details: any) {
     try {
       const { _id } = details;
-      console.log(details, "in usecase");
 
       const response = await this.userRepository.updateUser(_id, details);
+      if (details.verified && response.data) {
+        let transporter = nodemailer.createTransport({
+          service: "gmail",
+          auth: {
+            user: process.env.verifyAppEmail,
+            pass: process.env.verifyAppPassword,
+          },
+        });
+        const mailOptions = {
+          from: process.env.verifyAppEmail,
+          to: response.data?.email,
+          subject: "SkillStream approved you as Instructor",
+          html: `<div style="display:flex;justify-content:center ">
+          <div style="border-width:1px">
+          <p>Hey ${response.data?.name} You are now able to instruct students in <b style="color:red;">SkillStream</b> <br> Good luck for your bright future with skillstream</p><br>
+          <i>Keep your trust and ethics with us and lets embark the journey</i>
+          </div>
+          </div>`,
+        };
+        transporter.sendMail(mailOptions, (err) => {
+          if (err) {
+            console.log("Error occurred");
+            console.log(err);
+            return {
+              status: 500,
+              data: {
+                success: false,
+                message: "server error",
+              },
+            };
+          }
+        });
+      }
       return {
         status: response.success ? 200 : 500,
         data: {

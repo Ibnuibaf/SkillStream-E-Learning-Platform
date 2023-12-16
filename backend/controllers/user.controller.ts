@@ -109,9 +109,20 @@ class UserController {
   }
   async updateStatus(req: Request, res: Response) {
     try {
-      console.log("Its in cntrlr", req.query);
 
       const response = await this.userUsecase.updateUser(req.query);
+      res.status(response.status).send(response.data);
+    } catch (error) {
+      res.status(500).send({
+        success: false,
+        message: "server error",
+      });
+    }
+  }
+  async verifyInstructor(req: Request, res: Response) {
+    try {
+
+      const response = await this.userUsecase.updateUser(req.body);
       res.status(response.status).send(response.data);
     } catch (error) {
       res.status(500).send({

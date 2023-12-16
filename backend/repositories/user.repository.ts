@@ -97,7 +97,6 @@ class UserRepository {
       const userDetails = await Users.updateOne({email:email},{$set:{password:password}}, {
         new: true,
       });
-      console.log(userDetails, "hehhehehhehehhe");
       if (!userDetails) {
         return {
           success: false,
@@ -138,7 +137,6 @@ class UserRepository {
       const userDetails = await Users.findByIdAndUpdate(id, updates, {
         new: true,
       });
-      console.log(userDetails, "hehhehehhehehhe");
       if (!userDetails) {
         return {
           success: false,

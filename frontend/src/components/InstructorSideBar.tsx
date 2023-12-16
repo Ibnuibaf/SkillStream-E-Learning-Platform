@@ -158,7 +158,19 @@ function InstructorSideBar() {
           </div>
         </div>
       ):(
-        <p>Not approoved</p>
+        <div className="h-screen">
+          <div className="flex justify-start p-6">
+            <Link to={'/'} type="button" className="border rounded px-2 font-medium bg-gray-300 text-gray-800 hover:bg-gray-500 hover:text-white">
+              Back
+            </Link>
+          </div>
+          <div className="flex justify-center items-center h-[75vh]">
+            <div className="border-2 p-4 rounded-md shadow-lg shadow-gray-800 ">
+              <p className="text-2xl font-medium mb-5">Sorry :) Admin Not Approved! Try Later</p>
+              <p className="font-thin mt-3 py-5">Admin Approval for instructor is pending,<br /> you will be noticed when approved through Mail!</p>
+            </div>
+          </div>
+        </div>
       )}
     </>
   );

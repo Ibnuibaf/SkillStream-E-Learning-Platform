@@ -14,12 +14,14 @@ interface UserType {
   role: string;
   isBlock: boolean;
   verification: object;
+  verified: boolean;
 }
 function InstructorsTable() {
   const token = localStorage.getItem("SkillStreamToken");
   const dispatch = useDispatch();
   const data = useSelector(selectInstructors);
   const [search, setSearch] = useState("");
+  const [tabView, setTabView] = useState("approved");
   const [detailsView, setDetailsview] = useState<UserType>();
   const getUsersList = async () => {
     try {
@@ -55,7 +57,25 @@ function InstructorsTable() {
         }
       );
       toast("Changed users status");
-      getUsersList();
+      await getUsersList();
+    } catch (error: any) {
+      toast(error.response.data.message);
+    }
+  };
+  const changeInstructorPending =async (id: string) => {
+    try {
+      await axios.patch(
+        "http://localhost:3000/api/user/instructor/verify",
+        { _id: id, verified: true },
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      toast("Instructor approved");
+      await getUsersList();
+      setDetailsview(undefined);
     } catch (error: any) {
       toast(error.response.data.message);
     }
@@ -65,16 +85,35 @@ function InstructorsTable() {
       {detailsView ? (
         <div className="h-screen">
           <div className="flex justify-start p-6">
-            <button type="button" className="border rounded px-2 font-medium bg-gray-300 text-gray-800 hover:bg-gray-500 hover:text-white" onClick={() => setDetailsview(undefined)}>
+            <button
+              type="button"
+              className="border rounded px-2 font-medium bg-gray-300 text-gray-800 hover:bg-gray-500 hover:text-white"
+              onClick={() => setDetailsview(undefined)}
+            >
               Back
             </button>
           </div>
 
-          <div className="mt-14 flex justify-center items-center">
+          <div className="mt-8 flex justify-center items-center">
             <div className="border rounded max-w-6xl text-start">
-              <div className="flex flex-col items-center p-4">
-                <img src={detailsView.avatar} alt="" className="h-24" />
-                <p>{detailsView.name}</p>
+              <div>
+                {tabView == "pending" ? (
+                  <div className="flex justify-end px-6 pt-3">
+                    <button
+                      type="button"
+                      className="border rounded px-2 font-medium bg-gray-300 text-gray-800 hover:bg-red-500 hover:text-white"
+                      onClick={() => changeInstructorPending(detailsView._id)}
+                    >
+                      Approve
+                    </button>
+                  </div>
+                ) : (
+                  ""
+                )}
+                <div className="flex flex-col items-center p-4">
+                  <img src={detailsView.avatar} alt="" className="h-24" />
+                  <p>{detailsView.name}</p>
+                </div>
               </div>
               <div className="flex">
                 <div>
@@ -125,7 +164,7 @@ function InstructorsTable() {
                       </p>
                       <p className="bg-slate-600 my-1 pt-2 pr-8 pl-2 rounded-lg">
                         <span className="font-semibold">Account Number: </span>
-                        {detailsView._id}
+                        {"358237832953998"}
                       </p>
                       <p className="bg-slate-600 my-1 pt-2 pr-8 pl-2 rounded-lg">
                         <span className="font-semibold">Account Name: </span>
@@ -328,6 +367,32 @@ function InstructorsTable() {
               </button>
             </div>
           </div>
+          <div className="w-full flex justify-start px-10 py-5">
+            <div className="border-2 rounded-full">
+              <button
+                type="button"
+                className={`border rounded-s-full px-3 py-1  ${
+                  tabView == "approved"
+                    ? "bg-slate-600 font-medium"
+                    : "bg-transparent"
+                }`}
+                onClick={() => setTabView("approved")}
+              >
+                Approved
+              </button>
+              <button
+                type="button"
+                className={`border rounded-r-full px-4 py-1  ${
+                  tabView == "pending"
+                    ? "bg-slate-600 font-medium"
+                    : "bg-transparent"
+                }`}
+                onClick={() => setTabView("pending")}
+              >
+                Pending
+              </button>
+            </div>
+          </div>
           <div className="flex justify-center mt-16  w-full">
             <div className="relative overflow-x-auto shadow-md sm:rounded-lg max-h-[70vh] w-[70vw]">
               <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -357,39 +422,99 @@ function InstructorsTable() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((instructor) => (
-                    <tr
-                      key={instructor._id}
-                      
-                      className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                    >
-                      <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:cursor-pointer" onClick={() => setDetailsview(instructor)}>
-                        {instructor.email}
-                      </td>
-                      <td className="px-6 py-4 text-red-600">
-                        {instructor.name}
-                      </td>
-                      <td className="px-6 py-4">{instructor._id.length}</td>
-                      <td className="px-6 py-4">{instructor.name.length}</td>
-                      <td className="px-6 py-4">
-                        {instructor.email.length + instructor._id.length}
-                      </td>
-                      <td className="px-6 py-4">
-                        {instructor.role.toUpperCase()}
-                      </td>
-                      <td className="flex  items-center px-6 py-4">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            changeUserStatus(instructor._id, instructor.isBlock)
-                          }
-                          className={`border px-3 rounded font-medium text-blue-600 dark:text-blue-500 hover:underline ms-3`}
-                        >
-                          {instructor.isBlock ? "UnBlock" : "Block"}
-                        </button>
-                      </td>
-                    </tr>
-                  ))}
+                  {data.map((instructor) => {
+                    if (tabView == "approved") {
+                      if (instructor.verified) {
+                        return (
+                          <tr
+                            key={instructor._id}
+                            className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                          >
+                            <td
+                              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:cursor-pointer"
+                              onClick={() => setDetailsview(instructor)}
+                            >
+                              {instructor.email}
+                            </td>
+                            <td className="px-6 py-4 text-red-600">
+                              {instructor.name}
+                            </td>
+                            <td className="px-6 py-4">
+                              {instructor._id.length}
+                            </td>
+                            <td className="px-6 py-4">
+                              {instructor.name.length}
+                            </td>
+                            <td className="px-6 py-4">
+                              {instructor.email.length + instructor._id.length}
+                            </td>
+                            <td className="px-6 py-4">
+                              {instructor.role.toUpperCase()}
+                            </td>
+                            <td className="flex  items-center px-6 py-4">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  changeUserStatus(
+                                    instructor._id,
+                                    instructor.isBlock
+                                  )
+                                }
+                                className={`border px-3 rounded font-medium text-blue-600 dark:text-blue-500 hover:underline ms-3`}
+                              >
+                                {instructor.isBlock ? "UnBlock" : "Block"}
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      }
+                    } else {
+                      if (!instructor.verified) {
+                        return (
+                          <tr
+                            key={instructor._id}
+                            className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                          >
+                            <td
+                              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:cursor-pointer"
+                              onClick={() => setDetailsview(instructor)}
+                            >
+                              {instructor.email}
+                            </td>
+                            <td className="px-6 py-4 text-red-600">
+                              {instructor.name}
+                            </td>
+                            <td className="px-6 py-4">
+                              {instructor._id.length}
+                            </td>
+                            <td className="px-6 py-4">
+                              {instructor.name.length}
+                            </td>
+                            <td className="px-6 py-4">
+                              {instructor.email.length + instructor._id.length}
+                            </td>
+                            <td className="px-6 py-4">
+                              {instructor.role.toUpperCase()}
+                            </td>
+                            <td className="flex  items-center px-6 py-4">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  changeUserStatus(
+                                    instructor._id,
+                                    instructor.isBlock
+                                  )
+                                }
+                                className={`border px-3 rounded font-medium text-blue-600 dark:text-blue-500 hover:underline ms-3`}
+                              >
+                                {instructor.isBlock ? "UnBlock" : "Block"}
+                              </button>
+                            </td>
+                          </tr>
+                        );
+                      }
+                    }
+                  })}
                 </tbody>
               </table>
             </div>

@@ -67,7 +67,9 @@ function AuthorizePage() {
           email:res.data.user.email,
           avatar:res.data.user.avatar,
           role:res.data.user.role,
-          name:res.data.user.name
+          name:res.data.user.name,
+          verified:res.data.user.verfied,
+          isBlock:res.data.isBlock
         }))
         toast(`${res.data.user.name} is now Instructor`)
       } catch (error:any) {
