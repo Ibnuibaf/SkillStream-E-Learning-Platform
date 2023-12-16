@@ -1,12 +1,13 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
+import { TiTick } from "react-icons/ti";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex =
-        /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+  /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
 function ForgotPass() {
   const [otpWait, setOtpWait] = useState(false);
@@ -18,6 +19,7 @@ function ForgotPass() {
   });
   const [counter, setCounter] = useState(30);
   const [OTP, setOTP] = useState("");
+  const [otpVeified, setOtpVerifed] = useState(false);
   const [validPass, setValidPass] = useState(false);
   const navigate = useNavigate();
   // const dispatch=useDispatch()
@@ -116,6 +118,12 @@ function ForgotPass() {
     }
   };
 
+  const verifyOTP = () => {
+    if (OTP == localStorage.getItem("otp")) {
+      setOtpVerifed(true);
+    }
+  };
+
   useEffect(() => {
     if (token) {
       toast("User already logged In");
@@ -146,26 +154,39 @@ function ForgotPass() {
               />
             </div>
             <div className="my-5">
-              <div className=" w-full flex justify-between">
-                <input
-                  type="text"
-                  name=""
-                  id=""
-                  placeholder="Enter OTP"
-                  value={OTP}
-                  className=" py-2 px-3 border bg-transparent"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setOTP(e.target.value)
-                  }
-                />
-                <button
-                  type="button"
-                  className=" bg-gradient-to-tr from-red-500 to-red-600 py-2 px-2 rounded-md"
-                  onClick={sendOTP}
-                  disabled={otpWait}
-                >
-                  Send OTP
-                </button>
+              <div className=" w-full flex justify-between gap-2">
+                <div className=" flex justify-between items-center  py-2 px-3 border">
+                  <input
+                    type="text"
+                    name=""
+                    id=""
+                    placeholder="Enter OTP"
+                    value={OTP}
+                    className=" bg-transparent outline-none"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setOTP(e.target.value)
+                    }
+                  />
+                  {otpVeified ? <TiTick color="green" size={22} /> : ""}
+                </div>
+                {OTP ? (
+                  <button
+                    type="button"
+                    className=" bg-gradient-to-tr from-red-500 to-red-600 py-2 px-2 rounded-md"
+                    onClick={verifyOTP}
+                  >
+                    Verify
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className=" bg-gradient-to-tr from-red-500 to-red-600 py-2 px-2 rounded-md"
+                    onClick={sendOTP}
+                    disabled={otpWait}
+                  >
+                    Send OTP
+                  </button>
+                )}
               </div>
               {otpWait ? (
                 <p className="text-gray-400 text-right">
@@ -175,45 +196,50 @@ function ForgotPass() {
                 <p className="text-gray-400 text-right">OTP valid for 30sec </p>
               )}
             </div>
-            
-            <div className="my-5 text-start">
-              <div className="flex w-full py-2 px-3 border bg-transparent items-center justify-between">
-                <input
-                  type="password"
-                  name=""
-                  id=""
-                  value={userDetails.password}
-                  placeholder="Enter your password"
-                  className="bg-transparent outline-none"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    passwordOnChange(e)
-                  }
-                  title="Password must contain at least one uppercase, digit and special
+            {otpVeified ? (
+              <>
+                <div className="my-5 text-start">
+                  <div className="flex w-full py-2 px-3 border bg-transparent items-center justify-between">
+                    <input
+                      type="password"
+                      name=""
+                      id=""
+                      value={userDetails.password}
+                      placeholder="Enter your password"
+                      className="bg-transparent outline-none"
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        passwordOnChange(e)
+                      }
+                      title="Password must contain at least one uppercase, digit and special
                   character. at least 8 characters."
-                />
-                {validPass ? (
-                  <FaRegThumbsUp color="green" size={18} />
-                ) : (
-                  <FaRegThumbsDown color="red" size={18} />
-                )}
-              </div>
-            </div>
+                    />
+                    {validPass ? (
+                      <FaRegThumbsUp color="green" size={18} />
+                    ) : (
+                      <FaRegThumbsDown color="red" size={18} />
+                    )}
+                  </div>
+                </div>
 
-            <div className="my-5">
-              <input
-                type="password"
-                name=""
-                id=""
-                placeholder="Confirm your new password"
-                className="w-full py-2 px-3 border bg-transparent"
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setUserDetails({
-                    ...userDetails,
-                    confirmPassword: e.target.value,
-                  })
-                }
-              />
-            </div>
+                <div className="my-5">
+                  <input
+                    type="password"
+                    name=""
+                    id=""
+                    placeholder="Confirm your new password"
+                    className="w-full py-2 px-3 border bg-transparent"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setUserDetails({
+                        ...userDetails,
+                        confirmPassword: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              </>
+            ) : (
+              ""
+            )}
 
             <button
               type="submit"

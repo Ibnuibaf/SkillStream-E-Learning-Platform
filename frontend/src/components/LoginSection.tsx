@@ -16,6 +16,7 @@ function LoginSection() {
 
   const [loginDetails, setLoginDetails] = useState({ email: "", password: "" });
   const [validPass, setValidPass] = useState(false);
+  const [submitStage, setSubmitStage] = useState(false);
 
   useEffect(() => {
     if (token) {
@@ -27,6 +28,7 @@ function LoginSection() {
   const submitForm = async (e: React.FormEvent) => {
     try {
       e.preventDefault();
+      setSubmitStage(true)
       if (!loginDetails.email || !loginDetails.password) {
         return toast("Enter necessary details");
       }
@@ -46,6 +48,7 @@ function LoginSection() {
         toast.error(res.data.message);
         return;
       }
+      setSubmitStage(false)
       localStorage.setItem("SkillStreamToken", res.data.token);
       toast("User logged In");
       navigate("/");
@@ -75,7 +78,7 @@ function LoginSection() {
         </p>
         <div className=" p-2 w-80">
           <form action="" onSubmit={submitForm}>
-            <div className="my-5">
+            <div className="my-5 text-start">
               <input
                 type="text"
                 name=""
@@ -87,6 +90,13 @@ function LoginSection() {
                   setLoginDetails({ ...loginDetails, email: e.target.value })
                 }
               />
+              {!loginDetails.email && submitStage ? (
+                <i className="text-red-500 text-xs ">
+                  *Fill with your email address
+                </i>
+              ) : (
+                ""
+              )}
             </div>
             <div className="my-5 text-start">
               <div className="flex w-full py-2 px-3 border bg-transparent items-center justify-between">
@@ -109,6 +119,13 @@ function LoginSection() {
                   <FaRegThumbsDown color="red" size={18} />
                 )}
               </div>
+              {!loginDetails.password && submitStage ? (
+                <i className="text-red-500 text-xs ">
+                  *Fill password as per instruction.
+                </i>
+              ) : (
+                ""
+              )}
             </div>
             <div className="text-left">
               <Link to={"/forgot"}>

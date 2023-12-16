@@ -4,6 +4,7 @@ import axios from "axios";
 // import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { FaRegThumbsUp, FaRegThumbsDown } from "react-icons/fa";
+import { TiTick } from "react-icons/ti";
 // import { selectUser, setUser } from "../redux/slices/authSlice";
 
 interface IUserDetails {
@@ -28,6 +29,8 @@ function SignupSection() {
   });
   const [counter, setCounter] = useState(30);
   const [OTP, setOTP] = useState("");
+  const [otpVeified, setOtpVerifed] = useState(false);
+  const [submitStage, setSubmitStage] = useState(false);
   const token = localStorage.getItem("SkillStreamToken");
   const navigate = useNavigate();
   // const dispatch=useDispatch()
@@ -84,6 +87,7 @@ function SignupSection() {
   const submitForm = async (e: React.FormEvent) => {
     try {
       e.preventDefault();
+      setSubmitStage(true);
       if (
         !userDetails.confirmPassword ||
         !userDetails.email ||
@@ -122,6 +126,7 @@ function SignupSection() {
         toast(res.data.message);
         return;
       }
+      setSubmitStage(false);
       localStorage.setItem("SkillStreamToken", res.data.token);
       toast(`User account has been created`);
       navigate("/");
@@ -131,6 +136,13 @@ function SignupSection() {
       toast(error.response.data.message);
     }
   };
+
+  const verifyOTP = () => {
+    if (OTP == localStorage.getItem("otp")) {
+      setOtpVerifed(true);
+    }
+  };
+
   useEffect(() => {
     if (token) {
       toast("User already logged In");
@@ -147,7 +159,7 @@ function SignupSection() {
         </p> */}
         <div className=" p-2 w-80">
           <form action="" onSubmit={submitForm}>
-            <div className="my-5">
+            <div className="my-5 text-start">
               <input
                 type="text"
                 name=""
@@ -158,8 +170,15 @@ function SignupSection() {
                   setUserDetails({ ...userDetails, name: e.target.value })
                 }
               />
+              {!userDetails.name && submitStage ? (
+                <i className="text-red-500 text-xs ">
+                  *Fill with your name, (only letter and numbers)
+                </i>
+              ) : (
+                ""
+              )}
             </div>
-            <div className="my-5">
+            <div className="my-5 text-start">
               <input
                 type="text"
                 name=""
@@ -170,6 +189,13 @@ function SignupSection() {
                   emailOnChange(e)
                 }
               />
+              {!userDetails.email && submitStage ? (
+                <i className="text-red-500 text-xs ">
+                  *Fill with your email address
+                </i>
+              ) : (
+                ""
+              )}
             </div>
             <div className="my-5 text-start">
               <div className="flex w-full py-2 px-3 border bg-transparent items-center justify-between">
@@ -192,8 +218,15 @@ function SignupSection() {
                   <FaRegThumbsDown color="red" size={18} />
                 )}
               </div>
+              {!userDetails.password && submitStage ? (
+                <i className="text-red-500 text-xs ">
+                  *Fill password as per instruction.
+                </i>
+              ) : (
+                ""
+              )}
             </div>
-            <div className="my-5">
+            <div className="my-5 text-start">
               <input
                 type="password"
                 name=""
@@ -207,29 +240,56 @@ function SignupSection() {
                   })
                 }
               />
+              {!userDetails.confirmPassword && submitStage ? (
+                <i className="text-red-500 text-xs ">
+                  *Confirm the password to verify
+                </i>
+              ) : (
+                ""
+              )}
             </div>
-            <div className="my-5">
-              <div className=" w-full flex justify-between">
-                <input
-                  type="text"
-                  name=""
-                  id=""
-                  placeholder="Enter OTP"
-                  value={OTP}
-                  className=" py-2 px-3 border bg-transparent"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    setOTP(e.target.value)
-                  }
-                />
-                <button
-                  type="button"
-                  className=" bg-gradient-to-tr from-red-500 to-red-600 py-2 px-2 rounded-md"
-                  onClick={sendOTP}
-                  disabled={otpWait}
-                >
-                  Send OTP
-                </button>
+            <div className="my-5 text-start">
+              <div className=" w-full flex justify-between gap-2">
+                <div className=" flex justify-between items-center  py-2 px-3 border">
+                  <input
+                    type="text"
+                    name=""
+                    id=""
+                    placeholder="Enter OTP"
+                    value={OTP}
+                    className=" bg-transparent outline-none"
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setOTP(e.target.value)
+                    }
+                  />
+                  {otpVeified ? <TiTick color="green" size={22} /> : ""}
+                </div>
+                {OTP ? (
+                  <button
+                    type="button"
+                    className=" bg-gradient-to-tr from-red-500 to-red-600 py-2 px-2 rounded-md"
+                    onClick={verifyOTP}
+                  >
+                    Verify
+                  </button>
+                ) : (
+                  <button
+                    type="button"
+                    className=" bg-gradient-to-tr from-red-500 to-red-600 py-2 px-2 rounded-md"
+                    onClick={sendOTP}
+                    disabled={otpWait}
+                  >
+                    Send OTP
+                  </button>
+                )}
               </div>
+              {!OTP && submitStage ? (
+                <i className="text-red-500 text-xs ">
+                  *Veirfy email by OTP
+                </i>
+              ) : (
+                ""
+              )}
               {otpWait ? (
                 <p className="text-gray-400 text-right">
                   Resend OTP in {counter}
