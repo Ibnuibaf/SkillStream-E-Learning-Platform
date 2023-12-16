@@ -6,6 +6,8 @@ import {
   selectInstructors,
   setInstructors,
 } from "../redux/slices/instructorsSlice";
+import swal from "sweetalert";
+
 interface UserType {
   _id: string;
   name: string;
@@ -46,38 +48,48 @@ function InstructorsTable() {
   }, [dispatch, token]);
 
   const changeUserStatus = async (id: string, status: boolean) => {
-    try {
-      const res = await axios.patch(
-        `http://localhost:3000/api/user/status?_id=${id}&isBlock=${!status}`,
-        {},
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-      toast("Changed users status");
-      await getUsersList();
-    } catch (error: any) {
-      toast(error.response.data.message);
+    const confirmed = await swal("Are you sure to update status?", {
+      buttons: ["Cancel", true],
+    });
+    if (confirmed) {
+      try {
+        const res = await axios.patch(
+          `http://localhost:3000/api/user/status?_id=${id}&isBlock=${!status}`,
+          {},
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+        toast("Changed users status");
+        await getUsersList();
+      } catch (error: any) {
+        toast(error.response.data.message);
+      }
     }
   };
-  const changeInstructorPending =async (id: string) => {
-    try {
-      await axios.patch(
-        "http://localhost:3000/api/user/instructor/verify",
-        { _id: id, verified: true },
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-      toast("Instructor approved");
-      await getUsersList();
-      setDetailsview(undefined);
-    } catch (error: any) {
-      toast(error.response.data.message);
+  const changeInstructorPending = async (id: string) => {
+    const confirmed = await swal("Are you sure to approve user?", {
+      buttons: ["Cancel", true],
+    });
+    if (confirmed) {
+      try {
+        await axios.patch(
+          "http://localhost:3000/api/user/instructor/verify",
+          { _id: id, verified: true },
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+        toast("Instructor approved");
+        await getUsersList();
+        setDetailsview(undefined);
+      } catch (error: any) {
+        toast(error.response.data.message);
+      }
     }
   };
   return (

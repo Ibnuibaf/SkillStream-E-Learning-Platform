@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { selectStudents, setStudents } from "../redux/slices/studentsSlice";
+import swal from "sweetalert";
 
 interface UserType {
   _id: string;
@@ -41,20 +42,25 @@ function StudentsTable() {
   }, [dispatch, token]);
 
   const changeUserStatus = async (id: string, status: boolean) => {
-    try {
-      const res = await axios.patch(
-        `http://localhost:3000/api/user/status?_id=${id}&isBlock=${!status}`,
-        {},
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-      toast("Changed users status");
-      getUsersList();
-    } catch (error: any) {
-      toast(error.response.data.message);
+    const confirmed = await swal("Are you sure to update status?",{
+      buttons:["Cancel",true]
+    })
+    if(confirmed){
+      try {
+        const res = await axios.patch(
+          `http://localhost:3000/api/user/status?_id=${id}&isBlock=${!status}`,
+          {},
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        );
+        toast("Changed users status");
+        getUsersList();
+      } catch (error: any) {
+        toast(error.response.data.message);
+      }
     }
   };
   return (
