@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { selectStudents, setStudents } from "../redux/slices/studentsSlice";
+import { selectStudents} from "../redux/slices/studentsSlice";
 import swal from "sweetalert";
 import { getStudents } from "../redux/actions/studentsActions";
 import { AppDispatch } from "../redux/store";
@@ -38,7 +38,7 @@ function StudentsTable() {
     })
     if(confirmed){
       try {
-        const res = await axios.patch(
+        await axios.patch(
           `http://localhost:3000/api/user/status?_id=${id}&isBlock=${!status}`,
           {},
           {
