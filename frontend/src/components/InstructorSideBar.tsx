@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect,} from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import {
@@ -9,18 +9,15 @@ import {
   MdLogout,
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
-import { cleanUser, selectUser, setUser } from "../redux/slices/authSlice";
-// import AuthSection from "./AuthSection";
+import { cleanUser, selectUser,} from "../redux/slices/authSlice";
 import AuthorizePage from "../pages/AuthorizePage";
-import axios from "axios";
 
 function InstructorSideBar() {
   const token = localStorage.getItem("SkillStreamToken");
-  const user = useSelector(selectUser);
+  const user = useSelector(selectUser).user;
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const [role, setRole] = useState(user?.role);
 
   const logoutUser=()=>{
       localStorage.removeItem("SkillStreamToken")
@@ -28,43 +25,12 @@ function InstructorSideBar() {
       toast("Instructor Logged Out!")
       navigate('/')
   }
-  useEffect(() => {
-   
-
-    const fetchData = async () => {
-      try {
-        if (token) {
-          const response = await axios.get(
-            "http://localhost:3000/api/user/find",
-            {
-              headers: {
-                Authorization: token,
-              },
-            }
-          );
-          if (!response.data.user) {
-            toast(response.data.message);
-            return;
-          }
-          dispatch(setUser(response.data.user));
-        } 
-      } catch (error: any) {
-        console.error("Error fetching user:", error);
-        localStorage.removeItem("SkillStreamToken");
-
-        toast(error.response.data.message);
-      }
-    };
-
-    fetchData();
-  }, [dispatch]);
 
   useEffect(() => {
     if (!token) {
       toast("Log In to your account");
       navigate("/login");
     }
-    setRole(user?.role);
   }, [token, user]);
   return (
     <>

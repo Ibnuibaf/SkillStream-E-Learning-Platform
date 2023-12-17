@@ -1,7 +1,10 @@
 import {createSlice,PayloadAction} from '@reduxjs/toolkit'
+import { getUser } from '../actions/authActions'
 
 interface AuthState{
     user:UserType | null
+    loading:boolean
+    error:string
 }
 
 interface UserType{
@@ -22,7 +25,9 @@ const initialState: AuthState={
     //     avatar:"https://cdn0.iconfinder.com/data/icons/user-interface-vol-3-12/66/68-512.png",
     //     role:"Developer"
     // }
-    user:null
+    user:null,
+    loading:false,
+    error:""
 }
 
 const authSlice= createSlice({
@@ -34,11 +39,26 @@ const authSlice= createSlice({
         },
         cleanUser:(state)=>{
             state.user=null
+            state.loading=false
+            state.error=""
         }
+    },
+    extraReducers:(builder)=>{
+        builder.addCase(getUser.fulfilled,(state,{payload})=>{
+            state.loading=false
+            state.user=payload
+        })
+        builder.addCase(getUser.pending,(state)=>{
+            state.loading=true
+        })
+        builder.addCase(getUser.rejected,(state,{payload})=>{
+            state.loading=false
+            state.error=payload as string
+        })
     }
 })
 
 export const {setUser,cleanUser} = authSlice.actions
-export const selectUser = (state:{auth:AuthState})=>state.auth.user 
+export const selectUser = (state:{auth:AuthState})=>state.auth
 
 export default authSlice.reducer

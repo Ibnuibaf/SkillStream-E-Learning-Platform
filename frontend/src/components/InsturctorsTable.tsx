@@ -2,11 +2,10 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import {
-  selectInstructors,
-  setInstructors,
-} from "../redux/slices/instructorsSlice";
+import { selectInstructors } from "../redux/slices/instructorsSlice";
 import swal from "sweetalert";
+import { getInstructors } from "../redux/actions/instructorsActions";
+import { AppDispatch } from "../redux/store";
 
 interface UserType {
   _id: string;
@@ -20,25 +19,14 @@ interface UserType {
 }
 function InstructorsTable() {
   const token = localStorage.getItem("SkillStreamToken");
-  const dispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const data = useSelector(selectInstructors);
   const [search, setSearch] = useState("");
   const [tabView, setTabView] = useState("approved");
   const [detailsView, setDetailsview] = useState<UserType>();
   const getUsersList = async () => {
     try {
-      const res = await axios.get(
-        search
-          ? `http://localhost:3000/api/user?role=instructor&search=${search}`
-          : `http://localhost:3000/api/user?role=instructor`,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-      console.log(res.data.users);
-      dispatch(setInstructors(res.data.users));
+      dispatch(getInstructors(search));
     } catch (error: any) {
       toast(error.response.data.message);
     }
@@ -434,99 +422,133 @@ function InstructorsTable() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.map((instructor) => {
-                    if (tabView == "approved") {
-                      if (instructor.verified) {
-                        return (
-                          <tr
-                            key={instructor._id}
-                            className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                          >
-                            <td
-                              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:cursor-pointer"
-                              onClick={() => setDetailsview(instructor)}
+                  {data.data.length ? (
+                    data.data.map((instructor) => {
+                      if (tabView == "approved") {
+                        if (instructor.verified) {
+                          return (
+                            <tr
+                              key={instructor._id}
+                              className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                             >
-                              {instructor.email}
-                            </td>
-                            <td className="px-6 py-4 text-red-600">
-                              {instructor.name}
-                            </td>
-                            <td className="px-6 py-4">
-                              {instructor._id.length}
-                            </td>
-                            <td className="px-6 py-4">
-                              {instructor.name.length}
-                            </td>
-                            <td className="px-6 py-4">
-                              {instructor.email.length + instructor._id.length}
-                            </td>
-                            <td className="px-6 py-4">
-                              {instructor.role.toUpperCase()}
-                            </td>
-                            <td className="flex  items-center px-6 py-4">
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  changeUserStatus(
-                                    instructor._id,
-                                    instructor.isBlock
-                                  )
-                                }
-                                className={`border px-3 rounded font-medium text-blue-600 dark:text-blue-500 hover:underline ms-3`}
+                              <td
+                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:cursor-pointer"
+                                onClick={() => setDetailsview(instructor)}
                               >
-                                {instructor.isBlock ? "UnBlock" : "Block"}
-                              </button>
-                            </td>
-                          </tr>
-                        );
-                      }
-                    } else {
-                      if (!instructor.verified) {
-                        return (
-                          <tr
-                            key={instructor._id}
-                            className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
-                          >
-                            <td
-                              className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:cursor-pointer"
-                              onClick={() => setDetailsview(instructor)}
+                                {instructor.email}
+                              </td>
+                              <td className="px-6 py-4 text-red-600">
+                                {instructor.name}
+                              </td>
+                              <td className="px-6 py-4">
+                                {instructor._id.length}
+                              </td>
+                              <td className="px-6 py-4">
+                                {instructor.name.length}
+                              </td>
+                              <td className="px-6 py-4">
+                                {instructor.email.length +
+                                  instructor._id.length}
+                              </td>
+                              <td className="px-6 py-4">
+                                {instructor.role.toUpperCase()}
+                              </td>
+                              <td className="flex  items-center px-6 py-4">
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    changeUserStatus(
+                                      instructor._id,
+                                      instructor.isBlock
+                                    )
+                                  }
+                                  className={`border px-3 rounded font-medium text-blue-600 dark:text-blue-500 hover:underline ms-3`}
+                                >
+                                  {instructor.isBlock ? "UnBlock" : "Block"}
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        }
+                      } else {
+                        if (!instructor.verified) {
+                          return (
+                            <tr
+                              key={instructor._id}
+                              className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                             >
-                              {instructor.email}
-                            </td>
-                            <td className="px-6 py-4 text-red-600">
-                              {instructor.name}
-                            </td>
-                            <td className="px-6 py-4">
-                              {instructor._id.length}
-                            </td>
-                            <td className="px-6 py-4">
-                              {instructor.name.length}
-                            </td>
-                            <td className="px-6 py-4">
-                              {instructor.email.length + instructor._id.length}
-                            </td>
-                            <td className="px-6 py-4">
-                              {instructor.role.toUpperCase()}
-                            </td>
-                            <td className="flex  items-center px-6 py-4">
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  changeUserStatus(
-                                    instructor._id,
-                                    instructor.isBlock
-                                  )
-                                }
-                                className={`border px-3 rounded font-medium text-blue-600 dark:text-blue-500 hover:underline ms-3`}
+                              <td
+                                className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:cursor-pointer"
+                                onClick={() => setDetailsview(instructor)}
                               >
-                                {instructor.isBlock ? "UnBlock" : "Block"}
-                              </button>
-                            </td>
-                          </tr>
-                        );
+                                {instructor.email}
+                              </td>
+                              <td className="px-6 py-4 text-red-600">
+                                {instructor.name}
+                              </td>
+                              <td className="px-6 py-4">
+                                {instructor._id.length}
+                              </td>
+                              <td className="px-6 py-4">
+                                {instructor.name.length}
+                              </td>
+                              <td className="px-6 py-4">
+                                {instructor.email.length +
+                                  instructor._id.length}
+                              </td>
+                              <td className="px-6 py-4">
+                                {instructor.role.toUpperCase()}
+                              </td>
+                              <td className="flex  items-center px-6 py-4">
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    changeUserStatus(
+                                      instructor._id,
+                                      instructor.isBlock
+                                    )
+                                  }
+                                  className={`border px-3 rounded font-medium text-blue-600 dark:text-blue-500 hover:underline ms-3`}
+                                >
+                                  {instructor.isBlock ? "UnBlock" : "Block"}
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        }
                       }
-                    }
-                  })}
+                    })
+                  ) : data.loading ? (
+                    <>
+                      <br />
+                      <tr className="my-2">
+                        <td
+                          colSpan={7}
+                          className="h-4 bg-gray-200 rounded py-3 mt-3 animate-pulse"
+                        ></td>
+                      </tr>
+                      <br />
+                      <tr className="my-2">
+                        <td
+                          colSpan={7}
+                          className="h-4 bg-gray-200 rounded py-3 mt-3 animate-pulse"
+                        ></td>
+                      </tr>
+                      <br />
+                      <tr className="my-2">
+                        <td
+                          colSpan={7}
+                          className="h-4 bg-gray-200 rounded py-3 mt-3 animate-pulse"
+                        ></td>
+                      </tr>
+                    </>
+                  ) : (
+                    <tr>
+                      <td colSpan={6} className="text-center h-4 text-xl">
+                        {data.error}
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>

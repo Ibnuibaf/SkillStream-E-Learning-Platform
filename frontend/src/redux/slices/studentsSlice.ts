@@ -1,7 +1,10 @@
 import {createSlice,PayloadAction} from '@reduxjs/toolkit'
+import { getStudents } from '../actions/studentsActions'
 
 interface StudentsState{
     data:UserType[]
+    loading:boolean
+    error:string
 }
 
 
@@ -16,7 +19,9 @@ interface UserType{
 }
 
 const initialState: StudentsState={
-    data:[]
+    data:[],
+    loading:false,
+    error:""
 }
 
 
@@ -28,6 +33,19 @@ const studentsSlice= createSlice({
         setStudents:(state , action: PayloadAction<UserType[]> )=>{
             state.data=action.payload
         }
+    },
+    extraReducers:(builder)=>{
+        builder.addCase(getStudents.fulfilled,(state,{payload})=>{
+            state.loading=false
+            state.data=payload
+        })
+        builder.addCase(getStudents.pending,(state)=>{
+            state.loading=true
+        })
+        builder.addCase(getStudents.rejected,(state,{payload})=>{
+            state.loading=false
+            state.error=payload as string
+        })
     }
 })
 

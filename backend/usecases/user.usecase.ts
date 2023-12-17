@@ -279,6 +279,7 @@ class UserUsecase {
           success: response.success,
           message: "User Authenticated",
           token: token,
+          admin: response.data.role=="admin"
         },
       };
     } catch (error) {

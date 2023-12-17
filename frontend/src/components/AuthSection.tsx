@@ -1,53 +1,25 @@
 import { RiShoppingCart2Fill, RiNotification4Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import axios from "axios";
-import { selectUser, setUser } from "../redux/slices/authSlice";
-import { useEffect, useState } from "react";
+import { selectUser } from "../redux/slices/authSlice";
+import { useEffect } from "react";
+import { getUser } from "../redux/actions/authActions";
+import { AppDispatch } from "../redux/store";
 
 function AuthSection() {
-  const reduxUser = useSelector(selectUser);
-  const [userDetails, setUserDetails] = useState(reduxUser || null);
-  const dispatch = useDispatch();
+  const userDetails = useSelector(selectUser);
+  const dispatch:AppDispatch = useDispatch();
 
   useEffect(() => {
     const token = localStorage.getItem("SkillStreamToken");
-    console.log(token);
 
-    const fetchData = async () => {
-      try {
-        if (token) {
-          const response = await axios.get(
-            "http://localhost:3000/api/user/find",
-            {
-              headers: {
-                Authorization: token,
-              },
-            }
-          );
-          if (!response.data.user) {
-            toast(response.data.message);
-            return;
-          }
-          dispatch(setUser(response.data.user));
-          setUserDetails(response.data.user);
-        } else {
-          setUserDetails(null);
-        }
-      } catch (error:any) {
-        console.error("Error fetching user:", error);
-        setUserDetails(null);
-        localStorage.removeItem("SkillStreamToken");
+    if(token){
+      dispatch(getUser())
+    }
 
-        toast(error.response.data.message);
-      }
-    };
-
-    fetchData();
   }, [dispatch]);
 
-  return userDetails ? (
+  return userDetails.user ? (
     <div className="flex gap-5 items-center">
       <button>
         <RiShoppingCart2Fill size={24}></RiShoppingCart2Fill>
@@ -56,8 +28,8 @@ function AuthSection() {
         <RiNotification4Line size={24}></RiNotification4Line>
       </Link>
       <Link to={"/profile"} className="flex items-center gap-1">
-        <img src={userDetails.avatar} alt="" className="rounded-full h-8" />
-        <p>{userDetails.name}</p>
+        <img src={userDetails.user?.avatar} alt="" className="rounded-full h-8" />
+        <p>{userDetails.user?.name}</p>
       </Link>
     </div>
   ) : (

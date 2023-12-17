@@ -10,5 +10,5 @@ const store= configureStore({
         instructors: instructorsReducer
     }
 })
-
+export type AppDispatch=typeof store.dispatch
 export default store

@@ -1,7 +1,10 @@
 import {createSlice,PayloadAction} from '@reduxjs/toolkit'
+import { getInstructors } from '../actions/instructorsActions'
 
 interface InstructorsState{
     data:UserType[]
+    loading:boolean
+    error:string
 }
 
 
@@ -17,7 +20,9 @@ interface UserType{
 }
 
 const initialState: InstructorsState={
-    data:[]
+    data:[],
+    loading:false,
+    error:""
 }
 
 
@@ -29,10 +34,23 @@ const InstructorsSlice= createSlice({
         setInstructors:(state , action: PayloadAction<UserType[]> )=>{
             state.data=action.payload
         }
+    },
+    extraReducers:(builder)=>{
+        builder.addCase(getInstructors.fulfilled,(state,{payload})=>{
+            state.loading=false
+            state.data=payload
+        })
+        builder.addCase(getInstructors.pending,(state)=>{
+            state.loading=true
+        })
+        builder.addCase(getInstructors.rejected,(state,{payload})=>{
+            state.loading=false
+            state.error=payload as string
+        })
     }
 })
 
 export const {setInstructors} = InstructorsSlice.actions
-export const selectInstructors = (state:{instructors:InstructorsState})=>state.instructors.data
+export const selectInstructors = (state:{instructors:InstructorsState})=>state.instructors
 
 export default InstructorsSlice.reducer

@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { selectStudents, setStudents } from "../redux/slices/studentsSlice";
 import swal from "sweetalert";
+import { getStudents } from "../redux/actions/studentsActions";
+import { AppDispatch } from "../redux/store";
 
 interface UserType {
   _id: string;
@@ -15,24 +17,13 @@ interface UserType {
 }
 function StudentsTable() {
   const token = localStorage.getItem("SkillStreamToken");
-  const dispatch = useDispatch();
+  const dispatch:AppDispatch = useDispatch();
   const data = useSelector(selectStudents);
   const [search, setSearch] = useState("");
   const [detailsView, setDetailsview] = useState<UserType>();
   const getUsersList = async () => {
     try {
-      const res = await axios.get(
-        search
-          ? `http://localhost:3000/api/user?role=student&search=${search}`
-          : `http://localhost:3000/api/user?role=student`,
-        {
-          headers: {
-            Authorization: token,
-          },
-        }
-      );
-      console.log(res.data.users);
-      dispatch(setStudents(res.data.users));
+      dispatch(getStudents(search));
     } catch (error: any) {
       toast(error.response.data.message);
     }

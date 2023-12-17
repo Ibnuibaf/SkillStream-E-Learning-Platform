@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { cleanUser, selectUser, setUser } from "../redux/slices/authSlice";
+import { cleanUser, selectUser } from "../redux/slices/authSlice";
 import { toast } from "react-toastify";
-import axios from "axios";
 import {
   MdDashboard,
   MdLogout,
@@ -12,14 +11,14 @@ import {
   MdCategory,
 } from "react-icons/md";
 import { FaClipboardList, FaMoneyCheckAlt, FaUserFriends, FaUserGraduate } from "react-icons/fa";
+import { AppDispatch } from "../redux/store";
 
 function AdminSideBar() {
   const token = localStorage.getItem("SkillStreamToken");
   const user = useSelector(selectUser);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch:AppDispatch = useDispatch();
 
-  const [role, setRole] = useState(user?.role);
 
   const logoutUser = () => {
     localStorage.removeItem("SkillStreamToken");
@@ -27,47 +26,12 @@ function AdminSideBar() {
     toast("Admin Logged Out!");
     navigate("/");
   };
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        if (token) {
-          const response = await axios.get(
-            "http://localhost:3000/api/user/find",
-            {
-              headers: {
-                Authorization: token,
-              },
-            }
-          );
-          if (!response.data.user) {
-            toast(response.data.message);
-            return;
-          }
-          dispatch(setUser(response.data.user));
-          setRole(response.data.user.role);
-
-          if (response.data.user.role != "admin") {
-            toast("You have no Administration Access");
-            navigate("/");
-          }
-        }
-      } catch (error: any) {
-        console.error("Error fetching user:", error);
-        localStorage.removeItem("SkillStreamToken");
-
-        toast(error.response.data.message);
-      }
-    };
-
-    fetchData();
-  }, [dispatch]);
 
   useEffect(() => {
     if (!token) {
       toast("Log In to your account");
       navigate("/login");
     }
-    setRole(user?.role);
   }, [token, user]);
   return (
     <div className="sticky top-0 z-50 ">

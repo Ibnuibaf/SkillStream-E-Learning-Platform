@@ -28,7 +28,7 @@ function LoginSection() {
   const submitForm = async (e: React.FormEvent) => {
     try {
       e.preventDefault();
-      setSubmitStage(true)
+      setSubmitStage(true);
       if (!loginDetails.email || !loginDetails.password) {
         return toast("Enter necessary details");
       }
@@ -48,10 +48,15 @@ function LoginSection() {
         toast.error(res.data.message);
         return;
       }
-      setSubmitStage(false)
+      setSubmitStage(false);
       localStorage.setItem("SkillStreamToken", res.data.token);
-      toast("User logged In");
-      navigate("/");
+      if (res.data.admin) {
+        toast("Welcome back Admin, Good to see yah!");
+        navigate("/admin");
+      }else{
+        toast("User logged In");
+        navigate("/");
+      }
     } catch (error: any) {
       console.error(error.response);
 
@@ -59,7 +64,6 @@ function LoginSection() {
     }
   };
 
-  
   const passwordOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (passwordRegex.test(loginDetails.password)) {
       setValidPass(true);
