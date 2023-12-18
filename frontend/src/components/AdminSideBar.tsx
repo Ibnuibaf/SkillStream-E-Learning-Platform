@@ -1,4 +1,4 @@
-import {  useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { cleanUser, selectUser } from "../redux/slices/authSlice";
@@ -10,15 +10,19 @@ import {
   MdAdminPanelSettings,
   MdCategory,
 } from "react-icons/md";
-import { FaClipboardList, FaMoneyCheckAlt, FaUserFriends, FaUserGraduate } from "react-icons/fa";
+import {
+  FaClipboardList,
+  FaMoneyCheckAlt,
+  FaUserFriends,
+  FaUserGraduate,
+} from "react-icons/fa";
 import { AppDispatch } from "../redux/store";
 
 function AdminSideBar() {
   const token = localStorage.getItem("SkillStreamToken");
-  const user = useSelector(selectUser);
+  const user = useSelector(selectUser).user;
   const navigate = useNavigate();
-  const dispatch:AppDispatch = useDispatch();
-
+  const dispatch: AppDispatch = useDispatch();
 
   const logoutUser = () => {
     localStorage.removeItem("SkillStreamToken");
@@ -27,12 +31,18 @@ function AdminSideBar() {
     navigate("/");
   };
 
+  
+
   useEffect(() => {
+
     if (!token) {
       toast("Log In to your account");
       navigate("/login");
+    } else if (user && user.role !== "admin") {
+      toast("You have no administration access");
+      navigate('/');
     }
-  }, [token, user]);
+  }, [token, user, navigate]);
   return (
     <div className="sticky top-0 z-50 ">
       <div className="flex flex-col w-60 bg-gradient-to-r from-gray-900 to-slate-950 overflow-hidden h-screen">
@@ -80,7 +90,7 @@ function AdminSideBar() {
               className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-300"
             >
               <span className="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-gray-300">
-                <FaUserGraduate  size={24} />
+                <FaUserGraduate size={24} />
               </span>
               <span className="text-sm font-medium">Instructors</span>
             </Link>
@@ -113,7 +123,7 @@ function AdminSideBar() {
               className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-300"
             >
               <span className="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-gray-300">
-                <FaMoneyCheckAlt  size={24} />
+                <FaMoneyCheckAlt size={24} />
               </span>
               <span className="text-sm font-medium">Payments</span>
             </Link>
@@ -124,7 +134,7 @@ function AdminSideBar() {
               className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-300"
             >
               <span className="inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-gray-300">
-                <FaClipboardList  size={24} />
+                <FaClipboardList size={24} />
               </span>
               <span className="text-sm font-medium">Reports</span>
             </Link>

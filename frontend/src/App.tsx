@@ -1,7 +1,7 @@
 import "./App.css";
 import {BrowserRouter,Routes,Route} from 'react-router-dom'
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
@@ -12,7 +12,27 @@ import AdminDashboardPage from "./pages/AdminDashboardPage";
 import AdminStudentPage from "./pages/AdminStudentPage";
 import AdminInstructorPage from "./pages/AdminInstructorPage";
 import ForgotPage from "./pages/ForgotPage";
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "./redux/store";
+import { getUser } from "./redux/actions/authActions";
 function App() {
+  const dispatch:AppDispatch=useDispatch()
+  const token = localStorage.getItem("SkillStreamToken");
+  useEffect(() => {
+
+    const fetchData = async () => {
+      try {
+        await dispatch(getUser());
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+        toast("Error fetching user data");
+      }
+    };
+    if(token){
+      fetchData();
+    }
+  }, [dispatch]);
   return (
     <div className="min-h-screen">
       <BrowserRouter>

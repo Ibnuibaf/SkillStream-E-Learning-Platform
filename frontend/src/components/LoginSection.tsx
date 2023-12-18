@@ -4,6 +4,9 @@ import axios from "axios";
 // import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
+import { getUser } from "../redux/actions/authActions";
+import { AppDispatch } from "../redux/store";
+import { useDispatch } from "react-redux";
 // import { selectUser } from "../redux/slices/authSlice";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -13,6 +16,8 @@ const passwordRegex =
 function LoginSection() {
   const token = localStorage.getItem("SkillStreamToken");
   const navigate = useNavigate();
+  const dispatch:AppDispatch=useDispatch()
+
 
   const [loginDetails, setLoginDetails] = useState({ email: "", password: "" });
   const [validPass, setValidPass] = useState(false);
@@ -54,6 +59,7 @@ function LoginSection() {
         toast("Welcome back Admin, Good to see yah!");
         navigate("/admin");
       }else{
+        await dispatch(getUser());
         toast("User logged In");
         navigate("/");
       }
