@@ -40,8 +40,8 @@ const qa = [
 ];
 function AuthorizePage() {
   const [step, setStep] = useState(0);
-  const user=useSelector(selectUser)
-  const dispatch=useDispatch()
+  const user = useSelector(selectUser).user;
+  const dispatch = useDispatch();
   const [Authorization, setAuthorization] = useState<{ [key: string]: string }>(
     {
       "0": "",
@@ -49,34 +49,40 @@ function AuthorizePage() {
       "2": "",
     }
   );
-    const token=localStorage.getItem("SkillStreamToken")
-    const proceedInstructor=async()=>{
-      try {
-        console.log("Hello are you there");
-        
-        const res=await axios.post('http://localhost:3000/api/user/authorize',{updates:Authorization,id:user?.id},{
+  const token = localStorage.getItem("SkillStreamToken");
+  const proceedInstructor = async () => {
+    try {
+      console.log("Hello are you there");
+
+      const res = await axios.post(
+        "http://localhost:3000/api/user/authorize",
+        { updates: Authorization, id: user?.id },
+        {
           headers: {
             Authorization: token,
           },
-        })
-        if(!res.data.user){
-          toast(res.data.message)
         }
-        dispatch(setUser({
-          id:res.data.user._id,
-          email:res.data.user.email,
-          avatar:res.data.user.avatar,
-          role:res.data.user.role,
-          name:res.data.user.name,
-          verified:res.data.user.verfied,
-          isBlock:res.data.isBlock
-        }))
-        toast(`${res.data.user.name} is now Instructor`)
-      } catch (error:any) {
-        console.error(error);
-        toast(error.response.data.message)
+      );
+      if (!res.data.user) {
+        toast(res.data.message);
       }
+      dispatch(
+        setUser({
+          id: res.data.user._id,
+          email: res.data.user.email,
+          avatar: res.data.user.avatar,
+          role: res.data.user.role,
+          name: res.data.user.name,
+          verified: res.data.user.verfied,
+          isBlock: res.data.isBlock,
+        })
+      );
+      toast(`${res.data.user.name} is now Instructor`);
+    } catch (error: any) {
+      console.error(error);
+      toast(error.response.data.message);
     }
+  };
   return (
     <div className="h-screen">
       <h3 className="flex border rounded-3xl px-2 w-max  m-5 bg-white text-slate-950 font-semibold text-sm">
@@ -130,7 +136,9 @@ function AuthorizePage() {
           <button
             className="bg-white border text-slate-950 rounded-md h-min py-1 font-semibold px-3 duration-300 hover:bg-transparent hover:text-white"
             type="button"
-            onClick={() => {proceedInstructor()}}
+            onClick={() => {
+              proceedInstructor();
+            }}
           >
             Proceed
           </button>

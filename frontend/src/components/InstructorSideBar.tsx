@@ -34,7 +34,7 @@ function InstructorSideBar() {
   }, [token, user]);
   return (
     <>
-      {user?.role == "student" ? (
+      {user?.role != "instructor" ? (
         <AuthorizePage />
       ) : user?.verified?(
         <div className="min-h-screen flex flex-row ">
