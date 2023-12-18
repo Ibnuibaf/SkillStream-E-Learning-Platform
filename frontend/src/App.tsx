@@ -17,6 +17,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "./redux/store";
 import { getUser } from "./redux/actions/authActions";
 import AdminCategoryPage from "./pages/AdminCategoryPage";
+import InstructorCoursePage from "./pages/InstructorCoursePage";
 function App() {
   const dispatch:AppDispatch=useDispatch()
   const token = localStorage.getItem("SkillStreamToken");
@@ -45,6 +46,7 @@ function App() {
           <Route path="/courses" element={<CoursesPage/>}/>
           <Route path="/profile" element={<ProfilePage/>}/>
           <Route path="/instructor" element={<InstructorHomePage/>}/>
+          <Route path="/instructor/courses" element={<InstructorCoursePage/>}/>
           <Route path="/admin" element={<AdminDashboardPage/>}/>
           <Route path="/admin/students" element={<AdminStudentPage/>}/>
           <Route path="/admin/instructors" element={<AdminInstructorPage/>}/>
