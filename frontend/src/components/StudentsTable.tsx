@@ -23,7 +23,7 @@ function StudentsTable() {
   const [detailsView, setDetailsview] = useState<UserType>();
   const getUsersList = async () => {
     try {
-      dispatch(getStudents(search));
+      await dispatch(getStudents(search));
     } catch (error: any) {
       toast(error.response.data.message);
     }

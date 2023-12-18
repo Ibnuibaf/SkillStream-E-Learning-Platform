@@ -26,7 +26,7 @@ function InstructorsTable() {
   const [detailsView, setDetailsview] = useState<UserType>();
   const getUsersList = async () => {
     try {
-      dispatch(getInstructors(search));
+      await dispatch(getInstructors(search));
     } catch (error: any) {
       toast(error.response.data.message);
     }

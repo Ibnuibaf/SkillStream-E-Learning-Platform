@@ -16,6 +16,7 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "./redux/store";
 import { getUser } from "./redux/actions/authActions";
+import AdminCategoryPage from "./pages/AdminCategoryPage";
 function App() {
   const dispatch:AppDispatch=useDispatch()
   const token = localStorage.getItem("SkillStreamToken");
@@ -47,6 +48,7 @@ function App() {
           <Route path="/admin" element={<AdminDashboardPage/>}/>
           <Route path="/admin/students" element={<AdminStudentPage/>}/>
           <Route path="/admin/instructors" element={<AdminInstructorPage/>}/>
+          <Route path="/admin/categories" element={<AdminCategoryPage/>}/>
         </Routes>
       </BrowserRouter>
       <ToastContainer/>
