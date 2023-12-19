@@ -8,7 +8,7 @@ function AdminStudentPage() {
       <div className="">
         <AdminSideBar />
       </div>
-      <div className="w-full ">
+      <div className="w-full max-h-screen overflow-auto">
         <StudentsTable />
       </div>
     </div>

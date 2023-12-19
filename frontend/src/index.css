@@ -9,6 +9,9 @@ body{
   color: #fafafa;
 }
 
+select option {
+  color: #333;
+}
 
 /* width */
 ::-webkit-scrollbar {

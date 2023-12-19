@@ -3,6 +3,7 @@ import connectDB from "./configs/db";
 import createServer from "./configs/server";
 import userRoute from './routes/user.route'
 import categoryRoute from './routes/category.route'
+import courseRoute from './routes/course.route.'
 const app=createServer()
 
 app.get('/',(req:Request,res:Response)=>{
@@ -11,7 +12,7 @@ app.get('/',(req:Request,res:Response)=>{
 
 app.use('/api/user',userRoute)
 app.use('/api/category',categoryRoute)
-// app.use('/api/order')
+app.use('/api/course',courseRoute)
 
 app.listen(3000,()=>{
     console.log("Server listening on http://localhost:3000/");

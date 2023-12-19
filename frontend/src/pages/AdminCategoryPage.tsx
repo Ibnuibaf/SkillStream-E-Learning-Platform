@@ -7,7 +7,7 @@ function AdminCategoryPage() {
       <div>
         <AdminSideBar />
       </div>
-      <div className="w-full ">
+      <div className="w-full max-h-screen overflow-auto">
         <CategoriesTab/>
       </div>
     </div>
