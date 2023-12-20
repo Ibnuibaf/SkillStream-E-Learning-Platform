@@ -1,6 +1,6 @@
 import { RiShoppingCart2Fill, RiNotification4Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { selectUser } from "../redux/slices/authSlice";
 
 function AuthSection() {
@@ -8,12 +8,18 @@ function AuthSection() {
 
   return userDetails.loading ? (
     <div className="flex space-x-2 animate-pulse">
-        <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
-        <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
-        <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+      <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+      <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+      <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
     </div>
   ) : userDetails.user ? (
     <div className="flex gap-5 items-center">
+      <Link
+        to={"/mylearning"}
+        className=" h-min py-1 px-3 font-semibold "
+      >
+        My Learnings
+      </Link>
       <button>
         <RiShoppingCart2Fill size={24}></RiShoppingCart2Fill>
       </button>
