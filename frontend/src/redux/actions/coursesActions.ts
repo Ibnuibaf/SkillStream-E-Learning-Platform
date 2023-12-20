@@ -2,21 +2,21 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../axios/api";
 import { toast } from "react-toastify";
 
-export const getCategories = createAsyncThunk(
-  "categories/getcategories",
+export const getCourses = createAsyncThunk(
+  "courses/getcourses",
   async (search: string, { rejectWithValue }) => {
     try {
         
       const response = await api.get(
         search
-          ? `/category?search=${search}`
-          : `/category`
+          ? `/course?search=${search}`
+          : `/course`
       );
-      if (!response.data.categories) {
+      if (!response.data.courses) {
         toast(response.data.message);
         return rejectWithValue(response.data.message);
       }
-      return response.data.categories;
+      return response.data.courses;
     } catch (error: any) {
       console.error("Error fetching user:", error);
       toast(error.response.data.message);

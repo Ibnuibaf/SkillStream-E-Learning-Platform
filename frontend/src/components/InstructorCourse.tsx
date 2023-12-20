@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { GrAnnounce } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
@@ -8,6 +8,10 @@ import { AppDispatch } from "../redux/store";
 import { selectCategories } from "../redux/slices/categorySlice";
 import api from "../axios/api";
 import { toast } from "react-toastify";
+import axios from "axios";
+import { getCourses } from "../redux/actions/coursesActions";
+import { selectcourses } from "../redux/slices/coursesSlice";
+import swal from "sweetalert";
 
 interface ICoupon {
   code: string;
@@ -23,6 +27,7 @@ interface ILesson {
 }
 
 interface ICourse {
+  _id?:string
   title: string;
   description: string;
   language: string;
@@ -34,14 +39,19 @@ interface ICourse {
   coupons: ICoupon[];
   price: number;
   offer: number;
+  isApproved: boolean;
+  isBlock: boolean;
 }
 function InstructorCourse() {
   const dispatch: AppDispatch = useDispatch();
   const categories = useSelector(selectCategories).categories;
+  const courses = useSelector(selectcourses).courses;
   const [courseDetailView, setCourseDetailview] = useState(false);
   const [newCourse, setNewCourse] = useState(false);
+  const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
   const [submitStage, setSubmitStage] = useState(false);
-  const [coverImage, setCoverImage] = useState<null | File>(null);
+  const [coverImage, setCoverImage] = useState<File | null>(null);
   const [announcement, setAnnouncement] = useState("");
   const [courseDetails, setCourseDetails] = useState<ICourse>({
     title: "",
@@ -55,6 +65,8 @@ function InstructorCourse() {
     coupons: [],
     price: 0,
     offer: 0,
+    isApproved: false,
+    isBlock: false,
   });
   const [step, setStep] = useState(0);
 
@@ -67,79 +79,126 @@ function InstructorCourse() {
         !courseDetails.language ||
         !courseDetails.level ||
         !courseDetails.category ||
-        (newCourse && !coverImage) ||
-        (!newCourse && !courseDetails.cover) ||
+        !courseDetails.cover ||
         !courseDetails.price
       ) {
         return toast("Fill necessary fields");
       }
-      const formData = new FormData();
-      // Append individual fields
-      formData.append("title", courseDetails.title);
-      formData.append("description", courseDetails.description);
-      formData.append("language", courseDetails.language);
-      formData.append("level", courseDetails.level);
-      formData.append("category", courseDetails.category);
-      formData.append("price", courseDetails.price.toString()); // Convert to string if it's a number
-      formData.append("offer", courseDetails.offer.toString()); // Convert to string if it's a number
-
-      // Append lessons as JSON
-      formData.append("lessons", JSON.stringify(courseDetails.lessons));
-
-      // Append announcements as JSON
-      formData.append(
-        "announcements",
-        JSON.stringify(courseDetails.announcements)
-      );
-
-      // Append coupons as JSON
-      formData.append("coupons", JSON.stringify(courseDetails.coupons));
-
-      // Append coverImage if it exists
-      if (coverImage) {
-        formData.append("file", coverImage);
+      const confirmed = await swal("Are you sure create course with this details?", {
+        buttons: ["Cancel", true],
+      });
+      if(confirmed){
+        await api.post("/course/create", courseDetails);
+        setSubmitStage(false);
+        setCourseDetailview(false);
+        setCourseDetails({
+          title: "",
+          description: "",
+          language: "",
+          level: "",
+          category: "",
+          cover: "",
+          lessons: [],
+          announcements: [],
+          coupons: [],
+          price: 0,
+          offer: 0,
+          isApproved: false,
+          isBlock: false,
+        });
+        setCoverImage(null);
+        setStep(0);
+        setAnnouncement("");
+        setNewCourse(false);
+        dispatch(getCourses(search));
       }
-      console.log(formData, coverImage);
-
-      await api.post("/course/create", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      setSubmitStage(false);
-      setCourseDetailview(false);
-      setCourseDetails({
-        title: "",
-        description: "",
-        language: "",
-        level: "",
-        category: "",
-        cover: "",
-        lessons: [],
-        announcements: [],
-        coupons: [],
-        price: 0,
-        offer: 0,
-      });
-      setCoverImage(null);
-      setStep(0);
-      setAnnouncement("");
-      setNewCourse(false);
     } catch (error: any) {
       toast(error.response.data.message);
     }
   };
   const updateCourse = async () => {
     try {
-      await api.patch("/course/update");
+      setSubmitStage(true);
+      if (
+        !courseDetails._id ||
+        !courseDetails.title ||
+        !courseDetails.description ||
+        !courseDetails.language ||
+        !courseDetails.level ||
+        !courseDetails.category ||
+        !courseDetails.cover ||
+        !courseDetails.price
+      ) {
+        return toast("Fill necessary fields");
+      }
+      const confirmed = await swal("Are you sure to Update Changes?", {
+        buttons: ["Cancel", true],
+      });
+      if(confirmed){
+        await api.patch("/course/update", courseDetails);
+        setSubmitStage(false);
+        setCourseDetailview(false);
+        setCourseDetails({
+          title: "",
+          description: "",
+          language: "",
+          level: "",
+          category: "",
+          cover: "",
+          lessons: [],
+          announcements: [],
+          coupons: [],
+          price: 0,
+          offer: 0,
+          isApproved: false,
+          isBlock: false,
+        });
+        setCoverImage(null);
+        setStep(0);
+        setAnnouncement("");
+        setNewCourse(false);
+        dispatch(getCourses(search));
+      }
     } catch (error: any) {
       toast(error.response.data.message);
     }
   };
 
+  const uploadImage = async () => {
+    if (coverImage) {
+      setLoading(true);
+      const data = new FormData();
+      data.append("file", coverImage);
+      data.append("upload_preset", "image_preset");
+      try {
+        const cloudName = "dshijvj8y";
+
+        const api = `https://api.cloudinary.com/v1_1/${cloudName}/${"image"}/upload`;
+        const res = await axios.post(api, data, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        console.log(res);
+        const { secure_url } = res.data;
+        setCourseDetails({ ...courseDetails, cover: secure_url });
+        setCoverImage(null);
+        console.log(courseDetails);
+        setLoading(false);
+      } catch (error: any) {
+        setLoading(false);
+        toast("error");
+
+        toast(error.response.data.message);
+      }
+    }
+  };
+
   useEffect(() => {
     dispatch(getCategories(""));
+    dispatch(getCourses(search));
   }, []);
+
   // useEffect(() => {
   // }, [courseDetails]);
   return (
@@ -614,27 +673,55 @@ function InstructorCourse() {
               </div>
               <div className="mt-5 ">
                 <p className="text-xl font-medium mb-2">Cover Image</p>
-                <div className="border bg-transparent pt-2 pb-1 px-2 w-full outline-none flex justify-between items-center">
-                  {courseDetails.cover ? (
-                    <img src={`${courseDetails.cover}`} alt="" />
-                  ) : (
-                    <>
-                      <input
-                        id="upload"
-                        type="file"
-                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                          e.target.files
-                            ? setCoverImage(e.target.files[0])
-                            : setCoverImage(null)
+                <div className="">
+                  {loading ? (
+                    <div className="flex space-x-2 animate-pulse">
+                      <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+                      <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+                      <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+                    </div>
+                  ) : courseDetails.cover ? (
+                    <div className="h-52 w-[60%] flex items-start gap-2">
+                      <button
+                        onClick={() =>
+                          setCourseDetails({ ...courseDetails, cover: "" })
                         }
-                      />
-                      <label
-                        className="button bg-white text-black px-3 py-1 hover:cursor-pointer"
-                        htmlFor="upload"
+                        className="border px-2 py-1 rounded text-red-600 hover:bg-red-600 hover:text-white"
                       >
-                        Upload File
-                      </label>
-                    </>
+                        <MdDelete size={24} />
+                      </button>
+                      <img
+                        src={`${courseDetails.cover}`}
+                        alt=""
+                        className="h-full"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex justify-between">
+                      <div className="border bg-transparent pt-2 pb-1 px-2 w-full outline-none flex justify-between items-center">
+                        <input
+                          id="upload"
+                          type="file"
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            e.target.files
+                              ? setCoverImage(e.target.files[0])
+                              : setCoverImage(null)
+                          }
+                        />
+                        <label
+                          className="button bg-white text-black px-3 py-1 hover:cursor-pointer"
+                          htmlFor="upload"
+                        >
+                          Upload File
+                        </label>
+                      </div>
+                      <button
+                        onClick={() => uploadImage()}
+                        className="border px-4 py-1 bg-slate-600 hover:bg-slate-600/30"
+                      >
+                        Upload
+                      </button>
+                    </div>
                   )}
                 </div>
               </div>
@@ -651,9 +738,19 @@ function InstructorCourse() {
                   <input
                     type="text"
                     placeholder="Search your courses.."
+                    value={search}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setSearch(e.target.value)
+                    }
                     className="bg-transparent text-sm outline-none min-w-[20vw] px-2 py-1 "
                   />
-                  <button className="h-[100%] flex items-end bg-white text-black px-2 py-1 font-medium hover:bg-slate-400 transition duration-300">
+                  <button
+                    onClick={() => {
+                      dispatch(getCourses(search));
+                      setSearch("");
+                    }}
+                    className="h-[100%] flex items-end bg-white text-black px-2 py-1 font-medium hover:bg-slate-400 transition duration-300"
+                  >
                     Search
                   </button>
                 </div>
@@ -696,60 +793,74 @@ function InstructorCourse() {
             </div>
           </div>
           <div className=" mt-4 h-[70vh] overflow-y-auto overflow-x-hidden">
-            <div className="bg-purple-900/30 rounded flex justify-between px-5">
-              <div className="text-start flex items-center gap-2">
-                <div className="bg-slate-950 rounded-t-lg ">
-                  <div className="px-2 text-center">
-                    <p className="text-green-500 font-medium text-xs">
-                      APPROVED
+            {courses.map((course) => (
+              <div className="bg-purple-900/30 rounded flex justify-between px-5 mb-2">
+                <div className="text-start flex items-center gap-2">
+                  <div className="bg-slate-950 rounded-t-lg ">
+                    <div className="px-2 text-center">
+                      <p
+                        className={`${
+                          course.isApproved
+                            ? "text-green-500"
+                            : course.isBlock
+                            ? "text-blue-800"
+                            : "text-red-600"
+                        } font-medium text-xs`}
+                      >
+                        {course.isApproved
+                          ? "APPROVED"
+                          : course.isBlock
+                          ? "BLOCKED"
+                          : "PENDING"}
+                      </p>
+                    </div>
+                    <img
+                      src={course.cover}
+                      alt=""
+                      className="h-[6rem] w-[10rem]"
+                    />
+                  </div>
+                  <div className="">
+                    <div className="pb-2">
+                      <p className="text-xl font-medium">{course.title}</p>
+                      <p className="text-sm">{course.description}</p>
+                      <p className="italic  w-max  mt-1 py-1">
+                        Enrollements :{" "}
+                        <b className="text-purple-600 space-x-[0.9px] border p-1">
+                          <span className="bg-slate-800 rounded px-1">0</span>
+                          <span className="bg-slate-800 rounded px-1">7</span>
+                          <span className="bg-slate-800 rounded px-1">8</span>
+                        </b>
+                      </p>
+                    </div>
+                    <p className=" text-xs font-light">
+                      Updated on 05 Oct 7.5 total hours
                     </p>
                   </div>
-                  <img
-                    src="https://tse3.mm.bing.net/th?id=OIP.WXOyi2RkWruFvwKiO-y6ewHaEK&pid=Api&P=0&h=220"
-                    alt=""
-                    className="h-[6rem] w-[10rem]"
-                  />
                 </div>
-                <div className="">
-                  <div className="pb-2">
-                    <p className="text-xl font-medium">
-                      React & TypeScript - The Practical Guide
-                    </p>
-                    <p className="text-sm">
-                      Build type-safe React apps & use TypeScript to enhance
-                      your components, state mana....
-                    </p>
-                    <p className="italic  w-max  mt-1 py-1">
-                      Enrollements :{" "}
-                      <b className="text-purple-600 space-x-[0.9px] border p-1">
-                        <span className="bg-slate-800 rounded px-1">0</span>
-                        <span className="bg-slate-800 rounded px-1">7</span>
-                        <span className="bg-slate-800 rounded px-1">8</span>
-                      </b>
-                    </p>
-                  </div>
-                  <p className=" text-xs font-light">
-                    Updated on 05 Oct 7.5 total hours
+                <div className="text-end ">
+                  <p className="text-sm">rating</p>
+                  <p className="font-semibold text-lg text-purple-600">
+                    &#8377; {course.price}/-
                   </p>
+                  {course.offer ? (
+                    <p className="italic text-sm">{course.offer}% off</p>
+                  ) : (
+                    ""
+                  )}
+                  <button
+                    onClick={() => {
+                      setCourseDetailview(true);
+                      setCourseDetails(course);
+                      setNewCourse(false);
+                    }}
+                    className="border rounded-full px-4 py-1 my-3 text-purple-600 border-purple-600 hover:shadow hover:shadow-violet-800 transition duration-300 hover:bg-purple-600 hover:text-white"
+                  >
+                    Detail/edit
+                  </button>
                 </div>
               </div>
-              <div className="text-end ">
-                <p className="text-sm">rating</p>
-                <p className="font-semibold text-lg text-purple-600">
-                  &#8377; 976.09/-
-                </p>
-                <p className="italic text-sm">5% off</p>
-                <button
-                  onClick={() => {
-                    setCourseDetailview(true);
-                    setNewCourse(false);
-                  }}
-                  className="border rounded-full px-4 py-1 my-3 text-purple-600 border-purple-600 hover:shadow hover:shadow-violet-800 transition duration-300 hover:bg-purple-600 hover:text-white"
-                >
-                  Detail/edit
-                </button>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       )}
