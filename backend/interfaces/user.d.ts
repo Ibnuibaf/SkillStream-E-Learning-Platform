@@ -7,8 +7,9 @@ interface IUser {
   avatar?: string;
   role?: string;
   isBlock?: boolean;
-  verification?: [string];
+  verification?:object;
   verified?:boolean
+  learnings:string[]
 }
 
 export default IUser;

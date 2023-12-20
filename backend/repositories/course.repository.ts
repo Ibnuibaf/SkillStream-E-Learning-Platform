@@ -63,6 +63,28 @@ class CourseRepository {
       };
     }
   }
+  async updateCourseDirect(id: string, updates: any) {
+    try {
+      const updated = await Courses.updateOne({_id:id}, updates, {
+        new: true,
+      });
+      if (!updated) {
+        return {
+          success: false,
+          message: "Unable to update right now",
+        };
+      }
+      return {
+        success: true,
+        message: "Updated the Course",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to fetch ${error}`,
+      };
+    }
+  }
 }
 
 export default CourseRepository

@@ -11,7 +11,7 @@ const store= configureStore({
         students: studentsReducer,
         instructors: instructorsReducer,
         categories: catogoriesReducer,
-        courses: coursesReducer
+        courses: coursesReducer,
     }
 })
 export type AppDispatch=typeof store.dispatch

@@ -20,7 +20,7 @@ interface ICouponType{
 }
 
 interface ICoursesType{
-    _id?:string
+    _id:string
     title:string
     description:string
     language:string

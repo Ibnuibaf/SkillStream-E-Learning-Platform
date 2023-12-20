@@ -13,6 +13,8 @@ interface ICourse{
     lessons:ILesson[]
     announcements:string[]
     coupons:ICoupon[]
+    instructor:string|ObjectId
+    enrollers:ObjectId[]
     price:number
     offer:number
     isApproved:boolean

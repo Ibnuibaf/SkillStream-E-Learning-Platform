@@ -20,6 +20,7 @@
     "@types/multer": "^1.4.11",
     "@types/node": "^20.10.2",
     "@types/nodemailer": "^6.4.14",
+    "@types/stripe": "^8.0.417",
     "ts-node-dev": "^2.0.0"
   },
   "dependencies": {
@@ -33,6 +34,7 @@
     "mongoose": "^8.0.2",
     "morgan": "^1.10.0",
     "multer": "^1.4.5-lts.1",
-    "nodemailer": "^6.9.7"
+    "nodemailer": "^6.9.7",
+    "stripe": "^14.9.0"
   }
 }

@@ -155,6 +155,29 @@ class UserRepository {
       };
     }
   }
+  async updateUserDirect(id: string, updates: any) {
+    try {
+      const userDetails = await Users.updateOne({_id:id},updates , {
+        new: true,
+      });
+      if (!userDetails) {
+        return {
+          success: false,
+          message: "No user found",
+        };
+      }
+      return {
+        success: true,
+        message: "user details updated",
+        data: userDetails,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to update ${error}`,
+      };
+    }
+  }
   async updateRole(id: string, updates: any) {
     try {
       const userDetails = await Users.findByIdAndUpdate(

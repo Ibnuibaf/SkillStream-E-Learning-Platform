@@ -37,6 +37,8 @@ interface ICourse {
   offer: number;
   isApproved?: boolean;
   isBlock?: boolean;
+  instructor?: string;
+  enrollers?: string[];
 }
 function AdminCourse() {
   const dispatch: AppDispatch = useDispatch();
@@ -56,11 +58,11 @@ function AdminCourse() {
     announcements: [],
     coupons: [],
     price: 0,
-    offer: 0
+    offer: 0,
   });
   const [step, setStep] = useState(0);
 
-  const updateCourse = async (update:string) => {
+  const updateCourse = async (update: string) => {
     try {
       setSubmitStage(true);
       if (
@@ -83,15 +85,21 @@ function AdminCourse() {
           setCourseDetails({
             ...courseDetails,
             isBlock: !courseDetails.isBlock,
-        });
-        console.log(courseDetails);
-        await api.patch("/course/update", {_id:courseDetails._id,isBlock:!courseDetails.isBlock});
-    } else if (update == "approve") {
-        setCourseDetails({ ...courseDetails, isApproved: true });
-        await api.patch("/course/update", {_id:courseDetails._id,isApproved:!courseDetails.isApproved});
+          });
+          console.log(courseDetails);
+          await api.patch("/course/update", {
+            _id: courseDetails._id,
+            isBlock: !courseDetails.isBlock,
+          });
+        } else if (update == "approve") {
+          setCourseDetails({ ...courseDetails, isApproved: true });
+          await api.patch("/course/update", {
+            _id: courseDetails._id,
+            isApproved: !courseDetails.isApproved,
+          });
           console.log(courseDetails);
         }
-        
+
         setSubmitStage(false);
         setCourseDetailview(false);
         setCourseDetails({
@@ -128,7 +136,24 @@ function AdminCourse() {
         <div className="">
           <div className="flex justify-end my-2 gap-2">
             <button
-              onClick={() => setCourseDetailview(false)}
+              onClick={() => {
+                setCourseDetailview(false);
+                setCourseDetails({
+                  title: "",
+                  description: "",
+                  language: "",
+                  level: "",
+                  category: "",
+                  cover: "",
+                  lessons: [],
+                  announcements: [],
+                  coupons: [],
+                  price: 0,
+                  offer: 0,
+                  isApproved: false,
+                  isBlock: false,
+                });
+              }}
               className="border px-2 p-1 bg-gray-700 hover:bg-gray-800 transition duration-300"
             >
               Go Back
@@ -605,6 +630,7 @@ function AdminCourse() {
                         </b>
                       </p>
                     </div>
+                    
                     <p className=" text-xs font-light">
                       Updated on 05 Oct 7.5 total hours
                     </p>

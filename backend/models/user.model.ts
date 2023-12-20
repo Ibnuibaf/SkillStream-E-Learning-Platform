@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema<IUser>({
     "1":String,
     "2":String
   },
+  learnings:[{
+   type:mongoose.Types.ObjectId,
+   ref:"courses", 
+  }],
   isBlock: {
     type: Boolean,
     default: false,

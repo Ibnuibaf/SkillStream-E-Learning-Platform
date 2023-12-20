@@ -31,6 +31,15 @@ const CourseSchema = new mongoose.Schema<ICourse>({
     type:Number,
     default:0
   },
+  instructor:{
+    type:mongoose.Types.ObjectId,
+    ref:"users",
+    required:true
+  },
+  enrollers:[{
+    type:mongoose.Types.ObjectId,
+    ref:"users",
+  }],
   price:{
     type:Number,
     required:true

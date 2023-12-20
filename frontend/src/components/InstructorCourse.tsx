@@ -12,6 +12,7 @@ import axios from "axios";
 import { getCourses } from "../redux/actions/coursesActions";
 import { selectcourses } from "../redux/slices/coursesSlice";
 import swal from "sweetalert";
+import { selectUser } from "../redux/slices/authSlice";
 
 interface ICoupon {
   code: string;
@@ -27,7 +28,7 @@ interface ILesson {
 }
 
 interface ICourse {
-  _id?:string
+  _id?: string;
   title: string;
   description: string;
   language: string;
@@ -41,16 +42,19 @@ interface ICourse {
   offer: number;
   isApproved: boolean;
   isBlock: boolean;
+  instructor?: string;
+  enrollers?: string[];
 }
 function InstructorCourse() {
   const dispatch: AppDispatch = useDispatch();
   const categories = useSelector(selectCategories).categories;
   const courses = useSelector(selectcourses).courses;
+  const user = useSelector(selectUser).user;
   const [courseDetailView, setCourseDetailview] = useState(false);
   const [newCourse, setNewCourse] = useState(false);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
-  const [submitStage, setSubmitStage] = useState(false);
+  // const [submitStage, setSubmitStage] = useState(false);
   const [coverImage, setCoverImage] = useState<File | null>(null);
   const [announcement, setAnnouncement] = useState("");
   const [courseDetails, setCourseDetails] = useState<ICourse>({
@@ -61,6 +65,7 @@ function InstructorCourse() {
     category: "",
     cover: "",
     lessons: [],
+    instructor: "",
     announcements: [],
     coupons: [],
     price: 0,
@@ -72,7 +77,7 @@ function InstructorCourse() {
 
   const createCourse = async () => {
     try {
-      setSubmitStage(true);
+      // setSubmitStage(true);
       if (
         !courseDetails.title ||
         !courseDetails.description ||
@@ -84,12 +89,18 @@ function InstructorCourse() {
       ) {
         return toast("Fill necessary fields");
       }
-      const confirmed = await swal("Are you sure create course with this details?", {
-        buttons: ["Cancel", true],
-      });
-      if(confirmed){
+      const confirmed = await swal(
+        "Are you sure create course with this details?",
+        {
+          buttons: ["Cancel", true],
+        }
+      );
+      if (confirmed) {
+        setCourseDetails({ ...courseDetails, instructor: user?.id });
+        console.log(courseDetails);
+        
         await api.post("/course/create", courseDetails);
-        setSubmitStage(false);
+        // setSubmitStage(false);
         setCourseDetailview(false);
         setCourseDetails({
           title: "",
@@ -97,6 +108,7 @@ function InstructorCourse() {
           language: "",
           level: "",
           category: "",
+          instructor: "",
           cover: "",
           lessons: [],
           announcements: [],
@@ -118,7 +130,7 @@ function InstructorCourse() {
   };
   const updateCourse = async () => {
     try {
-      setSubmitStage(true);
+      // setSubmitStage(true);
       if (
         !courseDetails._id ||
         !courseDetails.title ||
@@ -134,9 +146,9 @@ function InstructorCourse() {
       const confirmed = await swal("Are you sure to Update Changes?", {
         buttons: ["Cancel", true],
       });
-      if(confirmed){
+      if (confirmed) {
         await api.patch("/course/update", courseDetails);
-        setSubmitStage(false);
+        // setSubmitStage(false);
         setCourseDetailview(false);
         setCourseDetails({
           title: "",
@@ -207,7 +219,24 @@ function InstructorCourse() {
         <div className="">
           <div className="flex justify-end my-2 gap-2">
             <button
-              onClick={() => setCourseDetailview(false)}
+              onClick={() => {
+                setCourseDetailview(false);
+                setCourseDetails({
+                  title: "",
+                  description: "",
+                  language: "",
+                  level: "",
+                  category: "",
+                  cover: "",
+                  lessons: [],
+                  announcements: [],
+                  coupons: [],
+                  price: 0,
+                  offer: 0,
+                  isApproved: false,
+                  isBlock: false,
+                });
+              }}
               className="border px-2 p-1 bg-gray-700 hover:bg-gray-800 transition duration-300"
             >
               Discard Changes

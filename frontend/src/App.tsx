@@ -19,6 +19,7 @@ import { getUser } from "./redux/actions/authActions";
 import AdminCategoryPage from "./pages/AdminCategoryPage";
 import InstructorCoursePage from "./pages/InstructorCoursePage";
 import AdminCoursePage from "./pages/AdminCoursePage";
+import PurchaseConfirmPage from "./pages/PurchaseConfirmPage";
 function App() {
   const dispatch:AppDispatch=useDispatch()
   const token = localStorage.getItem("SkillStreamToken");
@@ -53,6 +54,7 @@ function App() {
           <Route path="/admin/instructors" element={<AdminInstructorPage/>}/>
           <Route path="/admin/categories" element={<AdminCategoryPage/>}/>
           <Route path="/admin/courses" element={<AdminCoursePage/>}/>
+          <Route path="/purchase" element={<PurchaseConfirmPage/>}/>
         </Routes>
       </BrowserRouter>
       <ToastContainer/>
