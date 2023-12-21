@@ -93,7 +93,7 @@ function CourseList() {
   };
   useEffect(() => {
     dispatch(getCategories(""));
-    dispatch(getCourses(search));
+    dispatch(getCourses({search,isInstructor:false}));
   }, [dispatch]);
   useEffect(() => {
     courses = courses.filter(
@@ -383,7 +383,7 @@ function CourseList() {
               />
               <button
                 onClick={() => {
-                  dispatch(getCourses(search));
+                  dispatch(getCourses({search,isInstructor:false}));
                 }}
               >
                 <MdSearch size={24} />

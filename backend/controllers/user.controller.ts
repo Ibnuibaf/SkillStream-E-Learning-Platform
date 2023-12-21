@@ -18,6 +18,17 @@ class UserController {
       });
     }
   }
+  async getUserLearnings(req: Request, res: Response) {
+    try {
+      const response = await this.userUsecase.getUserLearnings(req.headers["authorization"] as string);
+      res.status(response.status).send(response.data);
+    } catch (error) {
+      res.status(500).send({
+        success: false,
+        message: "server error",
+      });
+    }
+  }
   async createUser(req: Request, res: Response) {
     try {
       const response = await this.userUsecase.createUser(req.body);

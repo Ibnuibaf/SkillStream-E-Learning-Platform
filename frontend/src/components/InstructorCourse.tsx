@@ -96,7 +96,9 @@ function InstructorCourse() {
         }
       );
       if (confirmed) {
-        setCourseDetails({ ...courseDetails, instructor: user?.id });
+        if(user&&user.id){
+          setCourseDetails({ ...courseDetails, instructor: user.id as string});
+        }
         console.log(courseDetails);
         
         await api.post("/course/create", courseDetails);
@@ -122,7 +124,7 @@ function InstructorCourse() {
         setStep(0);
         setAnnouncement("");
         setNewCourse(false);
-        dispatch(getCourses(search));
+        dispatch(getCourses({search,isInstructor:true}));
       }
     } catch (error: any) {
       toast(error.response.data.message);
@@ -169,7 +171,7 @@ function InstructorCourse() {
         setStep(0);
         setAnnouncement("");
         setNewCourse(false);
-        dispatch(getCourses(search));
+        dispatch(getCourses({search,isInstructor:true}));
       }
     } catch (error: any) {
       toast(error.response.data.message);
@@ -208,7 +210,7 @@ function InstructorCourse() {
 
   useEffect(() => {
     dispatch(getCategories(""));
-    dispatch(getCourses(search));
+    dispatch(getCourses({search,isInstructor:true}));
   }, []);
 
   // useEffect(() => {
@@ -775,7 +777,7 @@ function InstructorCourse() {
                   />
                   <button
                     onClick={() => {
-                      dispatch(getCourses(search));
+                      dispatch(getCourses({search,isInstructor:true}));
                       setSearch("");
                     }}
                     className="h-[100%] flex items-end bg-white text-black px-2 py-1 font-medium hover:bg-slate-400 transition duration-300"

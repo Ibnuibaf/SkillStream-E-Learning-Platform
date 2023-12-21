@@ -13,6 +13,9 @@ const userController = new UserController(userUsecase);
 Router.get("/",(req:Request,res:Response,next:NextFunction)=>authMiddleware.authUser(req,res,next), (req: Request, res: Response) =>
   userController.getUsers(req, res)
 );
+Router.get("/learnings",(req:Request,res:Response,next:NextFunction)=>authMiddleware.authUser(req,res,next), (req: Request, res: Response) =>
+  userController.getUserLearnings(req, res)
+);
 Router.patch("/status",(req:Request,res:Response,next:NextFunction)=>authMiddleware.authUser(req,res,next), (req: Request, res: Response) =>
   userController.updateStatus(req, res)
 );

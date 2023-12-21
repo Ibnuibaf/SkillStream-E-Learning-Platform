@@ -118,7 +118,7 @@ function AdminCourse() {
           isBlock: false,
         });
         setStep(0);
-        dispatch(getCourses(search));
+        dispatch(getCourses({search,isInstructor:false}));
       }
     } catch (error: any) {
       toast(error.response.data.message);
@@ -126,7 +126,7 @@ function AdminCourse() {
   };
 
   useEffect(() => {
-    dispatch(getCourses(search));
+    dispatch(getCourses({search,isInstructor:false}));
     dispatch(getCategories(""));
   }, []);
 
@@ -554,7 +554,7 @@ function AdminCourse() {
                   />
                   <button
                     onClick={() => {
-                      dispatch(getCourses(search));
+                      dispatch(getCourses({search,isInstructor:false}));
                       setSearch("");
                     }}
                     className="h-[100%] flex items-end bg-white text-black px-2 py-1 font-medium hover:bg-slate-400 transition duration-300"

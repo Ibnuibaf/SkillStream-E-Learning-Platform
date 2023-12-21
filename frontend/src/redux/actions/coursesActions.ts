@@ -2,15 +2,18 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../axios/api";
 import { toast } from "react-toastify";
 
+interface GetCoursesArgs {
+  search: string;
+  isInstructor: boolean;
+}
 export const getCourses = createAsyncThunk(
   "courses/getcourses",
-  async (search: string, { rejectWithValue }) => {
+  async ({ search, isInstructor }: GetCoursesArgs, { rejectWithValue }) => {
     try {
-        
       const response = await api.get(
         search
-          ? `/course?search=${search}`
-          : `/course`
+          ? `/course/${isInstructor ? "instructor" : ""}?search=${search}`
+          : `/course/${isInstructor ? "instructor" : ""}`
       );
       if (!response.data.courses) {
         toast(response.data.message);

@@ -28,7 +28,7 @@ function LoginSection() {
       toast("User already logged In");
       navigate("/");
     }
-  }, [token]);
+  }, []);
 
   const submitForm = async (e: React.FormEvent) => {
     try {
@@ -61,7 +61,7 @@ function LoginSection() {
       }else{
         await dispatch(getUser());
         toast("User logged In");
-        navigate("/");
+        navigate('/')
       }
     } catch (error: any) {
       console.error(error.response);

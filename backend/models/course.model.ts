@@ -4,16 +4,13 @@ import ICourse from "../interfaces/course";
 const CourseSchema = new mongoose.Schema<ICourse>({
   title: {
     type: String,
-    required: true,
   },
   description: {
     type: String,
-    required: true,
   },
   category: {
     type: mongoose.Types.ObjectId,
     ref: "categories",
-    required: true,
   },
   language: {
     type: String,
@@ -21,7 +18,6 @@ const CourseSchema = new mongoose.Schema<ICourse>({
   },
   level: {
     type: String,
-    required: true,
   },
   announcements: { type: [String], default: [] },
   cover:{
@@ -34,7 +30,6 @@ const CourseSchema = new mongoose.Schema<ICourse>({
   instructor:{
     type:mongoose.Types.ObjectId,
     ref:"users",
-    required:true
   },
   enrollers:[{
     type:mongoose.Types.ObjectId,
@@ -42,7 +37,6 @@ const CourseSchema = new mongoose.Schema<ICourse>({
   }],
   price:{
     type:Number,
-    required:true
   },
   isApproved:{
     type:Boolean,

@@ -41,6 +41,28 @@ class UserUsecase {
       };
     }
   }
+  async getUserLearnings(token:string) {
+    try {
+      const user=this.decodeToken(token)
+      const response = await this.userRepository.getUserLearnings(user.id);
+      return {
+        status: response.success ? 200 : 500,
+        data: {
+          success: response.success,
+          message: response.message,
+          learnings: response?.data,
+        },
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        data: {
+          success: false,
+          message: "server error",
+        },
+      };
+    }
+  }
   async createUser(body: IUserBody) {
     try {
       const { email, name, password, confirmPassword } = body;

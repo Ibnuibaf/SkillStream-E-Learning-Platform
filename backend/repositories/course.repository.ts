@@ -14,7 +14,8 @@ class CourseRepository {
       }
       return{
         success:true,
-        message:"Course created"
+        message:"Course created",
+        data:course
       }
     } catch (error) {
       return {
@@ -28,6 +29,24 @@ class CourseRepository {
         const courses = regex
           ? await Courses.find({ title: { $regex: regex, $options: "i" } })
           : await Courses.find();
+  
+        return {
+          success: true,
+          message: "Fetch all caetgories",
+          courses,
+        };
+      } catch (error) {
+        return {
+          success: false,
+          message: `Failed to fetch ${error}`,
+        };
+      }
+  }
+  async getInstructorCourses(regex:string,id:string) {
+    try {
+        const courses = regex
+          ? await Courses.find({ title: { $regex: regex, $options: "i" },instructor:id })
+          : await Courses.find({instructor:id });
   
         return {
           success: true,

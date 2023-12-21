@@ -4,7 +4,6 @@ import Users from "../models/user.model";
 class UserRepository {
   async getUsers(role: string, regex: string) {
     try {
-
       const users = regex
         ? await Users.find(
             { role: role, email: { $regex: regex } },
@@ -15,6 +14,26 @@ class UserRepository {
         success: true,
         message: "All users fetched",
         data: users,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to fetch ${error}`,
+      };
+    }
+  }
+  async getUserLearnings(userId: string) {
+    try {
+      const userLearnings = await Users.findOne(
+        { _id: userId },
+        { learnings: 1 }
+      ).populate("learnings");
+      console.log(userLearnings);
+
+      return {
+        success: true,
+        message: "All users fetched",
+        data: userLearnings?.learnings,
       };
     } catch (error) {
       return {
@@ -62,7 +81,7 @@ class UserRepository {
           role: userDetails.role,
           isBlock: userDetails.isBlock,
           verified: userDetails.verified,
-          verification:userDetails.verification
+          verification: userDetails.verification,
         },
       };
     } catch (error) {
@@ -95,9 +114,13 @@ class UserRepository {
   }
   async changePassword(email: string, password: string) {
     try {
-      const userDetails = await Users.updateOne({email:email},{$set:{password:password}}, {
-        new: true,
-      });
+      const userDetails = await Users.updateOne(
+        { email: email },
+        { $set: { password: password } },
+        {
+          new: true,
+        }
+      );
       if (!userDetails) {
         return {
           success: false,
@@ -158,7 +181,7 @@ class UserRepository {
   }
   async updateUserDirect(id: string, updates: any) {
     try {
-      const userDetails = await Users.updateOne({_id:id},updates , {
+      const userDetails = await Users.updateOne({ _id: id }, updates, {
         new: true,
       });
       if (!userDetails) {

@@ -4,16 +4,32 @@ import AuthMiddleware from "../middlewares/auth.middleware";
 import CourseRepository from "../repositories/course.repository";
 import CourseUsecase from "../usecases/course.usecase";
 import CourseController from "../controllers/course.controller";
+import CommunityRepository from "../repositories/community.repository";
 const Router = express.Router();
 
 const userRepository = new UserRepository();
 const authMiddleware = new AuthMiddleware(userRepository);
 const courseRepository = new CourseRepository();
-const courseUsecase = new CourseUsecase(courseRepository);
+const communityRepository = new CommunityRepository();
+const courseUsecase = new CourseUsecase(courseRepository, communityRepository);
 const courseController = new CourseController(courseUsecase);
 
 Router.get("/", (req: Request, res: Response) =>
   courseController.getCourses(req, res)
+);
+Router.get(
+  "/instructor",
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.authUser(req, res, next),
+  (req: Request, res: Response) =>
+    courseController.getInstructorCourses(req, res)
+);
+Router.get(
+  "/admin",
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.authUser(req, res, next),
+  (req: Request, res: Response) =>
+    courseController.getCourses(req, res)
 );
 Router.post(
   "/create",

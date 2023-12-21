@@ -30,7 +30,7 @@ const userSchema = new mongoose.Schema<IUser>({
   },
   learnings:[{
    type:mongoose.Types.ObjectId,
-   ref:"courses", 
+   ref:"Course", 
   }],
   isBlock: {
     type: Boolean,
