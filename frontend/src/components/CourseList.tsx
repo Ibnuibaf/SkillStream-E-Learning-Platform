@@ -44,6 +44,7 @@ interface ICourse {
 }
 
 function CourseList() {
+  const token=localStorage.getItem("SkillStreamToken")
   const dispatch: AppDispatch = useDispatch();
   const categories = useSelector(selectCategories).categories;
   const user = useSelector(selectUser).user;
@@ -70,20 +71,24 @@ function CourseList() {
   const [search, setSearch] = useState("");
 
   const makePayment = async () => {
-    try {
-      //   const stripe = await loadStripe(
-      //     "pk_test_51OPOXKSEJEe9TfyNNyag37yMF9bIEKeA4GFHqqwArgo7rYKFRMDYYNtg34XPUTqfL7ICfxkGbC7EzA5vtkxqApHj00TZwZYdyU"
-      //   );
-      const res = await api.post("/order/checkout-session", {
-        course: courseDetails,
-        userId: user?.id,
-      });
-
-      if (res.data.url) {
-        window.location.href = res.data.url;
+    if(token){
+      try {
+        //   const stripe = await loadStripe(
+        //     "pk_test_51OPOXKSEJEe9TfyNNyag37yMF9bIEKeA4GFHqqwArgo7rYKFRMDYYNtg34XPUTqfL7ICfxkGbC7EzA5vtkxqApHj00TZwZYdyU"
+        //   );
+        const res = await api.post("/order/checkout-session", {
+          course: courseDetails,
+          userId: user?.id,
+        });
+  
+        if (res.data.url) {
+          window.location.href = res.data.url;
+        }
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
+    }else{
+      toast("Login to purchase course")
     }
   };
   useEffect(() => {

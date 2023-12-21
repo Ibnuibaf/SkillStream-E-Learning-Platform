@@ -1,10 +1,21 @@
 import { RiShoppingCart2Fill, RiNotification4Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../redux/slices/authSlice";
+import { AppDispatch } from "../redux/store";
+import { useEffect } from "react";
+import { getUser } from "../redux/actions/authActions";
 
 function AuthSection() {
   const userDetails = useSelector(selectUser);
+  const token=localStorage.getItem("SkillStreamToken")
+  const dispatch:AppDispatch=useDispatch()
+
+  useEffect(()=>{
+    if(token){
+      dispatch(getUser())
+    }
+  },[])
 
   return userDetails.loading ? (
     <div className="flex space-x-2 animate-pulse">

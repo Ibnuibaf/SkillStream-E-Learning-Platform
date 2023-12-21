@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import { Link, useNavigate } from "react-router-dom";
 
 function PurchaseConfirmPage() {
+  const token=localStorage.getItem("SkillStreamToken")
   const navigate = useNavigate();
 
   const createPurchase = async (purchase: any) => {
@@ -30,7 +31,14 @@ function PurchaseConfirmPage() {
   if (query.get("canceled")) {
     toast("Course purchase canceled, Try Later!");
   }
-
+  useEffect(()=>{
+    if(!token){
+      navigate("/");
+    }
+    if (!query) {
+      navigate("/");
+    }
+  },[token])
 
   return (
     <div className="h-screen flex justify-center items-center">

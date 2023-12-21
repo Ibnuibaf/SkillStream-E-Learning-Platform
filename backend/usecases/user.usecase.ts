@@ -416,6 +416,7 @@ class UserUsecase {
     try {
       const { id, updates } = body;
       const response = await this.userRepository.updateRole(id, updates);
+      
       return {
         status: response.success ? 200 : 500,
         data: {

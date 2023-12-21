@@ -61,7 +61,8 @@ class UserRepository {
           id: userDetails._id,
           role: userDetails.role,
           isBlock: userDetails.isBlock,
-          verified: userDetails.verified
+          verified: userDetails.verified,
+          verification:userDetails.verification
         },
       };
     } catch (error) {

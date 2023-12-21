@@ -13,11 +13,8 @@ const categoryController = new CategoryController(categoryUsecase);
 
 const Router = express.Router();
 
-Router.get(
-  "/",
-  (req: Request, res: Response, next: NextFunction) =>
-    authMiddleware.authUser(req, res, next),
-  (req: Request, res: Response) => categoryController.getCategories(req, res)
+Router.get("/", (req: Request, res: Response) =>
+  categoryController.getCategories(req, res)
 );
 Router.post(
   "/create",

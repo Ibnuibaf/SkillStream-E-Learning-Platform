@@ -12,11 +12,8 @@ const courseRepository = new CourseRepository();
 const courseUsecase = new CourseUsecase(courseRepository);
 const courseController = new CourseController(courseUsecase);
 
-Router.get(
-  "/",
-  (req: Request, res: Response, next: NextFunction) =>
-    authMiddleware.authUser(req, res, next),
-  (req: Request, res: Response) => courseController.getCourses(req, res)
+Router.get("/", (req: Request, res: Response) =>
+  courseController.getCourses(req, res)
 );
 Router.post(
   "/create",

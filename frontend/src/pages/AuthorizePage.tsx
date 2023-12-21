@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { selectUser, setUser } from "../redux/slices/authSlice";
+import { getUser } from "../redux/actions/authActions";
+import { AppDispatch } from "../redux/store";
 const qa = [
   {
     title: "Share Your Knowledge",
@@ -41,7 +43,7 @@ const qa = [
 function AuthorizePage() {
   const [step, setStep] = useState(0);
   const user = useSelector(selectUser).user;
-  const dispatch = useDispatch();
+  const dispatch:AppDispatch = useDispatch();
   const [Authorization, setAuthorization] = useState<{ [key: string]: string }>(
     {
       "0": "",
@@ -51,6 +53,9 @@ function AuthorizePage() {
   );
   const token = localStorage.getItem("SkillStreamToken");
   const proceedInstructor = async () => {
+    if (!Authorization["0"] || !Authorization["1"] || !Authorization["2"]) {
+      return;
+    }
     try {
       console.log("Hello are you there");
 
@@ -66,17 +71,7 @@ function AuthorizePage() {
       if (!res.data.user) {
         toast(res.data.message);
       }
-      dispatch(
-        setUser({
-          id: res.data.user._id,
-          email: res.data.user.email,
-          avatar: res.data.user.avatar,
-          role: res.data.user.role,
-          name: res.data.user.name,
-          verified: res.data.user.verfied,
-          isBlock: res.data.isBlock,
-        })
-      );
+      dispatch(getUser());
       toast(`${res.data.user.name} is now Instructor`);
     } catch (error: any) {
       console.error(error);
