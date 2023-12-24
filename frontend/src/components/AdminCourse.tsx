@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { getCourses } from "../redux/actions/coursesActions";
 import { selectcourses } from "../redux/slices/coursesSlice";
 import swal from "sweetalert";
+import axios from "axios";
 
 interface ICoupon {
   code: string;
@@ -46,7 +47,7 @@ function AdminCourse() {
   const categories = useSelector(selectCategories).categories;
   const [courseDetailView, setCourseDetailview] = useState(false);
   const [search, setSearch] = useState("");
-  const [submitStage, setSubmitStage] = useState(false);
+  // const [submitStage, setSubmitStage] = useState(false);
   const [courseDetails, setCourseDetails] = useState<ICourse>({
     title: "",
     description: "",
@@ -64,7 +65,7 @@ function AdminCourse() {
 
   const updateCourse = async (update: string) => {
     try {
-      setSubmitStage(true);
+      // setSubmitStage(true);
       if (
         !courseDetails._id ||
         !courseDetails.title ||
@@ -100,7 +101,7 @@ function AdminCourse() {
           console.log(courseDetails);
         }
 
-        setSubmitStage(false);
+        // setSubmitStage(false);
         setCourseDetailview(false);
         setCourseDetails({
           title: "",
@@ -120,8 +121,12 @@ function AdminCourse() {
         setStep(0);
         dispatch(getCourses({search,isInstructor:false}));
       }
-    } catch (error: any) {
-      toast(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
     }
   };
 

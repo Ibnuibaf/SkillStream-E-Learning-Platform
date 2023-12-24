@@ -24,8 +24,12 @@ function StudentsTable() {
   const getUsersList = async () => {
     try {
       await dispatch(getStudents(search));
-    } catch (error: any) {
-      toast(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
     }
   };
   useEffect(() => {
@@ -49,8 +53,12 @@ function StudentsTable() {
         );
         toast("Changed users status");
         getUsersList();
-      } catch (error: any) {
-        toast(error.response.data.message);
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          toast(error?.response?.data?.message);
+        } else {
+          toast("An unexpected error occurred");
+        }
       }
     }
   };

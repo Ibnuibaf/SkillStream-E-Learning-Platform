@@ -8,6 +8,8 @@ import nodemailer from "nodemailer";
 import MyJWTPayLoad from "../interfaces/jwt";
 import IUserBody from "../interfaces/userBody";
 import { IncomingHttpHeaders } from "http";
+import { HttpStatus } from "../enums/HttpStatus.enum";
+import { UserRole } from "../enums/UserRole.enum";
 
 dotenv.config();
 
@@ -24,7 +26,7 @@ class UserUsecase {
       const { role, search } = query;
       const response = await this.userRepository.getUsers(role, search);
       return {
-        status: response.success ? 200 : 500,
+        status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {
           success: response.success,
           message: response.message,
@@ -33,7 +35,7 @@ class UserUsecase {
       };
     } catch (error) {
       return {
-        status: 500,
+        status: HttpStatus.ServerError,
         data: {
           success: false,
           message: "server error",
@@ -46,7 +48,7 @@ class UserUsecase {
       const user=this.decodeToken(token)
       const response = await this.userRepository.getUserLearnings(user.id);
       return {
-        status: response.success ? 200 : 500,
+        status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {
           success: response.success,
           message: response.message,
@@ -55,7 +57,7 @@ class UserUsecase {
       };
     } catch (error) {
       return {
-        status: 500,
+        status: HttpStatus.ServerError,
         data: {
           success: false,
           message: "server error",
@@ -71,7 +73,7 @@ class UserUsecase {
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
       if (!emailRegex.test(email)) {
         return {
-          status: 500,
+          status: HttpStatus.ServerError,
           data: {
             success: false,
             message: "Give a valid Email",
@@ -80,7 +82,7 @@ class UserUsecase {
       }
       if (password != confirmPassword || !passwordRegex.test(password)) {
         return {
-          status: 500,
+          status: HttpStatus.ServerError,
           data: {
             success: false,
             message: "Retry another password by matching confirmation",
@@ -90,7 +92,7 @@ class UserUsecase {
       const emailExist = await this.userRepository.authenticateUser(email);
       if (emailExist.data) {
         return {
-          status: 500,
+          status: HttpStatus.ServerError,
           data: {
             success: false,
             message: "User email exist already",
@@ -105,7 +107,7 @@ class UserUsecase {
       });
       if (!response.data) {
         return {
-          status: 500,
+          status: HttpStatus.ServerError,
           data: {
             success: false,
             message: response.message,
@@ -115,7 +117,7 @@ class UserUsecase {
       const token = jwt.sign(response.data, "itssecret");
 
       return {
-        status: response.success ? 200 : 500,
+        status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {
           success: response.success,
           message: response.message,
@@ -124,7 +126,7 @@ class UserUsecase {
       };
     } catch (error) {
       return {
-        status: 500,
+        status: HttpStatus.ServerError,
         data: {
           success: false,
           message: "server error",
@@ -140,7 +142,7 @@ class UserUsecase {
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
       if (!emailRegex.test(email)) {
         return {
-          status: 500,
+          status: HttpStatus.ServerError,
           data: {
             success: false,
             message: "Give a valid Email",
@@ -149,7 +151,7 @@ class UserUsecase {
       }
       if (password != confirmPassword || !passwordRegex.test(password)) {
         return {
-          status: 500,
+          status: HttpStatus.ServerError,
           data: {
             success: false,
             message: "Retry another password by matching confirmation",
@@ -163,7 +165,7 @@ class UserUsecase {
       );
       if (!response.data) {
         return {
-          status: 500,
+          status: HttpStatus.ServerError,
           data: {
             success: false,
             message: response.message,
@@ -172,7 +174,7 @@ class UserUsecase {
       }
 
       return {
-        status: response.success ? 200 : 500,
+        status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {
           success: response.success,
           message: response.message,
@@ -181,7 +183,7 @@ class UserUsecase {
       };
     } catch (error) {
       return {
-        status: 500,
+        status: HttpStatus.ServerError,
         data: {
           success: false,
           message: "server error",
@@ -191,6 +193,17 @@ class UserUsecase {
   }
   async sendOTP(email: string) {
     try {
+      
+      const emailExist = await this.userRepository.authenticateUser(email);
+      if (emailExist.data) {
+        return {
+          status: HttpStatus.ServerError,
+          data: {
+            success: false,
+            message: "User email exist already",
+          },
+        };
+      }
       const otp: string = `${Math.floor(1000 + Math.random() * 9000)}`;
       let transporter = nodemailer.createTransport({
         service: "gmail",
@@ -211,7 +224,7 @@ class UserUsecase {
           console.log("Error occurred");
           console.log(err);
           return {
-            status: 500,
+            status: HttpStatus.ServerError,
             data: {
               success: false,
               message: "server error",
@@ -222,7 +235,7 @@ class UserUsecase {
         }
       });
       return {
-        status: 200,
+        status: HttpStatus.Success,
         data: {
           success: true,
           message: "OTP generated and send",
@@ -231,7 +244,7 @@ class UserUsecase {
       };
     } catch (error) {
       return {
-        status: 500,
+        status: HttpStatus.ServerError,
         data: {
           success: false,
           message: "server error",
@@ -247,7 +260,7 @@ class UserUsecase {
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
       if (!emailRegex.test(email) || !passwordRegex.test(password)) {
         return {
-          status: 404,
+          status: HttpStatus.NotFound,
           data: {
             success: false,
             message: "Invalid email or password format",
@@ -257,7 +270,7 @@ class UserUsecase {
       const response = await this.userRepository.authenticateUser(email);
       if (!response.data) {
         return {
-          status: 404,
+          status: HttpStatus.NotFound,
           data: {
             success: false,
             message: response.message,
@@ -266,7 +279,7 @@ class UserUsecase {
       }
       if (response.data.isBlock) {
         return {
-          status: 404,
+          status: HttpStatus.NotFound,
           data: {
             success: false,
             message: "User is blocked by Admin",
@@ -279,7 +292,7 @@ class UserUsecase {
       );
       if (!comparedPassword) {
         return {
-          status: 404,
+          status: HttpStatus.NotFound,
           data: {
             success: false,
             message: "Password is not match",
@@ -296,17 +309,17 @@ class UserUsecase {
       );
 
       return {
-        status: response.success ? 200 : 500,
+        status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {
           success: response.success,
           message: "User Authenticated",
           token: token,
-          admin: response.data.role=="admin"
+          admin: response.data.role==UserRole.Admin
         },
       };
     } catch (error) {
       return {
-        status: 500,
+        status: HttpStatus.ServerError,
         data: {
           success: false,
           message: "server error",
@@ -319,7 +332,7 @@ class UserUsecase {
       const token = headers["authorization"];
       if (!token) {
         return {
-          status: 500,
+          status: HttpStatus.ServerError,
           data: {
             success: false,
             message: "server error",
@@ -330,7 +343,7 @@ class UserUsecase {
       const response = await this.userRepository.findUser(decode.id);
       if (!response.data) {
         return {
-          status: response.success ? 200 : 500,
+          status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
           data: {
             success: response.success,
             message: response.message,
@@ -338,7 +351,7 @@ class UserUsecase {
         };
       }
       return {
-        status: response.success ? 200 : 500,
+        status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {
           success: response.success,
           message: response.message,
@@ -347,7 +360,7 @@ class UserUsecase {
       };
     } catch (error) {
       return {
-        status: 500,
+        status: HttpStatus.ServerError,
         data: {
           success: false,
           message: "server error",
@@ -361,7 +374,7 @@ class UserUsecase {
   //     isBlock=Boolean(isBlock)
   //     const response = await this.userRepository.blockUser(id,isBlock);
   //     return {
-  //       status: response.success ? 200 : 500,
+  //       status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
   //       data: {
   //         success: response.success,
   //         message: response.message,
@@ -370,7 +383,7 @@ class UserUsecase {
   //     };
   //   } catch (error) {
   //     return {
-  //       status: 500,
+  //       status: HttpStatus.ServerError,
   //       data: {
   //         success: false,
   //         message: "server error",
@@ -407,7 +420,7 @@ class UserUsecase {
             console.log("Error occurred");
             console.log(err);
             return {
-              status: 500,
+              status: HttpStatus.ServerError,
               data: {
                 success: false,
                 message: "server error",
@@ -417,7 +430,7 @@ class UserUsecase {
         });
       }
       return {
-        status: response.success ? 200 : 500,
+        status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {
           success: response.success,
           message: response.message,
@@ -426,7 +439,7 @@ class UserUsecase {
       };
     } catch (error) {
       return {
-        status: 500,
+        status: HttpStatus.ServerError,
         data: {
           success: false,
           message: "server error",
@@ -440,7 +453,7 @@ class UserUsecase {
       const response = await this.userRepository.updateRole(id, updates);
       
       return {
-        status: response.success ? 200 : 500,
+        status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {
           success: response.success,
           message: response.message,
@@ -449,7 +462,7 @@ class UserUsecase {
       };
     } catch (error) {
       return {
-        status: 500,
+        status: HttpStatus.ServerError,
         data: {
           success: false,
           message: "server error",

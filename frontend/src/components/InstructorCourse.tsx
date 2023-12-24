@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { GrAnnounce } from "react-icons/gr";
 import { MdDelete } from "react-icons/md";
@@ -126,8 +126,12 @@ function InstructorCourse() {
         setNewCourse(false);
         dispatch(getCourses({search,isInstructor:true}));
       }
-    } catch (error: any) {
-      toast(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
     }
   };
   const updateCourse = async () => {
@@ -173,8 +177,12 @@ function InstructorCourse() {
         setNewCourse(false);
         dispatch(getCourses({search,isInstructor:true}));
       }
-    } catch (error: any) {
-      toast(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
     }
   };
 
@@ -199,11 +207,13 @@ function InstructorCourse() {
         setCoverImage(null);
         console.log(courseDetails);
         setLoading(false);
-      } catch (error: any) {
-        setLoading(false);
-        toast("error");
-
-        toast(error.response.data.message);
+      } catch (error: unknown) {
+        setLoading(false)
+        if (axios.isAxiosError(error)) {
+          toast(error?.response?.data?.message);
+        } else {
+          toast("An unexpected error occurred");
+        }
       }
     }
   };
@@ -211,7 +221,7 @@ function InstructorCourse() {
   useEffect(() => {
     dispatch(getCategories(""));
     dispatch(getCourses({search,isInstructor:true}));
-  }, []);
+  }, [dispatch]);
 
   // useEffect(() => {
   // }, [courseDetails]);

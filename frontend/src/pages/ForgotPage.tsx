@@ -1,4 +1,4 @@
-import React from 'react'
+// import React from 'react'
 import ForgotPass from '../components/ForgotPass'
 
 function ForgotPage() {

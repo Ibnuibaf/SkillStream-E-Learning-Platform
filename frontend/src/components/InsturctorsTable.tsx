@@ -27,8 +27,12 @@ function InstructorsTable() {
   const getUsersList = async () => {
     try {
       await dispatch(getInstructors(search));
-    } catch (error: any) {
-      toast(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
     }
   };
   useEffect(() => {
@@ -52,8 +56,12 @@ function InstructorsTable() {
         );
         toast("Changed users status");
         await getUsersList();
-      } catch (error: any) {
-        toast(error.response.data.message);
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          toast(error?.response?.data?.message);
+        } else {
+          toast("An unexpected error occurred");
+        }
       }
     }
   };
@@ -75,8 +83,12 @@ function InstructorsTable() {
         toast("Instructor approved");
         await getUsersList();
         setDetailsview(undefined);
-      } catch (error: any) {
-        toast(error.response.data.message);
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          toast(error?.response?.data?.message);
+        } else {
+          toast("An unexpected error occurred");
+        }
       }
     }
   };

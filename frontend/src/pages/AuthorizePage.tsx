@@ -1,8 +1,8 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import  {  useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { selectUser, setUser } from "../redux/slices/authSlice";
+import { selectUser } from "../redux/slices/authSlice";
 import { getUser } from "../redux/actions/authActions";
 import { AppDispatch } from "../redux/store";
 const qa = [
@@ -73,9 +73,12 @@ function AuthorizePage() {
       }
       dispatch(getUser());
       toast(`${res.data.user.name} is now Instructor`);
-    } catch (error: any) {
-      console.error(error);
-      toast(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
     }
   };
   return (

@@ -1,4 +1,4 @@
-import React from 'react'
+// import React from 'react'
 import InsturctorsTable from '../components/InsturctorsTable'
 import AdminSideBar from '../components/AdminSideBar'
 

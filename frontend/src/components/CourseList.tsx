@@ -6,12 +6,11 @@ import { getCourses } from "../redux/actions/coursesActions";
 import { getCategories } from "../redux/actions/categoriesActions";
 import { AppDispatch } from "../redux/store";
 import { IoMdStar, IoIosPlayCircle } from "react-icons/io";
-import { MdSearch } from "react-icons/md";
-import { loadStripe } from "@stripe/stripe-js";
+// import { MdSearch } from "react-icons/md";
 import api from "../axios/api";
-import { URLSearchParams } from "url";
 import { toast } from "react-toastify";
 import { selectUser } from "../redux/slices/authSlice";
+import { MdSearch } from "react-icons/md";
 
 interface ICoupon {
   code: string;
@@ -44,7 +43,7 @@ interface ICourse {
 }
 
 function CourseList() {
-  const token=localStorage.getItem("SkillStreamToken")
+  const token = localStorage.getItem("SkillStreamToken");
   const dispatch: AppDispatch = useDispatch();
   const categories = useSelector(selectCategories).categories;
   const user = useSelector(selectUser).user;
@@ -71,7 +70,7 @@ function CourseList() {
   const [search, setSearch] = useState("");
 
   const makePayment = async () => {
-    if(token){
+    if (token) {
       try {
         //   const stripe = await loadStripe(
         //     "pk_test_51OPOXKSEJEe9TfyNNyag37yMF9bIEKeA4GFHqqwArgo7rYKFRMDYYNtg34XPUTqfL7ICfxkGbC7EzA5vtkxqApHj00TZwZYdyU"
@@ -80,22 +79,29 @@ function CourseList() {
           course: courseDetails,
           userId: user?.id,
         });
-  
+
         if (res.data.url) {
           window.location.href = res.data.url;
         }
       } catch (error) {
         console.log(error);
       }
-    }else{
-      toast("Login to purchase course")
+    } else {
+      toast("Login to purchase course");
+    }
+  };
+  const searchCourse = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(e.target.value);
+    if(search.length>3){
+      dispatch(getCourses({ search, isInstructor: false }));
     }
   };
   useEffect(() => {
     dispatch(getCategories(""));
-    dispatch(getCourses({search,isInstructor:false}));
+    dispatch(getCourses({ search:"", isInstructor: false }));
   }, [dispatch]);
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     courses = courses.filter(
       (course) => course.category == selectedCategory.id
     );
@@ -378,12 +384,12 @@ function CourseList() {
                 className="bg-transparent w-full outline-none"
                 placeholder="Search your intreseted courses.."
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setSearch(e.target.value)
+                  searchCourse(e)
                 }
               />
               <button
                 onClick={() => {
-                  dispatch(getCourses({search,isInstructor:false}));
+                  dispatch(getCourses({ search, isInstructor: false }));
                 }}
               >
                 <MdSearch size={24} />
@@ -396,7 +402,9 @@ function CourseList() {
           <div className="grid mt-5 grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-7">
             {selectedCategory.id
               ? courses.map((course) =>
-                  course.category == selectedCategory.id ? (
+                  course.category == selectedCategory.id &&
+                  !course.isBlock &&
+                  course.isApproved ? (
                     <div
                       className="text-start rounded-3xl bg-white text-black hover:cursor-pointer"
                       onClick={() => {
@@ -418,9 +426,7 @@ function CourseList() {
                               size={16}
                               color={Math.random() >= 0.5 ? "red" : "blue"}
                             />
-                            <p className="text-xs font-medium">
-                              {course.cover.length}x Lesson
-                            </p>
+                            <p className="text-xs font-medium">{63}x Lesson</p>
                           </div>
                           <div className="flex items-center">
                             <IoMdStar size={16} color="orange" />
@@ -470,75 +476,79 @@ function CourseList() {
                     ""
                   )
                 )
-              : courses.map((course) => (
-                  <div
-                    className="text-start rounded-3xl bg-white text-black hover:cursor-pointer"
-                    onClick={() => {
-                      setSelectedCourse(course._id);
-                      setCourseDetails(course);
-                    }}
-                  >
-                    <div className="h-[25vh] rounded-t-3xl">
-                      <img
-                        src={course.cover}
-                        alt=""
-                        className="h-full w-full rounded-t-3xl"
-                      />
-                    </div>
-                    <div className="px-4 py-1">
-                      <div className="flex items-start justify-between text-sm">
-                        <div className="flex items-center gap-1">
-                          <IoIosPlayCircle
-                            size={16}
-                            color={Math.random() >= 0.5 ? "red" : "blue"}
-                          />
-                          <p className="text-xs font-medium">
-                            {course.cover.length}x Lesson
+              : courses.map((course) =>
+                  !course.isBlock && course.isApproved ? (
+                    <div
+                      className="text-start rounded-3xl bg-white text-black hover:cursor-pointer"
+                      onClick={() => {
+                        setSelectedCourse(course._id);
+                        setCourseDetails(course);
+                      }}
+                    >
+                      <div className="h-[25vh] rounded-t-3xl">
+                        <img
+                          src={course.cover}
+                          alt=""
+                          className="h-full w-full rounded-t-3xl"
+                        />
+                      </div>
+                      <div className="px-4 py-1">
+                        <div className="flex items-start justify-between text-sm">
+                          <div className="flex items-center gap-1">
+                            <IoIosPlayCircle
+                              size={16}
+                              color={Math.random() >= 0.5 ? "red" : "blue"}
+                            />
+                            <p className="text-xs font-medium">{52}x Lesson</p>
+                          </div>
+                          <div className="flex items-center">
+                            <IoMdStar size={16} color="orange" />
+                            <IoMdStar size={16} color="orange" />
+                            <IoMdStar size={16} color="orange" />
+                            <IoMdStar size={16} color="orange" />
+                          </div>
+                        </div>
+                        <div className="min-h-[8vh] pt-1">
+                          <p className="text-xs text-gray-600 ">
+                            {course.level == "2"
+                              ? "Intermediate"
+                              : course.level == "3"
+                              ? "Advanced"
+                              : "Beginner"}
+                          </p>
+                          <p className="line-clamp-2  font-bold font-serif">
+                            {course.title}
                           </p>
                         </div>
-                        <div className="flex items-center">
-                          <IoMdStar size={16} color="orange" />
-                          <IoMdStar size={16} color="orange" />
-                          <IoMdStar size={16} color="orange" />
-                          <IoMdStar size={16} color="orange" />
+                        <p className="text-xs line-clamp-1  text-gray-600">
+                          {course.description}
+                        </p>
+                      </div>
+                      <div className="flex items-center justify-between border-t my-2 px-3 ">
+                        <div>
+                          <img src="" alt="" />
+                          <div className="space-y-[-4px]">
+                            <p className="font-medium">Brooklyn </p>
+                            <p className="text-xs italic">English Teacher</p>
+                          </div>
+                        </div>
+                        <div>
+                          <p
+                            className={`${
+                              Math.random() >= 0.5
+                                ? "bg-blue-500"
+                                : "bg-pink-500"
+                            } px-2 rounded-full text-white text-xs py-1 font-medium`}
+                          >
+                            Programming
+                          </p>
                         </div>
                       </div>
-                      <div className="min-h-[8vh] pt-1">
-                        <p className="text-xs text-gray-600 ">
-                          {course.level == "2"
-                            ? "Intermediate"
-                            : course.level == "3"
-                            ? "Advanced"
-                            : "Beginner"}
-                        </p>
-                        <p className="line-clamp-2  font-bold font-serif">
-                          {course.title}
-                        </p>
-                      </div>
-                      <p className="text-xs line-clamp-1  text-gray-600">
-                        {course.description}
-                      </p>
                     </div>
-                    <div className="flex items-center justify-between border-t my-2 px-3 ">
-                      <div>
-                        <img src="" alt="" />
-                        <div className="space-y-[-4px]">
-                          <p className="font-medium">Brooklyn </p>
-                          <p className="text-xs italic">English Teacher</p>
-                        </div>
-                      </div>
-                      <div>
-                        <p
-                          className={`${
-                            Math.random() >= 0.5 ? "bg-blue-500" : "bg-pink-500"
-                          } px-2 rounded-full text-white text-xs py-1 font-medium`}
-                        >
-                          Programming
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                ))}
+                  ) : (
+                    ""
+                  )
+                )}
           </div>
         </div>
       )}

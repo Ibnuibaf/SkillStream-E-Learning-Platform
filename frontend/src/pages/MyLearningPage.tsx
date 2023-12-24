@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import BasicHeader from "../components/BasicHeader";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -12,7 +12,7 @@ function MyLearningPage() {
       toast("Logging to access");
       navigate("/login");
     }
-  }, [token]);
+  }, [token,navigate]);
   return (
     <div>
       <div className="px-10 py-4">

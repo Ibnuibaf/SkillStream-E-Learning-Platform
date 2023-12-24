@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "../redux/store";
 import { getCategories } from "../redux/actions/categoriesActions";
 import { selectCategories } from "../redux/slices/categorySlice";
+import axios from "axios";
 function CategoriesTab() {
   const dispatch: AppDispatch = useDispatch();
   const token = localStorage.getItem("SkillStreamToken");
@@ -21,8 +22,12 @@ function CategoriesTab() {
         toast("Created Category");
         setInputCat("");
         getCategoriesList();
-      } catch (error: any) {
-        toast(error.response.data.message);
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          toast(error?.response?.data?.message);
+        } else {
+          toast("An unexpected error occurred");
+        }
       }
     }
   };
@@ -37,8 +42,12 @@ function CategoriesTab() {
         setInputCat("");
         setSelectedCat("");
         getCategoriesList();
-      } catch (error: any) {
-        toast(error.response.data.message);
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          toast(error?.response?.data?.message);
+        } else {
+          toast("An unexpected error occurred");
+        }
       }
     }
   };
@@ -57,15 +66,23 @@ function CategoriesTab() {
       setInputCat("");
       setSelectedCat("");
       getCategoriesList();
-    } catch (error: any) {
-      toast(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
     }
   };
   const getCategoriesList = async () => {
     try {
       dispatch(getCategories(search));
-    } catch (error: any) {
-      toast(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
     }
   };
   useEffect(() => {

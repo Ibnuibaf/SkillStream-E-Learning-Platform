@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import {  useEffect, useState } from "react";
 import { IoIosPlayCircle, IoMdStar } from "react-icons/io";
 import { toast } from "react-toastify";
 import api from "../axios/api";
@@ -29,7 +30,7 @@ function LearningsList() {
 
       setLearnings(res.data.learnings);
     } catch (error: any) {
-      toast(error.response.data.message);
+      toast(error?.response?.data?.message);
     }
   };
   useEffect(() => {
@@ -70,31 +71,11 @@ function LearningsList() {
               {learnings?.map((comm) => (
                 <div className="flex items-center gap-4 bg-purple-900/60 rounded-3xl mb-2 py-2 px-8  text-start hover:cursor-pointer hover:bg-purple-900/80">
                   <div className="h-12 w-12 rounded-full">
-                    <img src={comm.cover} alt="" className="h-full w-full rounded-full"/>
-                  </div>
-                  <p className="text-xl">{comm.title}</p>
-                </div>
-              ))}
-              {learnings?.map((comm) => (
-                <div className="flex items-center gap-4 bg-purple-900/60 rounded-3xl mb-2 py-2 px-8  text-start hover:cursor-pointer hover:bg-purple-900/80">
-                  <div className="h-12 w-12 rounded-full">
-                    <img src={comm.cover} alt="" className="h-full w-full rounded-full"/>
-                  </div>
-                  <p className="text-xl">{comm.title}</p>
-                </div>
-              ))}
-              {learnings?.map((comm) => (
-                <div className="flex items-center gap-4 bg-purple-900/60 rounded-3xl mb-2 py-2 px-8  text-start hover:cursor-pointer hover:bg-purple-900/80">
-                  <div className="h-12 w-12 rounded-full">
-                    <img src={comm.cover} alt="" className="h-full w-full rounded-full"/>
-                  </div>
-                  <p className="text-xl">{comm.title}</p>
-                </div>
-              ))}
-              {learnings?.map((comm) => (
-                <div className="flex items-center gap-4 bg-purple-900/60 rounded-3xl mb-2 py-2 px-8  text-start hover:cursor-pointer hover:bg-purple-900/80">
-                  <div className="h-12 w-12 rounded-full">
-                    <img src={comm.cover} alt="" className="h-full w-full rounded-full"/>
+                    <img
+                      src={comm.cover}
+                      alt=""
+                      className="h-full w-full rounded-full"
+                    />
                   </div>
                   <p className="text-xl">{comm.title}</p>
                 </div>

@@ -15,7 +15,7 @@ function AuthSection() {
     if(token){
       dispatch(getUser())
     }
-  },[])
+  },[dispatch,token])
 
   return userDetails.loading ? (
     <div className="flex space-x-2 animate-pulse">

@@ -30,7 +30,7 @@ function InstructorSideBar() {
       toast("Log In to your account");
       navigate("/login");
     }
-  }, [token, user]);
+  }, [token, user,navigate]);
   return (
     <>
       {user?.role != "instructor" ||

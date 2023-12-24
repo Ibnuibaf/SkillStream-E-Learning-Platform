@@ -24,7 +24,7 @@ function ForgotPass() {
   const navigate = useNavigate();
   // const dispatch=useDispatch()
 
-  let intervalId: any;
+  let intervalId: NodeJS.Timeout;
   const sendOTP = async () => {
     try {
       if (!userDetails.email) {
@@ -55,8 +55,12 @@ function ForgotPass() {
         clearInterval(intervalId);
         setCounter(30);
       }, 30000);
-    } catch (error: any) {
-      toast(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
     }
   };
   const emailOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,10 +115,12 @@ function ForgotPass() {
       }
       toast(`User password has been updated login to account`);
       navigate("/login");
-    } catch (error: any) {
-      console.error("Error submitting data:", error);
-
-      toast(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
     }
   };
 
@@ -129,7 +135,7 @@ function ForgotPass() {
       toast("User already logged In");
       navigate("/");
     }
-  }, [token]);
+  }, [token,navigate]);
   return (
     <div className="flex justify-center items-center h-[90%]">
       <div className="border-2 w-min p-5">

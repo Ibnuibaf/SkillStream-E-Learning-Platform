@@ -5,6 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { FaRegThumbsUp, FaRegThumbsDown } from "react-icons/fa";
 import { TiTick } from "react-icons/ti";
+import api from "../axios/api";
 // import { selectUser, setUser } from "../redux/slices/authSlice";
 
 interface IUserDetails {
@@ -35,7 +36,8 @@ function SignupSection() {
   const navigate = useNavigate();
   // const dispatch=useDispatch()
 
-  let intervalId: any;
+  let intervalId: NodeJS.Timeout;
+
   const sendOTP = async () => {
     try {
       if (!userDetails.email) {
@@ -48,7 +50,7 @@ function SignupSection() {
       intervalId = setInterval(() => {
         setCounter((prevCounter) => prevCounter - 1);
       }, 1000);
-      const res = await axios.post("http://localhost:3000/api/user/otp", {
+      const res = await api.post("/user/otp", {
         email: userDetails.email,
       });
       if (!res.data.otp) {
@@ -67,8 +69,12 @@ function SignupSection() {
         clearInterval(intervalId);
         setCounter(30);
       }, 30000);
-    } catch (error: any) {
-      toast(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
     }
   };
   const emailOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -130,10 +136,12 @@ function SignupSection() {
       localStorage.setItem("SkillStreamToken", res.data.token);
       toast(`User account has been created`);
       navigate("/");
-    } catch (error: any) {
-      console.error("Error submitting data:", error);
-
-      toast(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
     }
   };
 
@@ -148,7 +156,7 @@ function SignupSection() {
       toast("User already logged In");
       navigate("/");
     }
-  }, [token]);
+  }, [token, navigate]);
   return (
     <div className="flex justify-center items-center h-[90vh]">
       <div className="border-2 w-min p-5">
@@ -284,9 +292,7 @@ function SignupSection() {
                 )}
               </div>
               {!OTP && submitStage ? (
-                <i className="text-red-500 text-xs ">
-                  *Veirfy email by OTP
-                </i>
+                <i className="text-red-500 text-xs ">*Veirfy email by OTP</i>
               ) : (
                 ""
               )}

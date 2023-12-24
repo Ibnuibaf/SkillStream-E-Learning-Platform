@@ -63,10 +63,12 @@ function LoginSection() {
         toast("User logged In");
         navigate('/')
       }
-    } catch (error: any) {
-      console.error(error.response);
-
-      toast(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
     }
   };
 

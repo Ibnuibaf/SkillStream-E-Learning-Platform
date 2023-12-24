@@ -1,17 +1,26 @@
-import React, { useEffect, useState } from "react";
+import { useEffect } from "react";
 import api from "../axios/api";
 import { toast } from "react-toastify";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 function PurchaseConfirmPage() {
-  const token=localStorage.getItem("SkillStreamToken")
+  const token = localStorage.getItem("SkillStreamToken");
   const navigate = useNavigate();
 
-  const createPurchase = async (purchase: any) => {
+  const createPurchase = async (purchase: {
+    userId: string | null;
+    courseId: string | null;
+    price: string | null;
+  }) => {
     try {
       await api.post("/order/create", purchase);
-    } catch (error: any) {
-      toast(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
     }
   };
   let userId: string | null;
@@ -31,14 +40,14 @@ function PurchaseConfirmPage() {
   if (query.get("canceled")) {
     toast("Course purchase canceled, Try Later!");
   }
-  useEffect(()=>{
-    if(!token){
+  useEffect(() => {
+    if (!token) {
       navigate("/");
     }
     if (!query) {
       navigate("/");
     }
-  },[token])
+  }, [token, navigate, query]);
 
   return (
     <div className="h-screen flex justify-center items-center">
