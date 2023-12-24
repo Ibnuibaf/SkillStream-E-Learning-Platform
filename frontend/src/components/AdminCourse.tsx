@@ -131,9 +131,9 @@ function AdminCourse() {
   };
 
   useEffect(() => {
-    dispatch(getCourses({search,isInstructor:false}));
+    dispatch(getCourses({search:"",isInstructor:false}));
     dispatch(getCategories(""));
-  }, []);
+  }, [dispatch]);
 
   return (
     <>

@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { selectStudents} from "../redux/slices/studentsSlice";
+import { selectStudents } from "../redux/slices/studentsSlice";
 import swal from "sweetalert";
 import { getStudents } from "../redux/actions/studentsActions";
 import { AppDispatch } from "../redux/store";
@@ -17,7 +17,7 @@ interface UserType {
 }
 function StudentsTable() {
   const token = localStorage.getItem("SkillStreamToken");
-  const dispatch:AppDispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const data = useSelector(selectStudents);
   const [search, setSearch] = useState("");
   const [detailsView, setDetailsview] = useState<UserType>();
@@ -33,14 +33,23 @@ function StudentsTable() {
     }
   };
   useEffect(() => {
-    getUsersList();
+    // getUsersList();
+    try {
+      dispatch(getStudents(""));
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
+    }
   }, [dispatch, token]);
 
   const changeUserStatus = async (id: string, status: boolean) => {
-    const confirmed = await swal("Are you sure to update status?",{
-      buttons:["Cancel",true]
-    })
-    if(confirmed){
+    const confirmed = await swal("Are you sure to update status?", {
+      buttons: ["Cancel", true],
+    });
+    if (confirmed) {
       try {
         await axios.patch(
           `http://localhost:3000/api/user/status?_id=${id}&isBlock=${!status}`,
@@ -255,9 +264,12 @@ function StudentsTable() {
                 className="block w-full px-4 py-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Search by student's email"
                 value={search}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setSearch(e.target.value)
-                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setSearch(e.target.value);
+                  if (search.length > 3) {
+                    getUsersList();
+                  }
+                }}
                 required
               />
               <button
@@ -300,8 +312,10 @@ function StudentsTable() {
                       key={student._id}
                       className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                     >
-                      
-                      <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:cursor-pointer" onClick={() => setDetailsview(student)}>
+                      <td
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:cursor-pointer"
+                        onClick={() => setDetailsview(student)}
+                      >
                         {student.email}
                       </td>
                       <td className="px-6 py-4 text-red-600">{student.name}</td>

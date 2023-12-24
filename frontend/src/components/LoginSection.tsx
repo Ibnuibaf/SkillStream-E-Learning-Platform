@@ -28,7 +28,7 @@ function LoginSection() {
       toast("User already logged In");
       navigate("/");
     }
-  }, []);
+  }, [navigate,token]);
 
   const submitForm = async (e: React.FormEvent) => {
     try {

@@ -6,24 +6,45 @@ import AuthMiddleware from "../middlewares/auth.middleware";
 
 const Router = express.Router();
 const userRepository = new UserRepository();
-const authMiddleware = new AuthMiddleware(userRepository)
+const authMiddleware = new AuthMiddleware(userRepository);
 const userUsecase = new UserUsecase(userRepository);
 const userController = new UserController(userUsecase);
 
-Router.get("/",(req:Request,res:Response,next:NextFunction)=>authMiddleware.authUser(req,res,next), (req: Request, res: Response) =>
-  userController.getUsers(req, res)
+Router.get(
+  "/",
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.authUser(req, res, next),
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.adminCheck(req, res, next),
+  (req: Request, res: Response) => userController.getUsers(req, res)
 );
-Router.get("/learnings",(req:Request,res:Response,next:NextFunction)=>authMiddleware.authUser(req,res,next), (req: Request, res: Response) =>
-  userController.getUserLearnings(req, res)
+Router.get(
+  "/learnings",
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.authUser(req, res, next),
+  (req: Request, res: Response) => userController.getUserLearnings(req, res)
 );
-Router.patch("/status",(req:Request,res:Response,next:NextFunction)=>authMiddleware.authUser(req,res,next), (req: Request, res: Response) =>
-  userController.updateStatus(req, res)
+Router.patch(
+  "/status",
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.authUser(req, res, next),
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.adminCheck(req, res, next),
+  (req: Request, res: Response) => userController.updateStatus(req, res)
 );
-Router.patch("/instructor/verify",(req:Request,res:Response,next:NextFunction)=>authMiddleware.authUser(req,res,next), (req: Request, res: Response) =>
-  userController.verifyInstructor(req, res)
+Router.patch(
+  "/instructor/verify",
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.authUser(req, res, next),
+    (req: Request, res: Response, next: NextFunction) =>
+      authMiddleware.adminCheck(req, res, next),
+  (req: Request, res: Response) => userController.verifyInstructor(req, res)
 );
-Router.get("/find",(req:Request,res:Response,next:NextFunction)=>authMiddleware.authUser(req,res,next), (req: Request, res: Response) =>
-  userController.findUser(req, res)
+Router.get(
+  "/find",
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.authUser(req, res, next),
+  (req: Request, res: Response) => userController.findUser(req, res)
 );
 Router.post("/register", (req: Request, res: Response) =>
   userController.createUser(req, res)
@@ -37,8 +58,11 @@ Router.post("/login", (req: Request, res: Response) =>
 Router.post("/recover", (req: Request, res: Response) =>
   userController.changePassword(req, res)
 );
-Router.post("/authorize",(req:Request,res:Response,next:NextFunction)=>authMiddleware.authUser(req,res,next), (req: Request, res: Response) =>
-  userController.updateRole(req, res)
+Router.post(
+  "/authorize",
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.authUser(req, res, next),
+  (req: Request, res: Response) => userController.updateRole(req, res)
 );
 
 export default Router;

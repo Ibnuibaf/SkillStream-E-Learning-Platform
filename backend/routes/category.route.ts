@@ -20,12 +20,16 @@ Router.post(
   "/create",
   (req: Request, res: Response, next: NextFunction) =>
     authMiddleware.authUser(req, res, next),
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.adminCheck(req, res, next),
   (req: Request, res: Response) => categoryController.createCategory(req, res)
 );
 Router.patch(
   "/update",
   (req: Request, res: Response, next: NextFunction) =>
     authMiddleware.authUser(req, res, next),
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.adminCheck(req, res, next),
   (req: Request, res: Response) => categoryController.updateCategory(req, res)
 );
 

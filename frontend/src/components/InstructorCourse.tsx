@@ -220,7 +220,7 @@ function InstructorCourse() {
 
   useEffect(() => {
     dispatch(getCategories(""));
-    dispatch(getCourses({search,isInstructor:true}));
+    dispatch(getCourses({search:"",isInstructor:true}));
   }, [dispatch]);
 
   // useEffect(() => {

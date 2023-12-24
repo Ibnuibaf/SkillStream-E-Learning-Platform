@@ -36,7 +36,16 @@ function InstructorsTable() {
     }
   };
   useEffect(() => {
-    getUsersList();
+    // getUsersList();
+    try {
+       dispatch(getInstructors(""));
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
+    }
   }, [dispatch, token]);
 
   const changeUserStatus = async (id: string, status: boolean) => {
@@ -365,9 +374,12 @@ function InstructorsTable() {
                 className="block w-full px-4 py-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Search by student's email"
                 value={search}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setSearch(e.target.value)
-                }
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                  setSearch(e.target.value);
+                  if(search.length>3){
+                    getUsersList()
+                  }
+                }}
                 required
               />
               <button

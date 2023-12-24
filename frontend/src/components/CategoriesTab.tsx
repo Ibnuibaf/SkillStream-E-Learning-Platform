@@ -86,7 +86,15 @@ function CategoriesTab() {
     }
   };
   useEffect(() => {
-    getCategoriesList();
+    try {
+      dispatch(getCategories(""));
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
+    }
   }, [dispatch, token]);
   return (
     <div className="">
@@ -119,8 +127,12 @@ function CategoriesTab() {
             placeholder="Search by student's email"
             value={search}
             onChange={
-              (e: React.ChangeEvent<HTMLInputElement>) => 
+              (e: React.ChangeEvent<HTMLInputElement>) => {
                 setSearch(e.target.value)
+                if(search.length>2){
+                  getCategoriesList()
+                }
+              }
             }
             required
           />
