@@ -37,7 +37,7 @@ function App() {
     if(token){
       fetchData();
     }
-  }, [dispatch]);
+  }, [dispatch,token]);
   return (
     <div className="min-h-screen">
       <BrowserRouter>

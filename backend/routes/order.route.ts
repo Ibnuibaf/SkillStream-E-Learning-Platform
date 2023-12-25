@@ -6,11 +6,11 @@ import CourseRepository from "../repositories/course.repository";
 import OrderRepository from "../repositories/order.repository";
 import OrderUsecase from "../usecases/order.usecase";
 import OrderController from "../controllers/order.controller";
-const stripePayments = new StripePayments();
 
 
 
 const userRepository = new UserRepository();
+const stripePayments = new StripePayments(userRepository);
 const courseRepository = new CourseRepository();
 const authMiddleware = new AuthMiddleware(userRepository);
 const orderRepository = new OrderRepository();

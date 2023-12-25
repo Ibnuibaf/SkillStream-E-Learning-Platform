@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import  { useEffect } from "react";
 import api from "../axios/api";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
@@ -47,7 +47,7 @@ function PurchaseConfirmPage() {
     if (!query) {
       navigate("/");
     }
-  }, [token, navigate, query]);
+  }, [token, navigate,query]);
 
   return (
     <div className="h-screen flex justify-center items-center">

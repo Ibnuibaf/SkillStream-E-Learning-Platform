@@ -1,6 +1,6 @@
 import { RiShoppingCart2Fill, RiNotification4Line } from "react-icons/ri";
 import { Link } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import {  useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../redux/slices/authSlice";
 import { AppDispatch } from "../redux/store";
 import { useEffect } from "react";
@@ -10,10 +10,12 @@ function AuthSection() {
   const userDetails = useSelector(selectUser);
   const token=localStorage.getItem("SkillStreamToken")
   const dispatch:AppDispatch=useDispatch()
-
+  const getUserDetails=async()=>{
+    await dispatch(getUser())
+  }
   useEffect(()=>{
     if(token){
-      dispatch(getUser())
+      getUserDetails()
     }
   },[dispatch,token])
 

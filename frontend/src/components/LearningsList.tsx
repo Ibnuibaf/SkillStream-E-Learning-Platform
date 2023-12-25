@@ -3,6 +3,7 @@ import {  useEffect, useState } from "react";
 import { IoIosPlayCircle, IoMdStar } from "react-icons/io";
 import { toast } from "react-toastify";
 import api from "../axios/api";
+// import { useNavigate } from "react-router-dom";
 
 interface ILearnings {
   _id: string;
@@ -22,6 +23,7 @@ interface ILearnings {
 }
 
 function LearningsList() {
+  // const navigate=useNavigate()
   const [learnings, setLearnings] = useState<ILearnings[]>();
   const [viewCommunity, setViewCommunity] = useState(false);
   const getLearnings = async () => {
@@ -31,6 +33,7 @@ function LearningsList() {
       setLearnings(res.data.learnings);
     } catch (error: any) {
       toast(error?.response?.data?.message);
+      window.location.href='http://localhost:5174/'
     }
   };
   useEffect(() => {

@@ -93,7 +93,7 @@ class UserRepository {
   }
   async authenticateUser(email: string) {
     try {
-      const userDetails = await Users.findOne({ email });
+      const userDetails = await Users.findOne({ email: email });
       if (!userDetails) {
         return {
           success: true,
@@ -137,6 +137,19 @@ class UserRepository {
         success: false,
         message: `Failed to update ${error}`,
       };
+    }
+  }
+  async isCourseInLearnings(userId:string, learningId:string) {
+    try {
+      const user = await Users.findOne({
+        _id: userId,
+        learnings: { $in: [learningId] },
+      });
+
+      return !!user; 
+    } catch (error) {
+      console.error("Error checking ObjectId in learnings:", error);
+      return false;
     }
   }
   // async blockUser(id: string, status: boolean) {

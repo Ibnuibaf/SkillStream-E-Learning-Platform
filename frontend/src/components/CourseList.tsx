@@ -11,6 +11,7 @@ import api from "../axios/api";
 import { toast } from "react-toastify";
 import { selectUser } from "../redux/slices/authSlice";
 import { MdSearch } from "react-icons/md";
+import axios from "axios";
 
 interface ICoupon {
   code: string;
@@ -83,8 +84,12 @@ function CourseList() {
         if (res.data.url) {
           window.location.href = res.data.url;
         }
-      } catch (error) {
-        console.log(error);
+      } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+          toast(error?.response?.data?.message);
+        } else {
+          toast("An unexpected error occurred");
+        }
       }
     } else {
       toast("Login to purchase course");
@@ -92,13 +97,13 @@ function CourseList() {
   };
   const searchCourse = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value);
-    if(search.length>3){
+    if (search.length > 3) {
       dispatch(getCourses({ search, isInstructor: false }));
     }
   };
   useEffect(() => {
     dispatch(getCategories(""));
-    dispatch(getCourses({ search:"", isInstructor: false }));
+    dispatch(getCourses({ search: "", isInstructor: false }));
   }, [dispatch]);
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps

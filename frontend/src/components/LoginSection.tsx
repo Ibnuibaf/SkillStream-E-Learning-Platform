@@ -7,6 +7,7 @@ import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
 import { getUser } from "../redux/actions/authActions";
 import { AppDispatch } from "../redux/store";
 import { useDispatch } from "react-redux";
+import api from "../axios/api";
 // import { selectUser } from "../redux/slices/authSlice";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -28,7 +29,7 @@ function LoginSection() {
       toast("User already logged In");
       navigate("/");
     }
-  }, [navigate,token]);
+  }, [navigate]);
 
   const submitForm = async (e: React.FormEvent) => {
     try {
@@ -44,8 +45,8 @@ function LoginSection() {
         return toast("Password should be strong");
       }
 
-      const res = await axios.post(
-        "http://localhost:3000/api/user/login",
+      const res = await api.post(
+        "/user/login",
         loginDetails
       );
       console.log("Is it hit here");
@@ -54,13 +55,14 @@ function LoginSection() {
         return;
       }
       setSubmitStage(false);
-      localStorage.setItem("SkillStreamToken", res.data.token);
       if (res.data.admin) {
         toast("Welcome back Admin, Good to see yah!");
+        localStorage.setItem("SkillStreamToken", res.data.token);
         navigate("/admin");
       }else{
         await dispatch(getUser());
         toast("User logged In");
+        localStorage.setItem("SkillStreamToken", res.data.token);
         navigate('/')
       }
     } catch (error: unknown) {

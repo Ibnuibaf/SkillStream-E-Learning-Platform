@@ -20,6 +20,7 @@ interface UserType {
     "1": string;
     "2": string;
   };
+  learnings:string[]
 }
 
 const initialState: AuthState = {

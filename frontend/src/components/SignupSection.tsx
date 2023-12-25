@@ -6,7 +6,10 @@ import { toast } from "react-toastify";
 import { FaRegThumbsUp, FaRegThumbsDown } from "react-icons/fa";
 import { TiTick } from "react-icons/ti";
 import api from "../axios/api";
-// import { selectUser, setUser } from "../redux/slices/authSlice";
+// import { AppDispatch } from "../redux/store";
+// import { useDispatch } from "react-redux";
+// import { getUser } from "../redux/actions/authActions";
+// // import { selectUser, setUser } from "../redux/slices/authSlice";
 
 interface IUserDetails {
   name: string;
@@ -20,6 +23,7 @@ const passwordRegex =
   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
 
 function SignupSection() {
+  // const dispatch:AppDispatch=useDispatch()
   const [otpWait, setOtpWait] = useState(false);
   const [validPass, setValidPass] = useState(false);
   const [userDetails, setUserDetails] = useState<IUserDetails>({
@@ -124,10 +128,7 @@ function SignupSection() {
       //   });
       //   console.log(formData);
 
-      const res = await axios.post(
-        "http://localhost:3000/api/user/register",
-        userDetails
-      );
+      const res = await api.post("/user/register", userDetails);
       if (!res.data.token) {
         toast(res.data.message);
         return;
@@ -135,8 +136,9 @@ function SignupSection() {
       setSubmitStage(false);
       localStorage.setItem("SkillStreamToken", res.data.token);
       toast(`User account has been created`);
-      navigate("/");
+      location.href = "/";
     } catch (error: unknown) {
+      setSubmitStage(false);
       if (axios.isAxiosError(error)) {
         toast(error?.response?.data?.message);
       } else {
@@ -156,7 +158,7 @@ function SignupSection() {
       toast("User already logged In");
       navigate("/");
     }
-  }, [token, navigate]);
+  }, [navigate]);
   return (
     <div className="flex justify-center items-center h-[90vh]">
       <div className="border-2 w-min p-5">

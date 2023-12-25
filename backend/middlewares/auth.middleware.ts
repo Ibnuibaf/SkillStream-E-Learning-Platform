@@ -32,7 +32,7 @@ class AuthMiddleware {
       } else {
         res.status(500).send({
           success: false,
-          message: "Try again after login in",
+          message: "User is Blocked, Try again after login in",
         });
       }
     } catch (error) {
