@@ -19,35 +19,42 @@ const CourseSchema = new mongoose.Schema<ICourse>({
   level: {
     type: String,
   },
+  lessons: {
+    content: String,
+    title: String,
+    duration: Number,
+  },
   announcements: { type: [String], default: [] },
-  cover:{
-    type:String,
+  cover: {
+    type: String,
   },
-  offer:{
-    type:Number,
-    default:0
+  offer: {
+    type: Number,
+    default: 0,
   },
-  instructor:{
-    type:mongoose.Types.ObjectId,
-    ref:"users",
+  instructor: {
+    type: mongoose.Types.ObjectId,
+    ref: "users",
   },
-  enrollers:[{
-    type:mongoose.Types.ObjectId,
-    ref:"users",
-  }],
-  price:{
-    type:Number,
+  enrollers: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: "users",
+    },
+  ],
+  price: {
+    type: Number,
   },
-  isApproved:{
-    type:Boolean,
-    default:false
+  isApproved: {
+    type: Boolean,
+    default: false,
   },
-  isBlock:{
-    type:Boolean,
-    default:false
-  }
+  isBlock: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-const CourseModel=mongoose.model("Course",CourseSchema)
+const CourseModel = mongoose.model("Course", CourseSchema);
 
-export default CourseModel
+export default CourseModel;

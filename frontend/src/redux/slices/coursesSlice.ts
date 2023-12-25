@@ -8,9 +8,10 @@ interface ICoursesState{
 }
 
 interface ILessonType{
+    _id?:string
     title:string
     content:string
-    duration:string
+    duration:number
 }
 interface ICouponType{
     code:string

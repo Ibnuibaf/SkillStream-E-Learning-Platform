@@ -1,7 +1,11 @@
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaPlus } from "react-icons/fa";
 import { GrAnnounce } from "react-icons/gr";
+import { LuReplace } from "react-icons/lu";
+import { RiDragDropLine } from "react-icons/ri";
 import { MdDelete } from "react-icons/md";
+import { IoIosClose } from "react-icons/io";
+import { FaRegCirclePlay } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategories } from "../redux/actions/categoriesActions";
 import { AppDispatch } from "../redux/store";
@@ -13,6 +17,7 @@ import { getCourses } from "../redux/actions/coursesActions";
 import { selectcourses } from "../redux/slices/coursesSlice";
 import swal from "sweetalert";
 import { selectUser } from "../redux/slices/authSlice";
+import ReactPlayer from "react-player";
 
 interface ICoupon {
   code: string;
@@ -22,9 +27,10 @@ interface ICoupon {
 }
 
 interface ILesson {
+  _id?:string
   title: string;
   content: string;
-  duration: string;
+  duration: number;
 }
 
 interface ICourse {
@@ -51,11 +57,18 @@ function InstructorCourse() {
   const courses = useSelector(selectcourses).courses;
   const user = useSelector(selectUser).user;
   const [courseDetailView, setCourseDetailview] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [newCourse, setNewCourse] = useState(false);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(false);
   // const [submitStage, setSubmitStage] = useState(false);
   const [coverImage, setCoverImage] = useState<File | null>(null);
+  const [lesson, setLesson] = useState<File | null>(null);
+  const [selectedContent, setSelectedContent] = useState({
+    content: "",
+    duration: 0,
+    title: "",
+  });
   const [announcement, setAnnouncement] = useState("");
   const [courseDetails, setCourseDetails] = useState<ICourse>({
     title: "",
@@ -74,7 +87,29 @@ function InstructorCourse() {
     isBlock: false,
   });
   const [step, setStep] = useState(0);
+  // const [selectedContentPos, setSelectedContentPos] = useState(
+  //   courseDetails.lessons.length
+  // );
 
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const droppedFiles = e.dataTransfer.files;
+    setLesson(droppedFiles[0]);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    setLesson(selectedFile || null);
+  };
+  const setLessonToArray = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const { lessons } = courseDetails;
+    console.log(courseDetails, "Before");
+    for (let i = lessons.length; i > parseInt(e.target.value); i--) {
+      lessons[i] = lessons[i - 1];
+    }
+    lessons[parseInt(e.target.value)] = selectedContent;
+    console.log(courseDetails);
+  };
   const createCourse = async () => {
     try {
       // setSubmitStage(true);
@@ -96,11 +131,11 @@ function InstructorCourse() {
         }
       );
       if (confirmed) {
-        if(user&&user.id){
-          setCourseDetails({ ...courseDetails, instructor: user.id as string});
+        if (user && user.id) {
+          setCourseDetails({ ...courseDetails, instructor: user.id as string });
         }
         console.log(courseDetails);
-        
+
         await api.post("/course/create", courseDetails);
         // setSubmitStage(false);
         setCourseDetailview(false);
@@ -124,7 +159,7 @@ function InstructorCourse() {
         setStep(0);
         setAnnouncement("");
         setNewCourse(false);
-        dispatch(getCourses({search,isInstructor:true}));
+        dispatch(getCourses({ search, isInstructor: true }));
       }
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -175,7 +210,7 @@ function InstructorCourse() {
         setStep(0);
         setAnnouncement("");
         setNewCourse(false);
-        dispatch(getCourses({search,isInstructor:true}));
+        dispatch(getCourses({ search, isInstructor: true }));
       }
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -185,7 +220,35 @@ function InstructorCourse() {
       }
     }
   };
+  const uploadVideo = async () => {
+    if (lesson) {
+      setLoading(true);
+      const data = new FormData();
+      data.append("file", lesson);
+      data.append("upload_preset", "video_preset");
+      try {
+        const cloudName = "dshijvj8y";
 
+        const api = `https://api.cloudinary.com/v1_1/${cloudName}/${"video"}/upload`;
+        const res = await axios.post(api, data, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        // console.log(res);
+        const { secure_url } = res.data;
+        setSelectedContent({ ...selectedContent, content: secure_url });
+        setLoading(false);
+      } catch (error: unknown) {
+        setLoading(false);
+        if (axios.isAxiosError(error)) {
+          toast(error?.response?.data?.message);
+        } else {
+          toast("An unexpected error occurred");
+        }
+      }
+    }
+  };
   const uploadImage = async () => {
     if (coverImage) {
       setLoading(true);
@@ -201,14 +264,14 @@ function InstructorCourse() {
             "Content-Type": "multipart/form-data",
           },
         });
-        console.log(res);
+        // console.log(res);
         const { secure_url } = res.data;
         setCourseDetails({ ...courseDetails, cover: secure_url });
         setCoverImage(null);
         console.log(courseDetails);
         setLoading(false);
       } catch (error: unknown) {
-        setLoading(false)
+        setLoading(false);
         if (axios.isAxiosError(error)) {
           toast(error?.response?.data?.message);
         } else {
@@ -220,7 +283,7 @@ function InstructorCourse() {
 
   useEffect(() => {
     dispatch(getCategories(""));
-    dispatch(getCourses({search:"",isInstructor:true}));
+    dispatch(getCourses({ search: "", isInstructor: true }));
   }, [dispatch]);
 
   // useEffect(() => {
@@ -312,130 +375,371 @@ function InstructorCourse() {
             </div>
           </div>
           {step == 1 ? (
-            ""
-          ) : // <div className="border p-5 px-10 mt-6 rounded-lg text-start">
-          //   <div className="flex justify-between items-start">
-          //     <div className="w-[30%]">
-          //       <div className=" text-end">
-          //         <button className="border-2 px-6 py-1 border-violet-500 text-violet-500 font-medium ">
-          //           Add Lesson
-          //         </button>
-          //       </div>
-          //       <div className="border p-3 mt-2">
-          //         <div className="flex justify-between items-end gap-2">
-          //           <p className="text-xl">Lessons List</p>
-          //           <p className="text-sm text-gray-400 italic"> 10 Lessons</p>
-          //         </div>
-          //         <div className="h-[50vh] mt-2 overflow-y-scroll overflow-x-hidden">
-          //           <div className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1">
-          //             <p className="italic text-xs text-gray-400">21:12</p>
-          //             <p>1. Introduction to JS</p>
-          //           </div>
-          //           <div className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1">
-          //             <p className="italic text-xs text-gray-400">21:12</p>
-          //             <p>1. Introduction to JS</p>
-          //           </div>
-          //           <div className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1">
-          //             <p className="italic text-xs text-gray-400">21:12</p>
-          //             <p>1. Introduction to JS</p>
-          //           </div>
-          //           <div className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1">
-          //             <p className="italic text-xs text-gray-400">21:12</p>
-          //             <p>1. Introduction to JS</p>
-          //           </div>
-          //           <div className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1">
-          //             <p className="italic text-xs text-gray-400">21:12</p>
-          //             <p>1. Introduction to JS</p>
-          //           </div>
-          //           <div className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1">
-          //             <p className="italic text-xs text-gray-400">21:12</p>
-          //             <p>1. Introduction to JS</p>
-          //           </div>
-          //           <div className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1">
-          //             <p className="italic text-xs text-gray-400">21:12</p>
-          //             <p>1. Introduction to JS</p>
-          //           </div>
-          //           <div className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1">
-          //             <p className="italic text-xs text-gray-400">21:12</p>
-          //             <p>1. Introduction to JS</p>
-          //           </div>
-          //         </div>
-          //       </div>
-          //     </div>
-          //     <div>
-          //       <div className="bg-white h-[55vh] w-[50vw]">
-          //         <embed src="" type="" />
-          //       </div>
-          //       <div className="flex justify-between mt-3">
-          //         <div>
-          //           <p className="text-xl">Introduction to JS on part 1</p>
-          //           <p className="text-sm text-gray-300">
-          //             Duration: 00:15:27 hrs
-          //           </p>
-          //         </div>
-          //         <div className="flex gap-2 px-6 h-max">
-          //           <button
-          //             className="flex gap-1 py-1 border-2 border-red-800 px-3 text-red-800 hover:bg-red-800 hover:text-white"
-          //             title="Delete"
-          //           >
-          //             <MdDelete size={24} />{" "}
-          //           </button>
-          //           <button
-          //             className="flex gap-1 py-1 border-2 border-violet-500 px-3 text-violet-500 hover:bg-violet-500 hover:text-white"
-          //             title="Replace"
-          //           >
-          //             <LuReplace size={24} />{" "}
-          //           </button>
-          //         </div>
-          //       </div>
-          //       <div className="text-end mt-2">
-          //         <button className="border-2 text-purple-900 border-purple-900 hover:bg-purple-900 hover:text-white px-4 py-1">
-          //           Save changes
-          //         </button>
-          //       </div>
-          //     </div>
-          //   </div>
-          //   <div>
-          //     <div className="">
-          //       <p className="font-medium mb-2">Lesson Title</p>
-          //       <input
-          //         type="text"
-          //         className="border bg-transparent pt-2 pb-1 px-2 w-full outline-none"
-          //         placeholder="Insert your lesson title.."
-          //       />
-          //       <br />
-          //       <p className="text-xs text-gray-400 italic">
-          //         Your title should be a mix of attention-grabbing, informative,
-          //         and optimized.
-          //       </p>
-          //     </div>
-          //     <div className="">
-          //       <p className="font-medium mb-2">Lesson Position</p>
-          //       <select name="" id="" className="border bg-transparent py-2 px-3">
-          //         <option value="" selected className="text-black">
-          //           --Select Lesson position After--
-          //         </option>
-          //         <option value="" className="text-black">
-          //           --At last--
-          //         </option>
-          //         <option value="" className="text-black">
-          //           -- 1 --
-          //         </option>
-          //         <option value="" className="text-black">
-          //           -- 1 --
-          //         </option>
-          //         <option value="" className="text-black">
-          //           -- 1 --
-          //         </option>
-          //       </select>
-          //       <p className="text-xs text-gray-400 italic">
-          //         Your title should be a mix of attention-grabbing, informative,
-          //         and optimized.
-          //       </p>
-          //     </div>
-          //   </div>
-          // </div>
-          step == 2 ? (
+            <div className="border p-5 px-10 mt-6 rounded-lg text-start">
+              <div className="flex justify-between items-start">
+                <div className="w-[30%]">
+                  <div className=" text-end flex gap-1 justify-between items-end">
+                    <p className="text-lg font-medium">Add Lessons: </p>
+                    {!selectedContent.content && (
+                      <button
+                        className="block border-2 px-6 py-1 border-violet-500 text-violet-500 font-medium"
+                        onClick={() => setIsModalOpen(true)}
+                      >
+                        Video
+                      </button>
+                    )}
+                    {/* <button
+                      className="block border-2 px-6 py-1 border-violet-500 text-violet-500 font-medium"
+                      onClick={() => setIsModalOpen(true)}
+                    >
+                      Document
+                    </button> */}
+
+                    {isModalOpen && (
+                      <div className="fixed inset-0 z-50 overflow-auto bg-black bg-opacity-30 flex items-center justify-center">
+                        <div className="p-8 max-w-2xl mx-auto rounded-lg">
+                          <div className="relative p-4 w-full max-w-2xl max-h-full">
+                            <div className="relative rounded-lg shadow dark:bg-purple-900">
+                              <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t gap-1 dark:border-gray-600">
+                                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
+                                  Upload Your Lesson Here
+                                </h3>
+                                <button
+                                  type="button"
+                                  disabled={loading}
+                                  className="end-2.5 text-gray-400 bg-transparent hover:bg-purple-500/30 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-purple-500/30 dark:hover:text-white"
+                                  onClick={() => {
+                                    setIsModalOpen(false);
+                                    setLesson(null);
+                                  }}
+                                >
+                                  <svg
+                                    className="w-3 h-3"
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 14 14"
+                                  >
+                                    <path
+                                      stroke="currentColor"
+                                      stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                                    />
+                                  </svg>
+                                  <span className="sr-only">Close modal</span>
+                                </button>
+                              </div>
+                              {/* <!-- Modal body --> */}
+                              <div className="p-4 md:p-5 text-start">
+                                <div className="space-y-4">
+                                  <div>
+                                    <label
+                                      htmlFor=""
+                                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                                    >
+                                      Your Content
+                                    </label>
+                                    <div
+                                      id="drop-area"
+                                      className="bg-gray-50 text-center border px-30 py-20 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
+                                      onDrop={handleDrop}
+                                      onDragOver={(e) => e.preventDefault()}
+                                    >
+                                      {loading ? (
+                                        <div className="flex justify-center">
+                                          <div
+                                            role="status"
+                                            className="flex flex-col items-center gap-3"
+                                          >
+                                            <svg
+                                              aria-hidden="true"
+                                              className="w-8 h-8 text-gray-200 animate-spin-slow-10 dark:text-gray-300 fill-violet-600 font-extrabold"
+                                              viewBox="0 0 100 101"
+                                              fill="none"
+                                              xmlns="http://www.w3.org/2000/svg"
+                                            >
+                                              <path
+                                                d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                                                fill="currentColor"
+                                              />
+                                              <path
+                                                d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                                                fill="currentFill"
+                                              />
+                                            </svg>
+                                            <span className="sr-only">
+                                              Loading...
+                                            </span>
+                                            <p className="animate-pulse">
+                                              Uploading...
+                                            </p>
+                                          </div>
+                                        </div>
+                                      ) : lesson ? (
+                                        <div className="flex items-center justify-between gap-3 bg-violet-800 px-4 py-2 rounded-lg">
+                                          <p>{lesson?.name}</p>
+                                          {!selectedContent.content && (
+                                            <button
+                                              className=""
+                                              onClick={() => setLesson(null)}
+                                            >
+                                              <IoIosClose
+                                                size={24}
+                                                className="hover:text-red-600 font-bold "
+                                              />
+                                            </button>
+                                          )}
+                                        </div>
+                                      ) : (
+                                        <label
+                                          htmlFor="file-input"
+                                          className="h-full cursor-pointer"
+                                        >
+                                          <b className="text-gray-400 mb-3 flex items-center">
+                                            <RiDragDropLine size={60} /> Drag &
+                                            drop your file here or click to
+                                            select
+                                          </b>
+                                          <input
+                                            type="file"
+                                            name="file-input"
+                                            accept="video/*"
+                                            className=""
+                                            // value={files[0].name}
+                                            id="file-input"
+                                            onChange={handleInputChange}
+                                          />
+                                        </label>
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  <div className="mt-2">
+                                    <button
+                                      type="button"
+                                      className="w-full flex justify-center text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800  disabled:bg-purple-700/30"
+                                      onClick={uploadVideo}
+                                      disabled={loading}
+                                    >
+                                      {loading ? (
+                                        <div
+                                          role="status"
+                                          className="flex items-center gap-2"
+                                        >
+                                          <svg
+                                            aria-hidden="true"
+                                            className="w-4 h-4 text-gray-200 animate-spin-slow-10 dark:text-gray-300 fill-violet-600 font-extrabold"
+                                            viewBox="0 0 100 101"
+                                            fill="none"
+                                            xmlns="http://www.w3.org/2000/svg"
+                                          >
+                                            <path
+                                              d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                                              fill="currentColor"
+                                            />
+                                            <path
+                                              d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                                              fill="currentFill"
+                                            />
+                                          </svg>
+                                          <span className="sr-only">
+                                            Loading...
+                                          </span>
+                                          <p className="animate-pulse">
+                                            Uploading...
+                                          </p>
+                                        </div>
+                                      ) : (
+                                        "Upload Content"
+                                      )}
+                                    </button>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="text-end py-2 px-4">
+                                <button
+                                  className="text-white bg-violet-800 hover:bg-violet-800/80 px-4 py-1 rounded"
+                                  disabled={loading}
+                                  onClick={() => {
+                                    setIsModalOpen(false);
+                                    setLesson(null);
+                                  }}
+                                >
+                                  Close
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <div className="border p-3 mt-2">
+                    <div className="flex justify-between items-end gap-2">
+                      <p className="text-xl">Lessons List</p>
+                      <p className="text-sm text-gray-400 italic">
+                        {" "}
+                        {courseDetails.lessons.length} Lessons
+                      </p>
+                    </div>
+                    <div className="h-[50vh] mt-2 overflow-y-scroll overflow-x-hidden">
+                      {courseDetails.lessons.map((lesson, index) => (
+                        <div className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1">
+                          <p className="italic text-xs text-gray-400">
+                            {Math.floor(selectedContent.duration / 3600)} :{" "}
+                            {Math.floor((selectedContent.duration % 3600) / 60)}{" "}
+                            : {Math.floor(selectedContent.duration % 60)} hrs
+                          </p>
+                          <p>{`${index + 1} ${lesson.title}`}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div
+                    className={`${
+                      !selectedContent.content && !selectedContent.content
+                        ? "bg-white/80"
+                        : ""
+                    } h-[55vh] w-[50vw]`}
+                  >
+                    {selectedContent.content ? (
+                      <ReactPlayer
+                        url={selectedContent.content}
+                        controls
+                        playing={false}
+                        light={courseDetails.cover}
+                        width={"100%"}
+                        height={"100%"}
+                        playIcon={
+                          <FaRegCirclePlay
+                            size={64}
+                            className="text-purple-500"
+                          />
+                        }
+                        onDuration={(duration: number) =>
+                          setSelectedContent({
+                            ...selectedContent,
+                            duration: duration,
+                          })
+                        }
+                      />
+                    ) : (
+                      <div className="flex justify-center items-center h-full">
+                        <FaRegCirclePlay
+                          size={64}
+                          className="text-purple-500"
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex justify-between mt-3">
+                    <div>
+                      <p className="text-xl">{selectedContent.title}</p>
+                      <p className="text-sm text-gray-300">
+                        Duration: {Math.floor(selectedContent.duration / 3600)}{" "}
+                        : {Math.floor((selectedContent.duration % 3600) / 60)} :{" "}
+                        {Math.floor(selectedContent.duration % 60)} hrs
+                      </p>
+                    </div>
+                    <div className="flex gap-2 px-6 h-max">
+                      <button
+                        className="flex gap-1 py-1 border-2 border-red-800 px-3 text-red-800 hover:bg-red-800 hover:text-white"
+                        title="Delete"
+                      >
+                        <MdDelete size={24} />{" "}
+                      </button>
+                      <button
+                        className="flex gap-1 py-1 border-2 border-violet-500 px-3 text-violet-500 hover:bg-violet-500 hover:text-white"
+                        title="Replace"
+                      >
+                        <LuReplace size={24} />{" "}
+                      </button>
+                    </div>
+                  </div>
+                  <div className="text-end mt-2">
+                    <button
+                      onClick={() => {
+                        if(selectedContent.title&&selectedContent.content){
+                          swal("Are you sure to save changes?", {
+                            buttons: ["Cancel", true],
+                          }).then((confirm) => {
+                            if (confirm) {
+                              setSelectedContent({
+                                content: "",
+                                duration: 0,
+                                title: "",
+                              });
+                            }
+                          });
+                        }else{
+                          toast("Fill every necessary fields")
+                        }
+                      }}
+                      className="border-2 text-purple-900 border-purple-900 hover:bg-purple-900 hover:text-white px-4 py-1"
+                    >
+                      Save changes
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div className="">
+                  <p className="font-medium mb-2">Lesson Title</p>
+                  <input
+                    type="text"
+                    className="border bg-transparent pt-2 pb-1 px-2 w-full outline-none"
+                    placeholder="Insert your lesson title.."
+                    value={selectedContent.title}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setSelectedContent({
+                        ...selectedContent,
+                        title: e.target.value,
+                      })
+                    }
+                  />
+                  <br />
+                  <p className="text-xs text-gray-400 italic">
+                    Your title should be a mix of attention-grabbing,
+                    informative, and optimized.
+                  </p>
+                </div>
+                <div className="">
+                  <p className="font-medium mb-2">Lesson Position</p>
+                  <select
+                    name=""
+                    id=""
+                    className="border bg-transparent py-2 px-3"
+                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                      setLessonToArray(e)
+                    }
+                  >
+                    <option value="" disabled selected className="text-black">
+                      --Select Lesson position After--
+                    </option>
+                    <option
+                      value={courseDetails.lessons.length || 0}
+                      className="text-black"
+                    >
+                      --At last--
+                    </option>
+                    {courseDetails.lessons.map((les, index) => (
+                      <option value={index + 1} className="text-black">
+                        After {index + 1}
+                      </option>
+                    ))}
+                  </select>
+                  <p className="text-xs text-gray-400 italic">
+                    Your title should be a mix of attention-grabbing,
+                    informative, and optimized.
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : step == 2 ? (
             <div className="border p-5 px-10 mt-6 rounded-lg text-start">
               <div className="">
                 <p className="text-xl font-medium mb-2">
@@ -748,6 +1052,7 @@ function InstructorCourse() {
                               ? setCoverImage(e.target.files[0])
                               : setCoverImage(null)
                           }
+                          accept="image/*"
                         />
                         <label
                           className="button bg-white text-black px-3 py-1 hover:cursor-pointer"
@@ -787,7 +1092,7 @@ function InstructorCourse() {
                   />
                   <button
                     onClick={() => {
-                      dispatch(getCourses({search,isInstructor:true}));
+                      dispatch(getCourses({ search, isInstructor: true }));
                       setSearch("");
                     }}
                     className="h-[100%] flex items-end bg-white text-black px-2 py-1 font-medium hover:bg-slate-400 transition duration-300"

@@ -20,7 +20,7 @@ interface ICoupon {
 interface ILesson {
   title: string;
   content: string;
-  duration: string;
+  duration: number;
 }
 
 interface ICourse {
