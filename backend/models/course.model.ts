@@ -10,7 +10,7 @@ const CourseSchema = new mongoose.Schema<ICourse>({
   },
   category: {
     type: mongoose.Types.ObjectId,
-    ref: "categories",
+    ref: "Category",
   },
   language: {
     type: String,
@@ -19,10 +19,15 @@ const CourseSchema = new mongoose.Schema<ICourse>({
   level: {
     type: String,
   },
-  lessons: {
-    content: String,
-    title: String,
-    duration: Number,
+  lessons: [
+    {
+      content: String,
+      title: String,
+      duration: Number,
+    },
+  ],
+  preview: {
+    type: String,
   },
   announcements: { type: [String], default: [] },
   cover: {
@@ -34,12 +39,12 @@ const CourseSchema = new mongoose.Schema<ICourse>({
   },
   instructor: {
     type: mongoose.Types.ObjectId,
-    ref: "users",
+    ref: "User",
   },
   enrollers: [
     {
       type: mongoose.Types.ObjectId,
-      ref: "users",
+      ref: "User",
     },
   ],
   price: {

@@ -1,9 +1,9 @@
 // import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import BasicHeader from '../components/BasicHeader'
-import LogoutSection from '../components/LogoutSection'
 import { useEffect } from 'react';
 import { toast } from 'react-toastify';
+import ProfileTab from '../components/ProfileTab';
 
 function ProfilePage() {
   const token = localStorage.getItem("SkillStreamToken");
@@ -17,7 +17,7 @@ function ProfilePage() {
   return (
     <div className='h-screen px-10 py-4'>
         <BasicHeader/>
-        <LogoutSection/>
+        <ProfileTab/>
     </div>
   )
 }

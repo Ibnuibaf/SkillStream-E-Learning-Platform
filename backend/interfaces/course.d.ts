@@ -10,6 +10,7 @@ interface ICourse{
     level:string
     category:string|ObjectId
     cover:string
+    preview:string
     lessons:ILesson[]
     announcements:string[]
     coupons:ICoupon[]

@@ -27,9 +27,10 @@ class CourseRepository {
   async getCourses(regex:string) {
     try {
         const courses = regex
-          ? await Courses.find({ title: { $regex: regex, $options: "i" } })
-          : await Courses.find();
-  
+          ? await Courses.find({ title: { $regex: regex, $options: "i" } }).populate('instructor', 'name').populate('category', 'name')
+          : await Courses.find().populate('instructor', 'name').populate('category', 'name');
+        console.log(courses);
+        
         return {
           success: true,
           message: "Fetch all caetgories",

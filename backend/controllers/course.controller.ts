@@ -9,8 +9,12 @@ class CourseController {
 
   async createCourse(req: Request, res: Response) {
     try {
-        const response=await this.courseUsecase.createCourse(req.body,req.headers["authorization"] as string)
-        return res.status(response.status).send(response.data)
+      console.log(req.body);
+      const response = await this.courseUsecase.createCourse(
+        req.body,
+        req.headers["authorization"] as string
+      );
+      return res.status(response.status).send(response.data);
     } catch (error) {
       res.status(500).send({
         success: false,
@@ -20,8 +24,8 @@ class CourseController {
   }
   async getCourses(req: Request, res: Response) {
     try {
-        const response=await this.courseUsecase.getCourses(req.query)
-        res.status(response.status).send(response.data)
+      const response = await this.courseUsecase.getCourses(req.query);
+      res.status(response.status).send(response.data);
     } catch (error) {
       res.status(500).send({
         success: false,
@@ -29,11 +33,14 @@ class CourseController {
       });
     }
   }
-  
+
   async getInstructorCourses(req: Request, res: Response) {
     try {
-        const response=await this.courseUsecase.getInstructorCourses(req.query,req.headers["authorization"] as string)
-        res.status(response.status).send(response.data)
+      const response = await this.courseUsecase.getInstructorCourses(
+        req.query,
+        req.headers["authorization"] as string
+      );
+      res.status(response.status).send(response.data);
     } catch (error) {
       res.status(500).send({
         success: false,
@@ -43,8 +50,8 @@ class CourseController {
   }
   async updateCourse(req: Request, res: Response) {
     try {
-        const response=await this.courseUsecase.updateCourse(req.body)
-        res.status(response.status).send(response.data)
+      const response = await this.courseUsecase.updateCourse(req.body);
+      res.status(response.status).send(response.data);
     } catch (error) {
       res.status(500).send({
         success: false,
@@ -54,4 +61,4 @@ class CourseController {
   }
 }
 
-export default CourseController
+export default CourseController;

@@ -9,6 +9,10 @@ import { getCourses } from "../redux/actions/coursesActions";
 import { selectcourses } from "../redux/slices/coursesSlice";
 import swal from "sweetalert";
 import axios from "axios";
+// import { MdDelete } from "react-icons/md";
+import { LuReplace } from "react-icons/lu";
+import ReactPlayer from "react-player";
+import { FaRegCirclePlay } from "react-icons/fa6";
 
 interface ICoupon {
   code: string;
@@ -20,7 +24,7 @@ interface ICoupon {
 interface ILesson {
   title: string;
   content: string;
-  duration: number;
+  duration: number | string;
 }
 
 interface ICourse {
@@ -29,16 +33,17 @@ interface ICourse {
   description: string;
   language: string;
   level: string;
-  category: string;
+  category: { name: string; _id: string }|string;
   cover: string;
-  lessons: ILesson[];
+    preview?:string
+    lessons: ILesson[];
+  instructor: { name: string; _id?: string }|string;
   announcements: string[];
   coupons: ICoupon[];
   price: number;
   offer: number;
   isApproved?: boolean;
   isBlock?: boolean;
-  instructor?: string;
   enrollers?: string[];
 }
 function AdminCourse() {
@@ -55,6 +60,7 @@ function AdminCourse() {
     level: "",
     category: "",
     cover: "",
+    instructor:"",
     lessons: [],
     announcements: [],
     coupons: [],
@@ -62,6 +68,11 @@ function AdminCourse() {
     offer: 0,
   });
   const [step, setStep] = useState(0);
+  const [selectedContent, setSelectedContent] = useState<ILesson>({
+    content: "",
+    duration: 0,
+    title: "",
+  });
 
   const updateCourse = async (update: string) => {
     try {
@@ -111,6 +122,7 @@ function AdminCourse() {
           category: "",
           cover: "",
           lessons: [],
+          instructor:"",
           announcements: [],
           coupons: [],
           price: 0,
@@ -118,8 +130,13 @@ function AdminCourse() {
           isApproved: false,
           isBlock: false,
         });
+        setSelectedContent({
+          content: "",
+          duration: 0,
+          title: "",
+        });
         setStep(0);
-        dispatch(getCourses({search,isInstructor:false}));
+        dispatch(getCourses({ search, isInstructor: false }));
       }
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -131,7 +148,7 @@ function AdminCourse() {
   };
 
   useEffect(() => {
-    dispatch(getCourses({search:"",isInstructor:false}));
+    dispatch(getCourses({ search: "", isInstructor: false }));
     dispatch(getCategories(""));
   }, [dispatch]);
 
@@ -152,11 +169,17 @@ function AdminCourse() {
                   cover: "",
                   lessons: [],
                   announcements: [],
+                  instructor:"",
                   coupons: [],
                   price: 0,
                   offer: 0,
                   isApproved: false,
                   isBlock: false,
+                });
+                setSelectedContent({
+                  content: "",
+                  duration: 0,
+                  title: "",
                 });
               }}
               className="border px-2 p-1 bg-gray-700 hover:bg-gray-800 transition duration-300"
@@ -236,130 +259,155 @@ function AdminCourse() {
             </div>
           </div>
           {step == 1 ? (
-            ""
-          ) : // <div className="border p-5 px-10 mt-6 rounded-lg text-start">
-          //   <div className="flex justify-between items-start">
-          //     <div className="w-[30%]">
-          //       <div className=" text-end">
-          //         <button className="border-2 px-6 py-1 border-violet-500 text-violet-500 font-medium ">
-          //           Add Lesson
-          //         </button>
-          //       </div>
-          //       <div className="border p-3 mt-2">
-          //         <div className="flex justify-between items-end gap-2">
-          //           <p className="text-xl">Lessons List</p>
-          //           <p className="text-sm text-gray-400 italic"> 10 Lessons</p>
-          //         </div>
-          //         <div className="h-[50vh] mt-2 overflow-y-scroll overflow-x-hidden">
-          //           <div className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1">
-          //             <p className="italic text-xs text-gray-400">21:12</p>
-          //             <p>1. Introduction to JS</p>
-          //           </div>
-          //           <div className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1">
-          //             <p className="italic text-xs text-gray-400">21:12</p>
-          //             <p>1. Introduction to JS</p>
-          //           </div>
-          //           <div className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1">
-          //             <p className="italic text-xs text-gray-400">21:12</p>
-          //             <p>1. Introduction to JS</p>
-          //           </div>
-          //           <div className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1">
-          //             <p className="italic text-xs text-gray-400">21:12</p>
-          //             <p>1. Introduction to JS</p>
-          //           </div>
-          //           <div className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1">
-          //             <p className="italic text-xs text-gray-400">21:12</p>
-          //             <p>1. Introduction to JS</p>
-          //           </div>
-          //           <div className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1">
-          //             <p className="italic text-xs text-gray-400">21:12</p>
-          //             <p>1. Introduction to JS</p>
-          //           </div>
-          //           <div className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1">
-          //             <p className="italic text-xs text-gray-400">21:12</p>
-          //             <p>1. Introduction to JS</p>
-          //           </div>
-          //           <div className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1">
-          //             <p className="italic text-xs text-gray-400">21:12</p>
-          //             <p>1. Introduction to JS</p>
-          //           </div>
-          //         </div>
-          //       </div>
-          //     </div>
-          //     <div>
-          //       <div className="bg-white h-[55vh] w-[50vw]">
-          //         <embed src="" type="" />
-          //       </div>
-          //       <div className="flex justify-between mt-3">
-          //         <div>
-          //           <p className="text-xl">Introduction to JS on part 1</p>
-          //           <p className="text-sm text-gray-300">
-          //             Duration: 00:15:27 hrs
-          //           </p>
-          //         </div>
-          //         <div className="flex gap-2 px-6 h-max">
-          //           <button
-          //             className="flex gap-1 py-1 border-2 border-red-800 px-3 text-red-800 hover:bg-red-800 hover:text-white"
-          //             title="Delete"
-          //           >
-          //             <MdDelete size={24} />{" "}
-          //           </button>
-          //           <button
-          //             className="flex gap-1 py-1 border-2 border-violet-500 px-3 text-violet-500 hover:bg-violet-500 hover:text-white"
-          //             title="Replace"
-          //           >
-          //             <LuReplace size={24} />{" "}
-          //           </button>
-          //         </div>
-          //       </div>
-          //       <div className="text-end mt-2">
-          //         <button className="border-2 text-purple-900 border-purple-900 hover:bg-purple-900 hover:text-white px-4 py-1">
-          //           Save changes
-          //         </button>
-          //       </div>
-          //     </div>
-          //   </div>
-          //   <div>
-          //     <div className="">
-          //       <p className="font-medium mb-2">Lesson Title</p>
-          //       <input
-          //         type="text"
-          //         className="border bg-transparent pt-2 pb-1 px-2 w-full outline-none"
-          //         placeholder="Insert your lesson title.."
-          //       />
-          //       <br />
-          //       <p className="text-xs text-gray-400 italic">
-          //         Your title should be a mix of attention-grabbing, informative,
-          //         and optimized.
-          //       </p>
-          //     </div>
-          //     <div className="">
-          //       <p className="font-medium mb-2">Lesson Position</p>
-          //       <select name="" id="" className="border bg-transparent py-2 px-3">
-          //         <option value="" selected className="text-black">
-          //           --Select Lesson position After--
-          //         </option>
-          //         <option value="" className="text-black">
-          //           --At last--
-          //         </option>
-          //         <option value="" className="text-black">
-          //           -- 1 --
-          //         </option>
-          //         <option value="" className="text-black">
-          //           -- 1 --
-          //         </option>
-          //         <option value="" className="text-black">
-          //           -- 1 --
-          //         </option>
-          //       </select>
-          //       <p className="text-xs text-gray-400 italic">
-          //         Your title should be a mix of attention-grabbing, informative,
-          //         and optimized.
-          //       </p>
-          //     </div>
-          //   </div>
-          // </div>
-          step == 2 ? (
+            <div className="border p-5 px-10 mt-6 rounded-lg text-start">
+              <div className="flex justify-between items-start">
+                <div className="w-[30%]">
+                  <div className="border p-3 mt-2">
+                    <div className="flex justify-between items-end gap-2">
+                      <p className="text-xl">Lessons List</p>
+                      <p className="text-sm text-gray-400 italic">
+                        {" "}
+                        {courseDetails.lessons.length} Lessons
+                      </p>
+                    </div>
+                    <div className="h-[50vh] mt-2 overflow-y-scroll overflow-x-hidden">
+                      {courseDetails.lessons.map((lesson, index) => (
+                        <div
+                          className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1 cursor-pointer"
+                          onClick={() => {
+                            setSelectedContent(lesson);
+                          }}
+                        >
+                          <p className="italic text-xs text-gray-400">
+                            {Math.floor(Number(lesson.duration) / 3600)} :{" "}
+                            {Math.floor((Number(lesson.duration) % 3600) / 60)}{" "}
+                            : {Math.floor(Number(lesson.duration) % 60)} hrs
+                          </p>
+                          <p>{`${index + 1} ${lesson.title}`}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div
+                    className={`${
+                      !selectedContent.content && !selectedContent.content
+                        ? "bg-white/80"
+                        : ""
+                    } h-[55vh] w-[50vw]`}
+                  >
+                    {selectedContent.content ? (
+                      <ReactPlayer
+                        url={selectedContent.content}
+                        controls
+                        playing={false}
+                        light={courseDetails.cover}
+                        width={"100%"}
+                        height={"100%"}
+                        playIcon={
+                          <FaRegCirclePlay
+                            size={64}
+                            className="text-purple-500"
+                          />
+                        }
+                        onDuration={(duration: number) =>
+                          setSelectedContent({
+                            ...selectedContent,
+                            duration: duration,
+                          })
+                        }
+                      />
+                    ) : (
+                      <div className="flex justify-center items-center h-full">
+                        <FaRegCirclePlay
+                          size={64}
+                          className="text-purple-500"
+                        />
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex justify-between mt-3">
+                    <div>
+                      <p className="text-xl">{selectedContent.title}</p>
+                      <p className="text-sm text-gray-300">
+                        Duration:{" "}
+                        {Math.floor(Number(selectedContent.duration) / 3600)} :{" "}
+                        {Math.floor(
+                          (Number(selectedContent.duration) % 3600) / 60
+                        )}{" "}
+                        : {Math.floor(Number(selectedContent.duration) % 60)}{" "}
+                        hrs
+                      </p>
+                    </div>
+                    <div className="flex gap-2  h-max">
+                      {/* <button
+                      className="flex gap-1 py-1 border-2 border-red-800 px-3 text-red-800 hover:bg-red-800 hover:text-white"
+                      title="Delete"
+                      disabled={selectedContent.content ? false : true}
+                      onClick={() => {
+                        swal("Are you sure to replace content?", {
+                          buttons: ["Cancel", true],
+                        }).then((confirm) => {
+                          if (confirm) {
+                            setSelectedContent({
+                              ...selectedContent,
+                              content: "",
+                            });
+                          }
+                        });
+                      }}
+                    >
+                      <MdDelete size={24} />{" "}
+                    </button> */}
+                      <button
+                        className="flex gap-1 py-1 border-2 border-violet-500 px-3 text-violet-500 hover:bg-violet-500 hover:text-white"
+                        title="Replace"
+                        disabled={selectedContent.content ? false : true}
+                        onClick={() => {
+                          swal("Are you sure to replace content?", {
+                            buttons: ["Cancel", true],
+                          }).then((confirm) => {
+                            if (confirm) {
+                              setSelectedContent({
+                                ...selectedContent,
+                                content: "",
+                              });
+                            }
+                          });
+                        }}
+                      >
+                        <LuReplace size={24} />
+                        {" Replace"}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div>
+                <div className="">
+                  <p className="font-medium mb-2">Lesson Title</p>
+                  <input
+                    type="text"
+                    disabled
+                    className="border bg-transparent pt-2 pb-1 px-2 w-full outline-none"
+                    value={selectedContent.title}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                      setSelectedContent({
+                        ...selectedContent,
+                        title: e.target.value,
+                      })
+                    }
+                  />
+                  <br />
+                  <p className="text-xs text-gray-400 italic">
+                    Your title should be a mix of attention-grabbing,
+                    informative, and optimized.
+                  </p>
+                </div>
+              </div>
+            </div>
+          ) : step == 2 ? (
             <div className="border p-5 px-10 mt-6 rounded-lg text-start">
               <div className="">
                 <p className="text-xl font-medium mb-2">
@@ -478,7 +526,7 @@ function AdminCourse() {
                     name=""
                     id=""
                     className="border bg-transparent py-2 px-3"
-                    value={courseDetails.category}
+                    value={typeof courseDetails.category === 'object' ? courseDetails.category.name : courseDetails.category}
                     disabled
                   >
                     {categories.map((cat) =>
@@ -559,7 +607,7 @@ function AdminCourse() {
                   />
                   <button
                     onClick={() => {
-                      dispatch(getCourses({search,isInstructor:false}));
+                      dispatch(getCourses({ search, isInstructor: false }));
                       setSearch("");
                     }}
                     className="h-[100%] flex items-end bg-white text-black px-2 py-1 font-medium hover:bg-slate-400 transition duration-300"
@@ -629,13 +677,13 @@ function AdminCourse() {
                       <p className="italic  w-max  mt-1 py-1">
                         Enrollements :{" "}
                         <b className="text-purple-600 space-x-[0.9px] border p-1">
-                          <span className="bg-slate-800 rounded px-1">0</span>
-                          <span className="bg-slate-800 rounded px-1">7</span>
-                          <span className="bg-slate-800 rounded px-1">8</span>
+                          <span className="bg-slate-800 rounded px-1">
+                            {course.enrollers.length}
+                          </span>
                         </b>
                       </p>
                     </div>
-                    
+
                     <p className=" text-xs font-light">
                       Updated on 05 Oct 7.5 total hours
                     </p>

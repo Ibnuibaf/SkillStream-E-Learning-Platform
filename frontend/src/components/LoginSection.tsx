@@ -4,9 +4,9 @@ import axios from "axios";
 // import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
-import { getUser } from "../redux/actions/authActions";
-import { AppDispatch } from "../redux/store";
-import { useDispatch } from "react-redux";
+// import { getUser } from "../redux/actions/authActions";
+// import { AppDispatch } from "../redux/store";
+// import { useDispatch } from "react-redux";
 import api from "../axios/api";
 // import { selectUser } from "../redux/slices/authSlice";
 
@@ -17,7 +17,7 @@ const passwordRegex =
 function LoginSection() {
   const token = localStorage.getItem("SkillStreamToken");
   const navigate = useNavigate();
-  const dispatch:AppDispatch=useDispatch()
+  // const dispatch:AppDispatch=useDispatch()
 
 
   const [loginDetails, setLoginDetails] = useState({ email: "", password: "" });
@@ -60,10 +60,10 @@ function LoginSection() {
         localStorage.setItem("SkillStreamToken", res.data.token);
         navigate("/admin");
       }else{
-        await dispatch(getUser());
+        // await dispatch(getUser());
         toast("User logged In");
         localStorage.setItem("SkillStreamToken", res.data.token);
-        navigate('/')
+        location.href='/'
       }
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {

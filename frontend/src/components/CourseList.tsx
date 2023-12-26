@@ -12,6 +12,8 @@ import { toast } from "react-toastify";
 import { selectUser } from "../redux/slices/authSlice";
 import { MdSearch } from "react-icons/md";
 import axios from "axios";
+import ReactPlayer from "react-player";
+import { FaRegCirclePlay } from "react-icons/fa6";
 
 interface ICoupon {
   code: string;
@@ -23,7 +25,7 @@ interface ICoupon {
 interface ILesson {
   title: string;
   content: string;
-  duration: number;
+  duration: number | string;
 }
 
 interface ICourse {
@@ -32,9 +34,11 @@ interface ICourse {
   description: string;
   language: string;
   level: string;
-  category: string;
+  category: { name: string; _id: string } | string;
+  preview?: string;
   cover: string;
   lessons: ILesson[];
+  instructor: { name: string; _id: string } | string;
   announcements: string[];
   coupons: ICoupon[];
   price: number;
@@ -62,6 +66,7 @@ function CourseList() {
     category: "",
     cover: "",
     lessons: [],
+    instructor: "",
     announcements: [],
     coupons: [],
     price: 0,
@@ -147,11 +152,20 @@ function CourseList() {
             </button>
           </div>
           <div className="flex px-10 mt-6 justify-center items-center gap-10">
-            <div className="w-[50vw] h-[60vh] bg-slate-600 rounded-3xl">
-              <img
-                src={courseDetails.cover}
-                alt=""
-                className="h-full w-full rounded-3xl"
+            <div className="w-[50vw] h-[60vh]  rounded-3xl">
+              <ReactPlayer
+                url={courseDetails.preview}
+                controls
+                light={courseDetails.cover}
+                // playing={false}
+                width={"100%"}
+                height={"100%"}
+                playIcon={
+                  <FaRegCirclePlay
+                    size={84}
+                    className="text-gray-300"
+                  />
+                }
               />
             </div>
             <div className="flex justify-center px-10 text-start">
@@ -161,7 +175,10 @@ function CourseList() {
                 </p>
                 <div className=" px-2 py-1">
                   <p className="text-sm  font-medium">
-                    Course By: <b className="text-lg">John Wivck</b>
+                    Course By:{" "}
+                    <b className="text-lg">
+                      {(courseDetails.instructor as { name: string }).name}
+                    </b>
                   </p>
                   <p className="text-sm text-gray-300 font-semibold">
                     Course Level:{" "}
@@ -223,43 +240,22 @@ function CourseList() {
                 <p className="text-xl font-bold">
                   What you will learn in this Course
                 </p>
-                <p className="font-semibold">Course By John Wixk</p>
+                <p className="font-semibold">
+                  Course By{" "}
+                  {(courseDetails.instructor as { name: string }).name}
+                </p>
                 <p className=" mt-2 px-5">{courseDetails.description}</p>
               </div>
             </div>
             <div className="mt-3 border-2 px-6 py-2">
               <p className="text-2xl font-medium">Course Content</p>
               <div className="my-2 max-h-[50vh] overflow-y-auto overflow-x-hidden">
-                <p className="border px-10 py-2 text-lg">
-                  Chapter 1 hello java script
-                </p>
-                <p className="border px-10 py-2 text-lg">
-                  Chapter 1 hello java script
-                </p>
-                <p className="border px-10 py-2 text-lg">
-                  Chapter 1 hello java script
-                </p>
-                <p className="border px-10 py-2 text-lg">
-                  Chapter 1 hello java script
-                </p>
-                <p className="border px-10 py-2 text-lg">
-                  Chapter 1 hello java script
-                </p>
-                <p className="border px-10 py-2 text-lg">
-                  Chapter 1 hello java script
-                </p>
-                <p className="border px-10 py-2 text-lg">
-                  Chapter 1 hello java script
-                </p>
-                <p className="border px-10 py-2 text-lg">
-                  Chapter 1 hello java script
-                </p>
-                <p className="border px-10 py-2 text-lg">
-                  Chapter 1 hello java script
-                </p>
-                <p className="border px-10 py-2 text-lg">
-                  Chapter 1 hello java script
-                </p>
+                {courseDetails.lessons.map((lesson, index) => (
+                  <p className="border px-10 py-2 text-lg">
+                    {`${index + 1}. `}
+                    {lesson.title.toUpperCase()}
+                  </p>
+                ))}
               </div>
             </div>
             <div className="mt-5 ">
@@ -407,7 +403,9 @@ function CourseList() {
           <div className="grid mt-5 grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-7">
             {selectedCategory.id
               ? courses.map((course) =>
-                  course.category == selectedCategory.id &&
+                  (typeof courseDetails.category === "object"
+                    ? courseDetails.category._id
+                    : courseDetails.category) == selectedCategory.id &&
                   !course.isBlock &&
                   course.isApproved ? (
                     <div
@@ -431,7 +429,9 @@ function CourseList() {
                               size={16}
                               color={Math.random() >= 0.5 ? "red" : "blue"}
                             />
-                            <p className="text-xs font-medium">{63}x Lesson</p>
+                            <p className="text-xs font-medium">
+                              {course.lessons.length}x Lesson
+                            </p>
                           </div>
                           <div className="flex items-center">
                             <IoMdStar size={16} color="orange" />
@@ -460,7 +460,11 @@ function CourseList() {
                         <div>
                           <img src="" alt="" />
                           <div className="space-y-[-4px]">
-                            <p className="font-medium">Brooklyn </p>
+                            <p className="text-lg">
+                              {typeof courseDetails.instructor == "object"
+                                ? courseDetails.instructor.name
+                                : courseDetails.instructor}
+                            </p>
                             <p className="text-xs italic">English Teacher</p>
                           </div>
                         </div>
@@ -472,7 +476,9 @@ function CourseList() {
                                 : "bg-pink-500"
                             } px-2 rounded-full text-white text-xs py-1 font-medium`}
                           >
-                            Programming
+                            {typeof courseDetails.category === "object"
+                              ? courseDetails.category.name
+                              : courseDetails.category}
                           </p>
                         </div>
                       </div>
@@ -504,7 +510,9 @@ function CourseList() {
                               size={16}
                               color={Math.random() >= 0.5 ? "red" : "blue"}
                             />
-                            <p className="text-xs font-medium">{52}x Lesson</p>
+                            <p className="text-xs font-medium">
+                              {course.lessons.length}x Lesson
+                            </p>
                           </div>
                           <div className="flex items-center">
                             <IoMdStar size={16} color="orange" />
@@ -533,7 +541,12 @@ function CourseList() {
                         <div>
                           <img src="" alt="" />
                           <div className="space-y-[-4px]">
-                            <p className="font-medium">Brooklyn </p>
+                            <p className="text-lg">
+                              {typeof courseDetails.instructor == "object"
+                                ? courseDetails.instructor.name
+                                : courseDetails.instructor}
+                            </p>
+
                             <p className="text-xs italic">English Teacher</p>
                           </div>
                         </div>
@@ -545,7 +558,9 @@ function CourseList() {
                                 : "bg-pink-500"
                             } px-2 rounded-full text-white text-xs py-1 font-medium`}
                           >
-                            Programming
+                            {typeof courseDetails.category === "object"
+                              ? courseDetails.category.name
+                              : courseDetails.category}
                           </p>
                         </div>
                       </div>

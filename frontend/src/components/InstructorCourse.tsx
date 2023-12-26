@@ -27,10 +27,10 @@ interface ICoupon {
 }
 
 interface ILesson {
-  _id?:string
+  _id?: string;
   title: string;
   content: string;
-  duration: number;
+  duration: number | string;
 }
 
 interface ICourse {
@@ -39,8 +39,10 @@ interface ICourse {
   description: string;
   language: string;
   level: string;
-  category: string;
+  category: { name: string; _id: string } | string;
+  instructor: { name: string; _id?: string } | string;
   cover: string;
+  preview?:string
   lessons: ILesson[];
   announcements: string[];
   coupons: ICoupon[];
@@ -48,7 +50,6 @@ interface ICourse {
   offer: number;
   isApproved: boolean;
   isBlock: boolean;
-  instructor?: string;
   enrollers?: string[];
 }
 function InstructorCourse() {
@@ -63,13 +64,16 @@ function InstructorCourse() {
   const [loading, setLoading] = useState(false);
   // const [submitStage, setSubmitStage] = useState(false);
   const [coverImage, setCoverImage] = useState<File | null>(null);
+  const [preview, setPreview] = useState<File | null>(null);
   const [lesson, setLesson] = useState<File | null>(null);
-  const [selectedContent, setSelectedContent] = useState({
+  const [selectedContent, setSelectedContent] = useState<ILesson>({
     content: "",
     duration: 0,
     title: "",
   });
+  const [isLessonUpdate, setIsLessonUpdate] = useState<number | null>(null);
   const [announcement, setAnnouncement] = useState("");
+  const [selectedPosOption, setSelectedPosOption] = useState("");
   const [courseDetails, setCourseDetails] = useState<ICourse>({
     title: "",
     description: "",
@@ -102,13 +106,57 @@ function InstructorCourse() {
     setLesson(selectedFile || null);
   };
   const setLessonToArray = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const { lessons } = courseDetails;
-    console.log(courseDetails, "Before");
-    for (let i = lessons.length; i > parseInt(e.target.value); i--) {
-      lessons[i] = lessons[i - 1];
+    if (selectedContent.content && selectedContent.title) {
+      try {
+        setCourseDetails((prevDetails) => {
+          const { lessons } = prevDetails;
+
+          if (isLessonUpdate !== null) {
+            if (isLessonUpdate !== parseInt(e.target.value)) {
+              const updatedLessons = [...lessons];
+
+              for (let i = isLessonUpdate + 1; i < updatedLessons.length; i++) {
+                updatedLessons[i - 1] = updatedLessons[i];
+              }
+              updatedLessons.pop();
+              for (
+                let i = updatedLessons.length;
+                i > parseInt(e.target.value);
+                i--
+              ) {
+                updatedLessons[i] = updatedLessons[i - 1];
+              }
+              updatedLessons[parseInt(e.target.value)] = selectedContent;
+
+              setIsLessonUpdate(parseInt(e.target.value));
+              return { ...prevDetails, lessons: updatedLessons };
+            } else {
+              const updatedLessons = [...lessons];
+              updatedLessons[isLessonUpdate] = selectedContent;
+
+              return { ...prevDetails, lessons: updatedLessons };
+            }
+          } else {
+            const updatedLessons = [...lessons];
+            for (
+              let i = updatedLessons.length;
+              i > parseInt(e.target.value);
+              i--
+            ) {
+              updatedLessons[i] = updatedLessons[i - 1];
+            }
+            updatedLessons[parseInt(e.target.value)] = selectedContent;
+
+            setIsLessonUpdate(parseInt(e.target.value));
+            return { ...prevDetails, lessons: updatedLessons };
+          }
+        });
+
+        setSelectedPosOption(e.target.value);
+      } catch (error) {
+        console.log(error);
+      }
     }
-    lessons[parseInt(e.target.value)] = selectedContent;
-    console.log(courseDetails);
   };
   const createCourse = async () => {
     try {
@@ -199,6 +247,7 @@ function InstructorCourse() {
           category: "",
           cover: "",
           lessons: [],
+          instructor: "",
           announcements: [],
           coupons: [],
           price: 0,
@@ -238,6 +287,35 @@ function InstructorCourse() {
         // console.log(res);
         const { secure_url } = res.data;
         setSelectedContent({ ...selectedContent, content: secure_url });
+        setLoading(false);
+      } catch (error: unknown) {
+        setLoading(false);
+        if (axios.isAxiosError(error)) {
+          toast(error?.response?.data?.message);
+        } else {
+          toast("An unexpected error occurred");
+        }
+      }
+    }
+  };
+  const uploadPreview = async () => {
+    if (preview) {
+      setLoading(true);
+      const data = new FormData();
+      data.append("file", preview);
+      data.append("upload_preset", "video_preset");
+      try {
+        const cloudName = "dshijvj8y";
+
+        const api = `https://api.cloudinary.com/v1_1/${cloudName}/${"video"}/upload`;
+        const res = await axios.post(api, data, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        // console.log(res);
+        const { secure_url } = res.data;
+        setCourseDetails({ ...courseDetails, preview: secure_url });
         setLoading(false);
       } catch (error: unknown) {
         setLoading(false);
@@ -303,6 +381,7 @@ function InstructorCourse() {
                   level: "",
                   category: "",
                   cover: "",
+                  instructor: "",
                   lessons: [],
                   announcements: [],
                   coupons: [],
@@ -310,6 +389,12 @@ function InstructorCourse() {
                   offer: 0,
                   isApproved: false,
                   isBlock: false,
+                });
+                setIsLessonUpdate(null);
+                setSelectedContent({
+                  content: "",
+                  duration: 0,
+                  title: "",
                 });
               }}
               className="border px-2 p-1 bg-gray-700 hover:bg-gray-800 transition duration-300"
@@ -521,7 +606,11 @@ function InstructorCourse() {
                                       type="button"
                                       className="w-full flex justify-center text-white bg-purple-700 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-purple-600 dark:hover:bg-purple-700 dark:focus:ring-purple-800  disabled:bg-purple-700/30"
                                       onClick={uploadVideo}
-                                      disabled={loading}
+                                      disabled={
+                                        selectedContent.content || loading
+                                          ? true
+                                          : false
+                                      }
                                     >
                                       {loading ? (
                                         <div
@@ -586,11 +675,17 @@ function InstructorCourse() {
                     </div>
                     <div className="h-[50vh] mt-2 overflow-y-scroll overflow-x-hidden">
                       {courseDetails.lessons.map((lesson, index) => (
-                        <div className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1">
+                        <div
+                          className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1 cursor-pointer"
+                          onClick={() => {
+                            setSelectedContent(lesson);
+                            setIsLessonUpdate(index);
+                          }}
+                        >
                           <p className="italic text-xs text-gray-400">
-                            {Math.floor(selectedContent.duration / 3600)} :{" "}
-                            {Math.floor((selectedContent.duration % 3600) / 60)}{" "}
-                            : {Math.floor(selectedContent.duration % 60)} hrs
+                            {Math.floor(Number(lesson.duration) / 3600)} :{" "}
+                            {Math.floor((Number(lesson.duration) % 3600) / 60)}{" "}
+                            : {Math.floor(Number(lesson.duration) % 60)} hrs
                           </p>
                           <p>{`${index + 1} ${lesson.title}`}</p>
                         </div>
@@ -640,43 +735,83 @@ function InstructorCourse() {
                     <div>
                       <p className="text-xl">{selectedContent.title}</p>
                       <p className="text-sm text-gray-300">
-                        Duration: {Math.floor(selectedContent.duration / 3600)}{" "}
-                        : {Math.floor((selectedContent.duration % 3600) / 60)} :{" "}
-                        {Math.floor(selectedContent.duration % 60)} hrs
+                        Duration:{" "}
+                        {Math.floor(Number(selectedContent.duration) / 3600)} :{" "}
+                        {Math.floor(
+                          (Number(selectedContent.duration) % 3600) / 60
+                        )}{" "}
+                        : {Math.floor(Number(selectedContent.duration) % 60)}{" "}
+                        hrs
                       </p>
                     </div>
-                    <div className="flex gap-2 px-6 h-max">
-                      <button
+                    <div className="flex gap-2  h-max">
+                      {/* <button
                         className="flex gap-1 py-1 border-2 border-red-800 px-3 text-red-800 hover:bg-red-800 hover:text-white"
                         title="Delete"
+                        disabled={selectedContent.content ? false : true}
+                        onClick={() => {
+                          swal("Are you sure to replace content?", {
+                            buttons: ["Cancel", true],
+                          }).then((confirm) => {
+                            if (confirm) {
+                              setSelectedContent({
+                                ...selectedContent,
+                                content: "",
+                              });
+                            }
+                          });
+                        }}
                       >
                         <MdDelete size={24} />{" "}
-                      </button>
+                      </button> */}
                       <button
                         className="flex gap-1 py-1 border-2 border-violet-500 px-3 text-violet-500 hover:bg-violet-500 hover:text-white"
                         title="Replace"
+                        disabled={selectedContent.content ? false : true}
+                        onClick={() => {
+                          swal("Are you sure to replace content?", {
+                            buttons: ["Cancel", true],
+                          }).then((confirm) => {
+                            if (confirm) {
+                              setSelectedContent({
+                                ...selectedContent,
+                                content: "",
+                              });
+                            }
+                          });
+                        }}
                       >
-                        <LuReplace size={24} />{" "}
+                        <LuReplace size={24} />
+                        {" Replace"}
                       </button>
                     </div>
                   </div>
                   <div className="text-end mt-2">
                     <button
                       onClick={() => {
-                        if(selectedContent.title&&selectedContent.content){
-                          swal("Are you sure to save changes?", {
-                            buttons: ["Cancel", true],
-                          }).then((confirm) => {
-                            if (confirm) {
-                              setSelectedContent({
-                                content: "",
-                                duration: 0,
-                                title: "",
-                              });
-                            }
-                          });
-                        }else{
-                          toast("Fill every necessary fields")
+                        if (selectedContent.title && selectedContent.content) {
+                          if (isLessonUpdate != null) {
+                            swal("Are you sure to save changes?", {
+                              buttons: ["Cancel", true],
+                            }).then((confirm) => {
+                              if (confirm) {
+                                const { lessons } = courseDetails;
+                                lessons[isLessonUpdate] = selectedContent;
+                                console.log(lessons);
+                                setSelectedContent({
+                                  content: "",
+                                  duration: 0,
+                                  title: "",
+                                });
+                                setIsLessonUpdate(null);
+                                setSelectedPosOption("");
+                              }
+                            });
+                          } else {
+                            toast("Select lesson position");
+                          }
+                        } else {
+                          toast("Fill every necessary fields");
                         }
                       }}
                       className="border-2 text-purple-900 border-purple-900 hover:bg-purple-900 hover:text-white px-4 py-1"
@@ -712,6 +847,7 @@ function InstructorCourse() {
                   <select
                     name=""
                     id=""
+                    value={selectedPosOption}
                     className="border bg-transparent py-2 px-3"
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                       setLessonToArray(e)
@@ -726,11 +862,21 @@ function InstructorCourse() {
                     >
                       --At last--
                     </option>
-                    {courseDetails.lessons.map((les, index) => (
-                      <option value={index + 1} className="text-black">
-                        After {index + 1}
-                      </option>
-                    ))}
+                    {courseDetails.lessons.map((les, index) =>
+                      isLessonUpdate !== null &&
+                      (isLessonUpdate - 1 == index ||
+                        isLessonUpdate == index) ? (
+                        ""
+                      ) : (
+                        <option
+                          key={index}
+                          value={index + 1}
+                          className="text-black"
+                        >
+                          After {index + 1}
+                        </option>
+                      )
+                    )}
                   </select>
                   <p className="text-xs text-gray-400 italic">
                     Your title should be a mix of attention-grabbing,
@@ -972,7 +1118,11 @@ function InstructorCourse() {
                     name=""
                     id=""
                     className="border bg-transparent py-2 px-3"
-                    value={courseDetails.category}
+                    value={
+                      typeof courseDetails.category === "object"
+                        ? courseDetails.category.name
+                        : courseDetails.category
+                    }
                     onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
                       setCourseDetails({
                         ...courseDetails,
@@ -1063,6 +1213,63 @@ function InstructorCourse() {
                       </div>
                       <button
                         onClick={() => uploadImage()}
+                        className="border px-4 py-1 bg-slate-600 hover:bg-slate-600/30"
+                      >
+                        Upload
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </div>
+              <div className="mt-5 ">
+                <p className="text-xl font-medium mb-2">Preview Video</p>
+                <div className="">
+                  {loading ? (
+                    <div className="flex space-x-2 animate-pulse">
+                      <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+                      <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+                      <div className="w-3 h-3 bg-gray-500 rounded-full"></div>
+                    </div>
+                  ) : courseDetails.preview ? (
+                    <div className="h-52 w-96 flex items-start gap-2">
+                      <button
+                        onClick={() =>
+                          setCourseDetails({ ...courseDetails, preview: "" })
+                        }
+                        className="border px-2 py-1 rounded text-red-600 hover:bg-red-600 hover:text-white"
+                      >
+                        <MdDelete size={24} />
+                      </button>
+                      <ReactPlayer
+                        url={courseDetails.preview}
+                        controls
+                        playing={false}
+                        width={"100%"}
+                        height={"100%"}
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex justify-between">
+                      <div className="border bg-transparent pt-2 pb-1 px-2 w-full outline-none flex justify-between items-center">
+                        <input
+                          id="upload"
+                          type="file"
+                          onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                            e.target.files
+                              ? setPreview(e.target.files[0])
+                              : setPreview(null)
+                          }
+                          accept="video/*"
+                        />
+                        <label
+                          className="button bg-white text-black px-3 py-1 hover:cursor-pointer"
+                          htmlFor="upload"
+                        >
+                          Upload File
+                        </label>
+                      </div>
+                      <button
+                        onClick={() => uploadPreview()}
                         className="border px-4 py-1 bg-slate-600 hover:bg-slate-600/30"
                       >
                         Upload
@@ -1173,9 +1380,9 @@ function InstructorCourse() {
                       <p className="italic  w-max  mt-1 py-1">
                         Enrollements :{" "}
                         <b className="text-purple-600 space-x-[0.9px] border p-1">
-                          <span className="bg-slate-800 rounded px-1">0</span>
-                          <span className="bg-slate-800 rounded px-1">7</span>
-                          <span className="bg-slate-800 rounded px-1">8</span>
+                          <span className="bg-slate-800 rounded px-1">
+                            {course.enrollers.length}
+                          </span>
                         </b>
                       </p>
                     </div>

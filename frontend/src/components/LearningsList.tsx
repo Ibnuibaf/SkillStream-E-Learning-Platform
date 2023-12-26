@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {  useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { IoIosPlayCircle, IoMdStar } from "react-icons/io";
 import { toast } from "react-toastify";
 import api from "../axios/api";
@@ -33,7 +33,7 @@ function LearningsList() {
       setLearnings(res.data.learnings);
     } catch (error: any) {
       toast(error?.response?.data?.message);
-      window.location.href='http://localhost:5174/'
+      window.location.href = "http://localhost:5174/";
     }
   };
   useEffect(() => {
@@ -110,7 +110,7 @@ function LearningsList() {
                         color={Math.random() >= 0.5 ? "red" : "blue"}
                       />
                       <p className="text-xs font-medium">
-                        {course.cover.length}x Lesson
+                        {course.lessons ? course.lessons.length : ""}x Lesson
                       </p>
                     </div>
                     <div className="flex items-center">

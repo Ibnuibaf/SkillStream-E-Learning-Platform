@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../axios/api";
 import { toast } from "react-toastify";
+import axios from "axios";
 
 interface GetCoursesArgs {
   search: string;
@@ -20,10 +21,14 @@ export const getCourses = createAsyncThunk(
         return rejectWithValue(response.data.message);
       }
       return response.data.courses;
-    } catch (error: any) {
-      console.error("Error fetching user:", error);
-      toast(error.response.data.message);
-      return rejectWithValue(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        console.error("Error fetching user:", error);
+        toast(error?.response?.data?.message);
+        return rejectWithValue(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
     }
   }
 );
