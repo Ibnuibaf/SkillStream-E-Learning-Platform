@@ -186,6 +186,29 @@ class UserRepository {
   //     };
   //   }
   // }
+  async updateUserDetails(userId:string,updates:any){
+    try {
+      const userDetails = await Users.findByIdAndUpdate(userId, updates, {
+        new: true,
+      });
+      if (!userDetails) {
+        return {
+          success: false,
+          message: "No user found",
+        };
+      }
+      return {
+        success: true,
+        message: "user details updated",
+        data: userDetails,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to update ${error}`,
+      };
+    }
+  }
   async updateUser(id: string, updates: any) {
     try {
       const userDetails = await Users.findByIdAndUpdate(id, updates, {

@@ -70,5 +70,11 @@ Router.post(
     authMiddleware.authUser(req, res, next),
   (req: Request, res: Response) => userController.updateRole(req, res)
 );
+Router.patch(
+  "/update",
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.authUser(req, res, next),
+  (req: Request, res: Response) => userController.updateUserDetails(req, res)
+);
 
 export default Router;

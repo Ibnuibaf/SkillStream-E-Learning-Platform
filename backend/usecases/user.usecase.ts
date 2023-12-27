@@ -43,9 +43,9 @@ class UserUsecase {
       };
     }
   }
-  async getUserLearnings(token:string) {
+  async getUserLearnings(token: string) {
     try {
-      const user=this.decodeToken(token)
+      const user = this.decodeToken(token);
       const response = await this.userRepository.getUserLearnings(user.id);
       return {
         status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
@@ -65,11 +65,15 @@ class UserUsecase {
       };
     }
   }
-  async updateLearningsProgress(token:string,body:any) {
+  async updateLearningsProgress(token: string, body: any) {
     try {
-      const user=this.decodeToken(token)
-      const {courseId,lessonId}=body
-      const response = await this.userRepository.updateLearningsProgress(user.id,courseId,lessonId);
+      const user = this.decodeToken(token);
+      const { courseId, lessonId } = body;
+      const response = await this.userRepository.updateLearningsProgress(
+        user.id,
+        courseId,
+        lessonId
+      );
       return {
         status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {
@@ -215,7 +219,6 @@ class UserUsecase {
   }
   async sendOTP(email: string) {
     try {
-      
       const emailExist = await this.userRepository.authenticateUser(email);
       if (emailExist.data) {
         return {
@@ -336,7 +339,7 @@ class UserUsecase {
           success: response.success,
           message: "User Authenticated",
           token: token,
-          admin: response.data.role==UserRole.Admin
+          admin: response.data.role == UserRole.Admin,
         },
       };
     } catch (error) {
@@ -365,7 +368,9 @@ class UserUsecase {
       const response = await this.userRepository.findUser(decode.id);
       if (!response.data) {
         return {
-          status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
+          status: response.success
+            ? HttpStatus.Success
+            : HttpStatus.ServerError,
           data: {
             success: response.success,
             message: response.message,
@@ -413,6 +418,36 @@ class UserUsecase {
   //     };
   //   }
   // }
+  async updateUserDetails(details: any, token: string) {
+    try {
+      const user = this.decodeToken(token);
+      let { password } = details;
+      if(password){
+        details.password= await bcrypt.hash(password, 10);
+      }
+      // console.log(user,details);
+      const response = await this.userRepository.updateUserDetails(
+        user.id,
+        details
+      );
+      // console.log(response);
+      return {
+        status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
+        data: {
+          success: response.success,
+          message: response.message,
+        },
+      };
+    } catch (error) {
+      return {
+        status: HttpStatus.ServerError,
+        data: {
+          success: false,
+          message: "server error",
+        },
+      };
+    }
+  }
   async updateUser(details: any) {
     try {
       const { _id } = details;
@@ -473,7 +508,7 @@ class UserUsecase {
     try {
       const { id, updates } = body;
       const response = await this.userRepository.updateRole(id, updates);
-      
+
       return {
         status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {

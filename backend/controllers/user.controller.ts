@@ -107,9 +107,9 @@ class UserController {
   //     });
   //   }
   // }
-  async updateUser(req: Request, res: Response) {
+  async updateUserDetails(req: Request, res: Response) {
     try {
-      const response = await this.userUsecase.updateUser(req.body);
+      const response = await this.userUsecase.updateUserDetails(req.body,req.headers["authorization"] as string);
       res.status(response.status).send(response.data);
     } catch (error) {
       res.status(500).send({
