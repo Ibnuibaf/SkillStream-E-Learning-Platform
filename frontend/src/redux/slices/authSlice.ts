@@ -6,9 +6,12 @@ interface AuthState {
   loading: boolean;
   error: string;
 }
-
+interface ILearning {
+  course: string;
+  progress: string[];
+}
 interface UserType {
-  id: string;
+  _id: string;
   name: string;
   email: string;
   avatar: string;
@@ -20,7 +23,7 @@ interface UserType {
     "1": string;
     "2": string;
   };
-  learnings:string[]
+  learnings:ILearning[]
 }
 
 const initialState: AuthState = {

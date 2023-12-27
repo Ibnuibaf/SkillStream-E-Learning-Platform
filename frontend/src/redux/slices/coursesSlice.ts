@@ -6,7 +6,11 @@ interface ICoursesState {
   loading: boolean;
   error: string;
 }
-
+interface IReviews {
+  user: { name: string; _id: string } ;
+  rating: number;
+  feedback: string;
+}
 interface ILessonType {
   _id?: string;
   title: string;
@@ -26,15 +30,16 @@ interface ICoursesType {
   description: string;
   language: string;
   level: string;
-  category: { name: string; _id: string }|string;
-    preview?:string
-    cover: string;
+  category: { name: string; _id: string } | string;
+  preview?: string;
+  cover: string;
   lessons: ILessonType[];
   announcements: string[];
   coupons: ICouponType[];
+  reviews?: IReviews[];
   price: number;
   offer: number;
-  instructor: { name: string; _id: string }|string;
+  instructor: { name: string; _id: string } | string;
   isApproved: boolean;
   isBlock: boolean;
   enrollers: string[];

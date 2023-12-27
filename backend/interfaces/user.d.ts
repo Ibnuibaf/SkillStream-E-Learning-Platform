@@ -1,3 +1,9 @@
+import { ObjectId } from "mongoose";
+
+interface ILearning {
+  course: ObjectId;
+  progress: ObjectId[];
+}
 interface IUser {
   id: string;
   name?: string;
@@ -9,7 +15,7 @@ interface IUser {
   isBlock?: boolean;
   verification?:object;
   verified?:boolean
-  learnings:string[]
+  learnings:ILearning[]
 }
 
 export default IUser;

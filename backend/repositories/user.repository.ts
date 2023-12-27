@@ -27,13 +27,39 @@ class UserRepository {
       const userLearnings = await Users.findOne(
         { _id: userId },
         { learnings: 1 }
-      ).populate("learnings");
+      ).populate("learnings.course").exec();
       console.log(userLearnings);
 
       return {
         success: true,
         message: "All users fetched",
         data: userLearnings?.learnings,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to fetch ${error}`,
+      };
+    }
+  }
+  async updateLearningsProgress(
+    userId: string,
+    courseId: string,
+    lessonId: string
+  ) {
+    try {
+      const userLearnings = await Users.updateOne(
+        { _id: userId, "learnings.course": courseId },
+        {
+          $addToSet: { "learnings.$.progress": lessonId }, 
+        },
+        {new:true}
+      );
+      console.log(userLearnings);
+
+      return {
+        success: true,
+        message: "All users fetched",
       };
     } catch (error) {
       return {
@@ -63,7 +89,7 @@ class UserRepository {
   }
   async findUser(id: string) {
     try {
-      const userDetails = await Users.findById(id);
+      const userDetails = await Users.findById(id,{password:0});
       if (!userDetails) {
         return {
           success: false,
@@ -73,16 +99,7 @@ class UserRepository {
       return {
         success: true,
         message: "user details fetched",
-        data: {
-          name: userDetails.name,
-          email: userDetails.email,
-          avatar: userDetails.avatar,
-          id: userDetails._id,
-          role: userDetails.role,
-          isBlock: userDetails.isBlock,
-          verified: userDetails.verified,
-          verification: userDetails.verification,
-        },
+        data: userDetails,
       };
     } catch (error) {
       return {
@@ -139,14 +156,14 @@ class UserRepository {
       };
     }
   }
-  async isCourseInLearnings(userId:string, learningId:string) {
+  async isCourseInLearnings(userId: string, learningId: string) {
     try {
       const user = await Users.findOne({
         _id: userId,
         learnings: { $in: [learningId] },
       });
 
-      return !!user; 
+      return !!user;
     } catch (error) {
       console.error("Error checking ObjectId in learnings:", error);
       return false;

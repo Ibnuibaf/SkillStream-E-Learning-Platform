@@ -1,6 +1,7 @@
 import { ObjectId } from "mongoose"
 import ICoupon from "./coupon"
 import ILesson from "./lesson"
+import IReviews from "./reviews"
 
 interface ICourse{
     _id?:string|ObjectId
@@ -14,6 +15,7 @@ interface ICourse{
     lessons:ILesson[]
     announcements:string[]
     coupons:ICoupon[]
+    reviews:IReviews[]
     instructor:string|ObjectId
     enrollers:ObjectId[]
     price:number

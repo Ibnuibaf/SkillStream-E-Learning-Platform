@@ -39,7 +39,7 @@ class OrderUsecase {
             }
         }
       }
-      const userRes=await this.userRepository.updateUserDirect(userId,{$addToSet:{learnings:courseId}})
+      const userRes=await this.userRepository.updateUserDirect(userId,{$addToSet:{learnings:{course:courseId,progress:[]}}})
       if(!userRes.success){
         return{
             status:500,

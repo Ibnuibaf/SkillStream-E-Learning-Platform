@@ -47,6 +47,13 @@ const CourseSchema = new mongoose.Schema<ICourse>({
       ref: "User",
     },
   ],
+  reviews: [
+    {
+      user: { type: mongoose.Types.ObjectId, ref: "User" },
+      rating: Number,
+      feedback: String,
+    },
+  ],
   price: {
     type: Number,
   },

@@ -6,6 +6,7 @@ import { selectInstructors } from "../redux/slices/instructorsSlice";
 import swal from "sweetalert";
 import { getInstructors } from "../redux/actions/instructorsActions";
 import { AppDispatch } from "../redux/store";
+import api from "../axios/api";
 
 interface UserType {
   _id: string;
@@ -80,8 +81,8 @@ function InstructorsTable() {
     });
     if (confirmed) {
       try {
-        await axios.patch(
-          "http://localhost:3000/api/user/instructor/verify",
+        await api.patch(
+          "/user/instructor/verify",
           { _id: id, verified: true },
           {
             headers: {

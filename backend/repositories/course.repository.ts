@@ -1,8 +1,8 @@
 import ICourse from "../interfaces/course";
+import IReviews from "../interfaces/reviews";
 import Courses from "../models/course.model";
 
 class CourseRepository {
-
   async createCourse(details: ICourse) {
     try {
       const course = await Courses.create(details);
@@ -12,11 +12,11 @@ class CourseRepository {
           message: `server error`,
         };
       }
-      return{
-        success:true,
-        message:"Course created",
-        data:course
-      }
+      return {
+        success: true,
+        message: "Course created",
+        data: course,
+      };
     } catch (error) {
       return {
         success: false,
@@ -24,42 +24,51 @@ class CourseRepository {
       };
     }
   }
-  async getCourses(regex:string) {
+  async getCourses(regex: string) {
     try {
-        const courses = regex
-          ? await Courses.find({ title: { $regex: regex, $options: "i" } }).populate('instructor', 'name').populate('category', 'name')
-          : await Courses.find().populate('instructor', 'name').populate('category', 'name');
-        console.log(courses);
-        
-        return {
-          success: true,
-          message: "Fetch all caetgories",
-          courses,
-        };
-      } catch (error) {
-        return {
-          success: false,
-          message: `Failed to fetch ${error}`,
-        };
-      }
+      const courses = regex
+        ? await Courses.find({ title: { $regex: regex, $options: "i" } })
+            .populate("instructor", "name")
+            .populate("category", "name")
+            .populate("reviews.user", "name")
+        : await Courses.find()
+            .populate("instructor", "name")
+            .populate("category", "name")
+            .populate("reviews.user", "name");
+      console.log(courses);
+
+      return {
+        success: true,
+        message: "Fetch all caetgories",
+        courses,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to fetch ${error}`,
+      };
+    }
   }
-  async getInstructorCourses(regex:string,id:string) {
+  async getInstructorCourses(regex: string, id: string) {
     try {
-        const courses = regex
-          ? await Courses.find({ title: { $regex: regex, $options: "i" },instructor:id })
-          : await Courses.find({instructor:id });
-  
-        return {
-          success: true,
-          message: "Fetch all caetgories",
-          courses,
-        };
-      } catch (error) {
-        return {
-          success: false,
-          message: `Failed to fetch ${error}`,
-        };
-      }
+      const courses = regex
+        ? await Courses.find({
+            title: { $regex: regex, $options: "i" },
+            instructor: id,
+          })
+        : await Courses.find({ instructor: id });
+
+      return {
+        success: true,
+        message: "Fetch all caetgories",
+        courses,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to fetch ${error}`,
+      };
+    }
   }
   async updateCourse(id: string, updates: ICourse) {
     try {
@@ -83,9 +92,35 @@ class CourseRepository {
       };
     }
   }
+  async updateReviews(id: string, updates: IReviews) {
+    try {
+      const updated = await Courses.updateOne(
+        { _id: id },
+        { $addToSet: { reviews: updates } },
+        {
+          new: true,
+        }
+      );
+      if (!updated) {
+        return {
+          success: false,
+          message: "Unable to update right now",
+        };
+      }
+      return {
+        success: true,
+        message: "Updated the Review",
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to fetch ${error}`,
+      };
+    }
+  }
   async updateCourseDirect(id: string, updates: any) {
     try {
-      const updated = await Courses.updateOne({_id:id}, updates, {
+      const updated = await Courses.updateOne({ _id: id }, updates, {
         new: true,
       });
       if (!updated) {
@@ -107,4 +142,4 @@ class CourseRepository {
   }
 }
 
-export default CourseRepository
+export default CourseRepository;

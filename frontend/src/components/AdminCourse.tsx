@@ -26,6 +26,11 @@ interface ILesson {
   content: string;
   duration: number | string;
 }
+interface IReviews {
+  user: { name: string; _id: string } ;
+  rating: number;
+  feedback: string;
+}
 
 interface ICourse {
   _id?: string;
@@ -41,6 +46,7 @@ interface ICourse {
   announcements: string[];
   coupons: ICoupon[];
   price: number;
+  reviews?: IReviews[];
   offer: number;
   isApproved?: boolean;
   isBlock?: boolean;

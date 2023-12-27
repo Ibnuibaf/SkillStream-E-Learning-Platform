@@ -23,23 +23,33 @@ const userSchema = new mongoose.Schema<IUser>({
     type: String,
     default: "student",
   },
-  verification:{
-    "0":String,
-    "1":String,
-    "2":String
+  verification: {
+    "0": String,
+    "1": String,
+    "2": String,
   },
-  learnings:[{
-   type:mongoose.Types.ObjectId,
-   ref:"Course", 
-  }],
+  learnings: [
+    {
+      course: {
+        type: mongoose.Types.ObjectId,
+        ref: "Course",
+      },
+      progress: [
+        {
+          type: mongoose.Types.ObjectId,
+          ref: "Course",
+        },
+      ],
+    },
+  ],
   isBlock: {
     type: Boolean,
     default: false,
   },
-  verified:{
+  verified: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 });
 
 const userModel = mongoose.model("User", userSchema);

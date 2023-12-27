@@ -26,6 +26,11 @@ interface ICoupon {
   to: Date;
 }
 
+interface IReviews {
+  user: { name: string; _id: string } ;
+  rating: number;
+  feedback: string;
+}
 interface ILesson {
   _id?: string;
   title: string;
@@ -43,6 +48,7 @@ interface ICourse {
   instructor: { name: string; _id?: string } | string;
   cover: string;
   preview?:string
+  reviews?: IReviews[];
   lessons: ILesson[];
   announcements: string[];
   coupons: ICoupon[];
@@ -179,8 +185,8 @@ function InstructorCourse() {
         }
       );
       if (confirmed) {
-        if (user && user.id) {
-          setCourseDetails({ ...courseDetails, instructor: user.id as string });
+        if (user && user._id) {
+          setCourseDetails({ ...courseDetails, instructor: user._id as string });
         }
         console.log(courseDetails);
 

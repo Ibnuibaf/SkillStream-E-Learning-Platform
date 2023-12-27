@@ -65,6 +65,28 @@ class UserUsecase {
       };
     }
   }
+  async updateLearningsProgress(token:string,body:any) {
+    try {
+      const user=this.decodeToken(token)
+      const {courseId,lessonId}=body
+      const response = await this.userRepository.updateLearningsProgress(user.id,courseId,lessonId);
+      return {
+        status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
+        data: {
+          success: response.success,
+          message: response.message,
+        },
+      };
+    } catch (error) {
+      return {
+        status: HttpStatus.ServerError,
+        data: {
+          success: false,
+          message: "server error",
+        },
+      };
+    }
+  }
   async createUser(body: IUserBody) {
     try {
       const { email, name, password, confirmPassword } = body;

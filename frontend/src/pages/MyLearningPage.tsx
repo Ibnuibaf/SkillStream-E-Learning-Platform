@@ -18,7 +18,7 @@ function MyLearningPage() {
       <div className="px-10 py-4">
         <BasicHeader />
       </div>
-      <div>
+      <div className="py-4">
         <LearningsList/>
       </div>
     </div>
