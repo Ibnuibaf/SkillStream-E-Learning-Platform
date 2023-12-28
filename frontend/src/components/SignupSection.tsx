@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 // import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { FaRegThumbsUp, FaRegThumbsDown } from "react-icons/fa";
+import { FaRegThumbsUp, FaRegThumbsDown, FaGoogle } from "react-icons/fa";
 import { TiTick } from "react-icons/ti";
 import api from "../axios/api";
+import { useGoogleLogin } from "@react-oauth/google";
 // import { AppDispatch } from "../redux/store";
 // import { useDispatch } from "react-redux";
 // import { getUser } from "../redux/actions/authActions";
@@ -146,13 +148,34 @@ function SignupSection() {
       }
     }
   };
+  const handleGoogleLoginSuccess = async (tokenResponse: any) => {
+    try {
+      const accessToken = tokenResponse.access_token;
+      const res = await api.post("/user/register", {
+        googleAccessToken: accessToken,
+      });
+      if (!res.data.token) {
+        toast(res.data.message);
+        return;
+      }
+      localStorage.setItem("SkillStreamToken", res.data.token);
+      toast(`User account has been created`);
+      location.href = "/";
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
+    }
+  };
 
   const verifyOTP = () => {
     if (OTP == localStorage.getItem("otp")) {
       setOtpVerifed(true);
     }
   };
-
+  const login = useGoogleLogin({ onSuccess: handleGoogleLoginSuccess });
   useEffect(() => {
     if (token) {
       toast("User already logged In");
@@ -311,12 +334,21 @@ function SignupSection() {
                 Already have an account?
               </Link>
             </div>
-            <button
-              type="submit"
-              className="mt-9 bg-gradient-to-tr from-red-500 to-red-600 py-2 px-10 rounded-md"
-            >
-              Sign Up
-            </button>
+            <div className="flex flex-col ">
+              <button
+                type="submit"
+                className="mt-9 bg-gradient-to-tr from-red-500 to-red-600 py-2 px-10 rounded-md"
+              >
+                Sign Up
+              </button>
+              <button
+                type="button"
+                onClick={() => login()}
+                className="flex items-center  gap-2 mt-9 bg-gradient-to-tr from-red-500 to-red-600 py-2 px-10 rounded-md"
+              >
+                <FaGoogle/>Sign Up with Google
+              </button>
+            </div>
           </form>
         </div>
       </div>

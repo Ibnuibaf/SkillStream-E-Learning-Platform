@@ -3,23 +3,59 @@
 
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import api from "../axios/api";
+// import { useSelector } from "react-redux";
+// import { selectUser } from "../redux/slices/authSlice";
+// import { loadStripe } from "@stripe/stripe-js";
 interface Instructor {
   name: string;
   _id?: string;
-  avatar:string
+  avatar: string;
 }
 
 function InstructorsList() {
-  const navigate = useNavigate();
+  //   const navigate = useNavigate();
+//   const user = useSelector(selectUser).user;
   const [instructors, setInstructors] = useState<Instructor[]>([]);
+//   const token = localStorage.getItem("SkillStreamToken");
+//   const makePayment = async (instructor: any) => {
+    // if (token) {
+    //   try {
+    //     //   const stripe = await loadStripe(
+    //     //     "pk_test_51OPOXKSEJEe9TfyNNyag37yMF9bIEKeA4GFHqqwArgo7rYKFRMDYYNtg34XPUTqfL7ICfxkGbC7EzA5vtkxqApHj00TZwZYdyU"
+    //     //   );
+    //     const res = await api.post("/user/payment", {
+    //       instructor: instructor._id,
+    //       user: user?._id,
+    //     });
 
-  const getInstructors =async () => {
+    //     const stripe = await loadStripe(
+    //       "pk_test_51OPOXKSEJEe9TfyNNyag37yMF9bIEKeA4GFHqqwArgo7rYKFRMDYYNtg34XPUTqfL7ICfxkGbC7EzA5vtkxqApHj00TZwZYdyU"
+    //     );
+    //     const Element = stripe?.elements({
+    //       clientSecret: res.data.clientSecret,
+    //     });
+    //     const payElement = Element?.create("payment", {
+    //       layout: "tabs",
+    //     });
+    //     payElement?.mount(Element);
+    //   } catch (error: unknown) {
+    //     if (axios.isAxiosError(error)) {
+    //       toast(error?.response?.data?.message);
+    //     } else {
+    //       toast("An unexpected error occurred");
+    //     }
+    //   }
+    // } else {
+    //   toast("Login to purchase course");
+    // }
+//   };
+  const getInstructors = async () => {
     try {
-        const res=await api.get('/user/instructors')
-        setInstructors(res.data.instructors) 
+      const res = await api.get("/user/instructors");
+      setInstructors(res.data.instructors);
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         toast(error?.response?.data?.message);
@@ -36,18 +72,13 @@ function InstructorsList() {
       <div className="text-2xl font-semibold my-3">
         <p>My Instructors</p>
       </div>
-      <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden grid grid-cols-7">
+      <div className=" max-h-[60vh] overflow-y-auto overflow-x-hidden grid grid-cols-7 gap-4">
         {instructors?.map((instructor) => (
-          <div
-            className="flex flex-col items-center justify-between gap-4 bg-purple-500 rounded-3xl mb-2 px-4 py-5 h-[30vh]  text-start "
-            onClick={() => navigate(`/community?courseid=${"comm.course._id"}`)}
-          >
+          <div className="flex flex-col items-center justify-between gap-4 bg-purple-500 rounded-3xl mb-2 px-4 py-5 h-[32vh]  text-start ">
             <div className="flex flex-col  items-center">
-              <div className="h-12 w-12 rounded-full">
+              <div className="h-16 w-16 rounded-full">
                 <img
-                  src={
-                    instructor.avatar
-                  }
+                  src={instructor.avatar}
                   alt=""
                   className="h-full w-full rounded-full"
                 />
@@ -59,13 +90,18 @@ function InstructorsList() {
                 <p className="text-sm text-start ">Subscribe for </p>
                 <p className="text-center">&#8377; 130/month</p>
               </div>
-              <button className="bg-white text-purple-500 px-4 py-1 rounded-3xl hover:bg-purple-800 hover:text-white cursor-pointer">
+              <button
+                type="button"
+                // onClick={() => makePayment(instructor)}
+                className="bg-white text-purple-500 px-4 py-1 rounded-3xl hover:bg-purple-800 hover:text-white cursor-pointer"
+              >
                 Subscribe
               </button>
             </div>
           </div>
         ))}
       </div>
+      
     </div>
   );
 }

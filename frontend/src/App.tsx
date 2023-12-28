@@ -22,6 +22,7 @@ import AdminCoursePage from "./pages/AdminCoursePage";
 import PurchaseConfirmPage from "./pages/PurchaseConfirmPage";
 import MyLearningPage from "./pages/MyLearningPage";
 import CommunityPage from "./pages/CommunityPage";
+import {GoogleOAuthProvider} from "@react-oauth/google"
 function App() {
   const dispatch:AppDispatch=useDispatch()
   const token = localStorage.getItem("SkillStreamToken");
@@ -42,6 +43,7 @@ function App() {
   return (
     <div className="min-h-screen">
       <BrowserRouter>
+      <GoogleOAuthProvider clientId="596357550935-jhld1mlmi7hjda08ret8ju85lt7rftnm.apps.googleusercontent.com">
         <Routes>
           <Route path="/" element={<LandingPage/>}/>
           <Route path="/login" element={<LoginPage/>}/>
@@ -60,6 +62,7 @@ function App() {
           <Route path="/purchase" element={<PurchaseConfirmPage/>}/>
           <Route path="/community" element={<CommunityPage/>}/>
         </Routes>
+      </GoogleOAuthProvider>
       </BrowserRouter>
       <ToastContainer/>
     

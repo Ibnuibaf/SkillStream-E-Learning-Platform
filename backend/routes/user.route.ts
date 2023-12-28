@@ -3,12 +3,15 @@ import UserRepository from "../repositories/user.repository";
 import UserUsecase from "../usecases/user.usecase";
 import UserController from "../controllers/user.controller";
 import AuthMiddleware from "../middlewares/auth.middleware";
+import StripePayments from "../utils/stripe.payment";
+// import passport from "passport";
 
 const Router = express.Router();
 const userRepository = new UserRepository();
 const authMiddleware = new AuthMiddleware(userRepository);
 const userUsecase = new UserUsecase(userRepository);
 const userController = new UserController(userUsecase);
+const stripePayments = new StripePayments(userRepository);
 
 Router.get(
   "/",
@@ -24,17 +27,18 @@ Router.get(
     authMiddleware.authUser(req, res, next),
   (req: Request, res: Response) => userController.getUserLearnings(req, res)
 );
-// Router.get(
-//   "/instructors",
-//   (req: Request, res: Response, next: NextFunction) =>
-//     authMiddleware.authUser(req, res, next),
-//   (req: Request, res: Response) => userController.getUserLearnings(req, res)
-// );
+Router.get(
+  "/instructors",
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.authUser(req, res, next),
+  (req: Request, res: Response) => userController.getInstructors(req, res)
+);
 Router.patch(
   "/learnings/progress",
   (req: Request, res: Response, next: NextFunction) =>
     authMiddleware.authUser(req, res, next),
-  (req: Request, res: Response) => userController.updateLearningsProgress(req, res)
+  (req: Request, res: Response) =>
+    userController.updateLearningsProgress(req, res)
 );
 Router.patch(
   "/status",
@@ -48,8 +52,8 @@ Router.patch(
   "/instructor/verify",
   (req: Request, res: Response, next: NextFunction) =>
     authMiddleware.authUser(req, res, next),
-    (req: Request, res: Response, next: NextFunction) =>
-      authMiddleware.adminCheck(req, res, next),
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.adminCheck(req, res, next),
   (req: Request, res: Response) => userController.verifyInstructor(req, res)
 );
 Router.get(
@@ -61,6 +65,15 @@ Router.get(
 Router.post("/register", (req: Request, res: Response) =>
   userController.createUser(req, res)
 );
+// Router.get("/google", (req: Request, res: Response) =>
+//   passport.authenticate("google", ["profile", "email"] as any)
+// );
+// Router.get("/google/callback", (req: Request, res: Response) =>
+//   passport.authenticate("google",{
+//     successRedirect: "http://localhost:5173",
+//     failureRedirect:"http://localhost:5173/login"
+//   })
+// );
 Router.post("/otp", (req: Request, res: Response) =>
   userController.sendOTP(req, res)
 );
@@ -81,6 +94,12 @@ Router.patch(
   (req: Request, res: Response, next: NextFunction) =>
     authMiddleware.authUser(req, res, next),
   (req: Request, res: Response) => userController.updateUserDetails(req, res)
+);
+Router.patch(
+  "/payment",
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.authUser(req, res, next),
+  (req: Request, res: Response) => stripePayments.paymentIntent(req, res)
 );
 
 export default Router;

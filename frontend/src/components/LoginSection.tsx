@@ -1,13 +1,15 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 // import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
+import { FaGoogle, FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
 // import { getUser } from "../redux/actions/authActions";
 // import { AppDispatch } from "../redux/store";
 // import { useDispatch } from "react-redux";
 import api from "../axios/api";
+import { useGoogleLogin } from "@react-oauth/google";
 // import { selectUser } from "../redux/slices/authSlice";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -19,7 +21,6 @@ function LoginSection() {
   const navigate = useNavigate();
   // const dispatch:AppDispatch=useDispatch()
 
-
   const [loginDetails, setLoginDetails] = useState({ email: "", password: "" });
   const [validPass, setValidPass] = useState(false);
   const [submitStage, setSubmitStage] = useState(false);
@@ -30,6 +31,40 @@ function LoginSection() {
       navigate("/");
     }
   }, [navigate]);
+
+  const handleGoogleLoginSuccess = async (tokenResponse: any) => {
+    try {
+      const accessToken = tokenResponse.access_token;
+      const res = await api.post("/user/login", {
+        googleAccessToken: accessToken,
+      });
+      if (!res.data.token) {
+        toast(res.data.message);
+        return;
+      }
+      console.log("Is it hit here");
+      if (!res.data.success) {
+        toast.error(res.data.message);
+        return;
+      }
+      if (res.data.admin) {
+        toast("Welcome back Admin, Good to see yah!");
+        localStorage.setItem("SkillStreamToken", res.data.token);
+        navigate("/admin");
+      } else {
+        // await dispatch(getUser());
+        toast("User logged In");
+        localStorage.setItem("SkillStreamToken", res.data.token);
+        location.href = "/";
+      }
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
+    }
+  };
 
   const submitForm = async (e: React.FormEvent) => {
     try {
@@ -45,10 +80,7 @@ function LoginSection() {
         return toast("Password should be strong");
       }
 
-      const res = await api.post(
-        "/user/login",
-        loginDetails
-      );
+      const res = await api.post("/user/login", loginDetails);
       console.log("Is it hit here");
       if (!res.data.success) {
         toast.error(res.data.message);
@@ -59,11 +91,11 @@ function LoginSection() {
         toast("Welcome back Admin, Good to see yah!");
         localStorage.setItem("SkillStreamToken", res.data.token);
         navigate("/admin");
-      }else{
+      } else {
         // await dispatch(getUser());
         toast("User logged In");
         localStorage.setItem("SkillStreamToken", res.data.token);
-        location.href='/'
+        location.href = "/";
       }
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
@@ -73,6 +105,7 @@ function LoginSection() {
       }
     }
   };
+  const login = useGoogleLogin({ onSuccess: handleGoogleLoginSuccess });
 
   const passwordOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (passwordRegex.test(loginDetails.password)) {
@@ -153,12 +186,22 @@ function LoginSection() {
                 Create an account!
               </Link>
             </div>
-            <button
-              type="submit"
-              className="mt-9 bg-gradient-to-tr from-red-500 to-red-600 py-2 px-10 rounded-md"
-            >
-              Log In
-            </button>
+            <div className="flex flex-col ">
+              <button
+                type="submit"
+                className="mt-9 bg-gradient-to-tr from-red-500 to-red-600 py-2 px-10 rounded-md"
+              >
+                Log In
+              </button>
+              <button
+                type="button"
+                onClick={() => login()}
+                className="flex items-center  gap-2 mt-9 bg-gradient-to-tr from-red-500 to-red-600 py-2 px-10 rounded-md"
+              >
+                <FaGoogle />
+                Sign Up with Google
+              </button>
+            </div>
           </form>
         </div>
       </div>

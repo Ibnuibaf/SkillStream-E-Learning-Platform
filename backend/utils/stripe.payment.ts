@@ -50,6 +50,19 @@ class StripePayments {
       res.send({ url: session.url });
     }
   }
+  async paymentIntent(req:Request,res:Response){
+    const {instructor,user}=req.body
+    const payment=await stripe.paymentIntents.create({
+      amount: 130,
+      currency: "INR",
+      automatic_payment_methods:{
+        enabled:true
+      }
+    })
+    res.send({
+      clientSecret:payment.client_secret
+    })
+  }
 }
 
 export default StripePayments;

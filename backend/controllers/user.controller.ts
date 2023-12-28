@@ -29,6 +29,17 @@ class UserController {
       });
     }
   }
+  async getInstructors(req: Request, res: Response) {
+    try {
+      const response = await this.userUsecase.getInstructors();
+      res.status(response.status).send(response.data);
+    } catch (error) {
+      res.status(500).send({
+        success: false,
+        message: "server error",
+      });
+    }
+  }
   async updateLearningsProgress(req: Request, res: Response) {
     try {
       const response = await this.userUsecase.updateLearningsProgress(req.headers["authorization"] as string,req.body);

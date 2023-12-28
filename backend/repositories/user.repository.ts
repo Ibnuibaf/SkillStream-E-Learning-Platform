@@ -1,3 +1,4 @@
+import { UserRole } from "../enums/UserRole.enum";
 import IUser from "../interfaces/user";
 import IUserBody from "../interfaces/userBody";
 import Users from "../models/user.model";
@@ -14,6 +15,21 @@ class UserRepository {
         success: true,
         message: "All users fetched",
         data: users,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to fetch ${error}`,
+      };
+    }
+  }
+  async getInstructors() {
+    try {
+      const instructors = await Users.find({ role: UserRole.Instructor, isBlock:false, verified:true }, { name:1,avatar:1 });
+      return {
+        success: true,
+        message: "All users fetched",
+        instructors
       };
     } catch (error) {
       return {
