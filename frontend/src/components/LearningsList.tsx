@@ -8,7 +8,8 @@ import { FaRegCirclePlay } from "react-icons/fa6";
 import { OnProgressProps } from "react-player/base";
 import axios from "axios";
 import { LuMoveLeft } from "react-icons/lu";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import InstructorsList from "./InstructorsList";
 
 interface ILesson {
   _id?: string;
@@ -40,9 +41,9 @@ interface ILearnings {
 }
 
 function LearningsList() {
-  // const navigate=useNavigate()
+  const navigate = useNavigate();
   const [learnings, setLearnings] = useState<ILearnings[]>();
-  const [viewCommunity, setViewCommunity] = useState(false);
+  const [view, setView] = useState("courses");
   const [isLearningsView, setIsLearningsView] = useState(false);
   const [isAnnouncementView, setIsAnnouncementView] = useState(false);
   const [learningsDetails, setLearningsDetails] = useState<ILearnings>();
@@ -92,11 +93,11 @@ function LearningsList() {
               onClick={() => {
                 setIsLearningsView(false);
                 setLearningsDetails(undefined);
-                setSelectedLesson(undefined)
-                setIsAnnouncementView(false)
+                setSelectedLesson(undefined);
+                setIsAnnouncementView(false);
               }}
             >
-              <LuMoveLeft/> Back
+              <LuMoveLeft /> Back
             </button>
           </div>
           <div className="flex justify-between w-full h-[80vh] gap-4">
@@ -217,31 +218,45 @@ function LearningsList() {
             <button
               type="button"
               className={`border-2 px-4 py-1 text-lg hover:bg-white hover:text-black transition duration-300 ${
-                !viewCommunity ? "bg-white text-black" : ""
+                view == "courses" ? "bg-white text-black" : ""
               }`}
-              onClick={() => setViewCommunity(false)}
+              onClick={() => setView("courses")}
             >
               Courses
             </button>
             <button
               type="button"
               className={`border-2 px-4 py-1 text-lg hover:bg-white hover:text-black transition duration-300 ${
-                viewCommunity ? "bg-white text-black" : ""
+                view == "communities" ? "bg-white text-black" : ""
               }`}
-              onClick={() => setViewCommunity(true)}
+              onClick={() => setView("communities")}
             >
               Communities
             </button>
+            <button
+              type="button"
+              className={`border-2 px-4 py-1 text-lg hover:bg-white hover:text-black transition duration-300 ${
+                view == "instructors" ? "bg-white text-black" : ""
+              }`}
+              onClick={() => setView("instructors")}
+            >
+              Instructors
+            </button>
           </div>
           <div className="">
-            {viewCommunity ? (
+            {view == "communities" ? (
               <div className="px-10">
                 <div className="text-2xl font-semibold my-3">
                   <p>My Communites</p>
                 </div>
                 <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden ">
                   {learnings?.map((comm) => (
-                    <div className="flex items-center gap-4 bg-purple-900/60 rounded-3xl mb-2 py-2 px-8  text-start hover:cursor-pointer hover:bg-purple-900/80">
+                    <div
+                      className="flex items-center gap-4 bg-purple-900/60 rounded-3xl mb-2 py-2 px-8  text-start hover:cursor-pointer hover:bg-purple-900/80 cursor-pointer"
+                      onClick={() =>
+                        navigate(`/community?courseid=${comm.course._id}`)
+                      }
+                    >
                       <div className="h-12 w-12 rounded-full">
                         <img
                           src={comm.course.cover}
@@ -254,7 +269,7 @@ function LearningsList() {
                   ))}
                 </div>
               </div>
-            ) : (
+            ) : view == "courses" ? (
               <div className="grid mt-5 grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-7">
                 {learnings?.map((course) => (
                   <div
@@ -337,6 +352,8 @@ function LearningsList() {
                   </div>
                 ))}
               </div>
+            ) : (
+              <InstructorsList />
             )}
           </div>
         </>

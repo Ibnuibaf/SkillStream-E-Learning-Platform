@@ -24,6 +24,12 @@ Router.get(
     authMiddleware.authUser(req, res, next),
   (req: Request, res: Response) => userController.getUserLearnings(req, res)
 );
+// Router.get(
+//   "/instructors",
+//   (req: Request, res: Response, next: NextFunction) =>
+//     authMiddleware.authUser(req, res, next),
+//   (req: Request, res: Response) => userController.getUserLearnings(req, res)
+// );
 Router.patch(
   "/learnings/progress",
   (req: Request, res: Response, next: NextFunction) =>

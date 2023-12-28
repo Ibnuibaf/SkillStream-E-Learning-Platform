@@ -51,6 +51,7 @@ class CourseUsecase {
       }
       const response = await this.communityRepository.createCommunity({
         course: res.data._id,
+        chats: [],
       });
 
       return {
