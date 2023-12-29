@@ -1,16 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// import React from 'react'
+
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-// import { toast } from "react-toastify";
 import io from "socket.io-client";
 import { selectUser } from "../redux/slices/authSlice";
 import api from "../axios/api";
-import { toast } from "react-toastify";
 import axios from "axios";
 import { FaPlusCircle } from "react-icons/fa";
-import { AppDispatch } from "../redux/store";
-import { getCourses } from "../redux/actions/coursesActions";
-import { selectcourses } from "../redux/slices/coursesSlice";
 
 interface Message {
   user: string;
@@ -18,56 +16,51 @@ interface Message {
   image: string;
 }
 
-function CommunityChat() {
+function ChatWithStudent() {
   const socket = io("http://localhost:3000");
   const navigate = useNavigate();
-  const dispatch: AppDispatch = useDispatch();
   const user = useSelector(selectUser).user;
-  const courses = useSelector(selectcourses).courses;
   const query = new URLSearchParams(window.location.search);
-  //   console.log(query);
-  const courseId = query.get("courseid");
+  const studentId = query.get("student");
   const [message, setMessage] = useState("");
-  const [communityName, setCommunityName] = useState("");
+  const [studentDetails, setStudentDetails] = useState<any>();
+  const [roomId, setRoomId] = useState("");
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
 
-  const getCommunity = async () => {
+  const getPersonalChat = async () => {
     try {
-      const res = await api.get(`/community/find?course=${courseId}`);
-      setChatHistory(res.data.community.chats);
-    } catch (error: unknown) {
-      if (axios.isAxiosError(error)) {
-        toast(error?.response?.data?.message);
-      } else {
-        toast("An unexpected error occurred");
-      }
+      const res = await api.get(`/personal/find?student=${studentId}`);
+      setChatHistory(res.data.personalchat.chats);
+      setRoomId(res.data.personalchat._id);
+      console.log(roomId);
+      console.log(chatHistory);
+    } catch (error) {
+      console.error(error);
     }
   };
-
+  const getStudentDetails = async () => {
+    try {
+      const res = await api.get(`/user/students?id=${studentId}`);
+      setStudentDetails(res.data.students);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   useEffect(() => {
-    if (!query.size || !courseId) {
-      navigate("/mylearning");
+    if (!query.size || !studentId) {
+      navigate("/instructor");
     } else {
-      getCommunity();
-      const isInstructor=user?.role=="instructor"
-      const isPurchased = user?.learnings.find(
-        (learn) => learn.course == courseId
-      );
-      if (isPurchased || isInstructor) {
-        dispatch(getCourses({ search: "", isInstructor: false }));
-        const courseDeatils = courses.find((course) => course._id == courseId);
-        setCommunityName(courseDeatils?.title as string);
-        socket.emit("join", courseId);
-        socket.off("receive_message");
-        socket.off("receive_message");
-        socket.on("receive_message", (data) => {
-          setChatHistory((prevChatHistory) => [...prevChatHistory, data]);
-        });
-      } else {
-        navigate("/mylearning");
-      }
+      getPersonalChat();
+      getStudentDetails();
+
+      socket.emit("join", roomId);
+      socket.off("receive_personal_message");
+      socket.off("receive_personal_message");
+      socket.on("receive_personal_message", (data) => {
+        setChatHistory((prevChatHistory) => [...prevChatHistory, data]);
+      });
     }
   }, []);
 
@@ -94,34 +87,37 @@ function CommunityChat() {
           setImage(null);
           setLoading(false);
         }
-        socket.emit("send_message", {
-          roomId: courseId,
-          user: user?.name,
+        socket.emit("send_personal_message", {
+          roomId,
+          user: user?._id,
           message,
           image: uploadedImage,
         });
         setMessage("");
       }
-    } catch (error: unknown) {
+    } catch (error) {
       setLoading(false);
-      if (axios.isAxiosError(error)) {
-        toast(error?.response?.data?.message);
-      } else {
-        toast("An unexpected error occurred");
-      }
+      console.error(error);
     }
   };
   return (
     <div className="text-start ">
-      <div className="bg-purple-700 px-4 text-center">
-        <p className="text-3xl px-4 py-2 font-bold">
-          {communityName} Community
-        </p>
+      <div className="bg-purple-700 px-4 text-center flex gap-2 justify-center">
+        {studentDetails ? (
+          <>
+            <img src={studentDetails.avatar} alt="" className="h-12 w-12" />
+            <p className="text-3xl px-4 py-2 font-bold">
+              {studentDetails.name}
+            </p>
+          </>
+        ) : (
+          <p className="text-3xl px-4 py-2 font-bold">CHAT</p>
+        )}
       </div>
       <div className=" flex flex-col justify-between">
-        <div className="px-4 py-5 h-[74vh] overflow-y-auto">
+        <div className="px-4 py-5 h-[80vh] overflow-y-auto">
           {chatHistory.map((chat, index) =>
-            chat.user == user?.name ? (
+            chat.user == user?._id ? (
               <div key={index} className="px-3 py-2  flex justify-end">
                 <div className="">
                   {/* <p className="text-xs text-gray-300">{chat.user}</p> */}
@@ -142,7 +138,7 @@ function CommunityChat() {
             ) : (
               <div key={index} className="px-3 py-2">
                 <div>
-                  <p className="text-xs text-gray-300">{chat.user}</p>
+                  {/* <p className="text-xs text-gray-300">{chat.user}</p> */}
                   <div className="bg-purple-950 w-max pl-4 pr-2 py-1 rounded-r-lg rounded-b-lg">
                     {chat.image && (
                       <div className="h-72">
@@ -201,4 +197,4 @@ function CommunityChat() {
   );
 }
 
-export default CommunityChat;
+export default ChatWithStudent;

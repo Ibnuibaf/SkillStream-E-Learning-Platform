@@ -23,6 +23,10 @@ import PurchaseConfirmPage from "./pages/PurchaseConfirmPage";
 import MyLearningPage from "./pages/MyLearningPage";
 import CommunityPage from "./pages/CommunityPage";
 import {GoogleOAuthProvider} from "@react-oauth/google"
+import InstructorCommunitiesPage from "./pages/InstructorCommunitiesPage";
+import PersonalChatPage from "./pages/PeronalChatPage"
+import InstructorStudentsList from "./pages/InstructorStudentsList";
+import InstructorChatPage from "./pages/InstructorChatPage";
 function App() {
   const dispatch:AppDispatch=useDispatch()
   const token = localStorage.getItem("SkillStreamToken");
@@ -52,8 +56,12 @@ function App() {
           <Route path="/courses" element={<CoursesPage/>}/>
           <Route path="/mylearning" element={<MyLearningPage/>}/>
           <Route path="/profile" element={<ProfilePage/>}/>
+          <Route path="/personal/chat" element={<PersonalChatPage />}/>
           <Route path="/instructor" element={<InstructorHomePage/>}/>
           <Route path="/instructor/courses" element={<InstructorCoursePage/>}/>
+          <Route path="/instructor/chats" element={<InstructorStudentsList/>}/>
+          <Route path="/instructor/personal/chat" element={<InstructorChatPage/>}/>
+          <Route path="/instructor/communities" element={<InstructorCommunitiesPage/>}/>
           <Route path="/admin" element={<AdminDashboardPage/>}/>
           <Route path="/admin/students" element={<AdminStudentPage/>}/>
           <Route path="/admin/instructors" element={<AdminInstructorPage/>}/>

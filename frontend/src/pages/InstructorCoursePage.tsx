@@ -2,6 +2,7 @@ import InstructorCourse from "../components/InstructorCourse";
 import InstructorSideBar from "../components/InstructorSideBar";
 
 function InstructorCoursePage() {
+  
   return (
     <div className="min-h-screen flex flex-row">
         <InstructorSideBar />

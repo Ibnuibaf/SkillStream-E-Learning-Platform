@@ -31,7 +31,18 @@ class UserController {
   }
   async getInstructors(req: Request, res: Response) {
     try {
-      const response = await this.userUsecase.getInstructors();
+      const response = await this.userUsecase.getInstructors(req.query);
+      res.status(response.status).send(response.data);
+    } catch (error) {
+      res.status(500).send({
+        success: false,
+        message: "server error",
+      });
+    }
+  }
+  async getStudents(req: Request, res: Response) {
+    try {
+      const response = await this.userUsecase.getStudents(req.query);
       res.status(response.status).send(response.data);
     } catch (error) {
       res.status(500).send({

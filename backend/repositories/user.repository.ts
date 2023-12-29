@@ -23,13 +23,54 @@ class UserRepository {
       };
     }
   }
-  async getInstructors() {
+  async getInstructors(id: string) {
     try {
-      const instructors = await Users.find({ role: UserRole.Instructor, isBlock:false, verified:true }, { name:1,avatar:1 });
+      const instructors = id
+        ? await Users.findOne(
+            {
+              _id: id,
+              role: UserRole.Instructor,
+              isBlock: false,
+              verified: true,
+            },
+            { name: 1, avatar: 1 }
+          )
+        : await Users.find(
+            { role: UserRole.Instructor, isBlock: false, verified: true },
+            { name: 1, avatar: 1 }
+          );
       return {
         success: true,
         message: "All users fetched",
-        instructors
+        instructors,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to fetch ${error}`,
+      };
+    }
+  }
+  async getStudents(id: string) {
+    try {
+      const students = id
+        ? await Users.findOne(
+            {
+              _id: id,
+              role: UserRole.Student,
+              isBlock: false,
+              verified: true,
+            },
+            { name: 1, avatar: 1 }
+          )
+        : await Users.find(
+            { role: UserRole.Student, isBlock: false, verified: true },
+            { name: 1, avatar: 1 }
+          );
+      return {
+        success: true,
+        message: "All users fetched",
+        students,
       };
     } catch (error) {
       return {
@@ -43,7 +84,9 @@ class UserRepository {
       const userLearnings = await Users.findOne(
         { _id: userId },
         { learnings: 1 }
-      ).populate("learnings.course").exec();
+      )
+        .populate("learnings.course")
+        .exec();
       console.log(userLearnings);
 
       return {
@@ -67,9 +110,9 @@ class UserRepository {
       const userLearnings = await Users.updateOne(
         { _id: userId, "learnings.course": courseId },
         {
-          $addToSet: { "learnings.$.progress": lessonId }, 
+          $addToSet: { "learnings.$.progress": lessonId },
         },
-        {new:true}
+        { new: true }
       );
       console.log(userLearnings);
 
@@ -105,7 +148,7 @@ class UserRepository {
   }
   async findUser(id: string) {
     try {
-      const userDetails = await Users.findById(id,{password:0});
+      const userDetails = await Users.findById(id, { password: 0 });
       if (!userDetails) {
         return {
           success: false,
@@ -202,7 +245,7 @@ class UserRepository {
   //     };
   //   }
   // }
-  async updateUserDetails(userId:string,updates:any){
+  async updateUserDetails(userId: string, updates: any) {
     try {
       const userDetails = await Users.findByIdAndUpdate(userId, updates, {
         new: true,

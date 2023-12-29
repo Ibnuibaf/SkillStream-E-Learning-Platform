@@ -1,10 +1,13 @@
 import { Server, Socket } from "socket.io";
 import CommunityRepository from "../repositories/community.repository";
+import PersonalchatRepository from "../repositories/personalchat.repository";
 
 class SocketUtils {
   private communityRepository: CommunityRepository;
-  constructor(communityRepository: CommunityRepository) {
+  private personalchatRepository: PersonalchatRepository
+  constructor(communityRepository: CommunityRepository,personalchatRepository: PersonalchatRepository) {
     this.communityRepository = communityRepository;
+    this.personalchatRepository=personalchatRepository
   }
 
   configureSocketIO = async (io: Server) => {
@@ -14,7 +17,7 @@ class SocketUtils {
       // Joining a Room
       socket.on("join", (roomId) => {
         socket.join(roomId);
-        console.log(`User joined room ${roomId}`);
+        console.log(`User joined room ${roomId} hahahahahah`);
       });
 
       // Leaving a Room
@@ -31,6 +34,23 @@ class SocketUtils {
         );
         if (result.success) {
           io.to(data.roomId).emit("receive_message", {
+            user: data.user,
+            message: data.message,
+            image: data.image
+          });
+        } else {
+          console.error(result.message);
+        }
+      });
+      socket.on("send_personal_message", async (data) => {
+        const result = await this.personalchatRepository.addMessageToPersonalchat(
+          data,
+          data.roomId
+        );
+        console.log(data);
+        
+        if (result.success) {
+          io.to(data.roomId).emit("receive_personal_message", {
             user: data.user,
             message: data.message,
             image: data.image

@@ -67,15 +67,38 @@ class UserUsecase {
       };
     }
   }
-  async getInstructors() {
+  async getInstructors(query:any) {
     try {
-      const response = await this.userRepository.getInstructors();
+      const {id}=query
+      const response = await this.userRepository.getInstructors(id);
       return {
         status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {
           success: response.success,
           message: response.message,
           instructors: response.instructors,
+        },
+      };
+    } catch (error) {
+      return {
+        status: HttpStatus.ServerError,
+        data: {
+          success: false,
+          message: "server error",
+        },
+      };
+    }
+  }
+  async getStudents(query:any) {
+    try {
+      const {id}=query
+      const response = await this.userRepository.getStudents(id);
+      return {
+        status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
+        data: {
+          success: response.success,
+          message: response.message,
+          instructors: response.students,
         },
       };
     } catch (error) {
