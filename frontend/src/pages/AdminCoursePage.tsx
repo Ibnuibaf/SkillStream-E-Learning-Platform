@@ -1,16 +1,20 @@
 // import React from 'react'
-import AdminSideBar from '../components/AdminSideBar'
-import AdminCourse from '../components/AdminCourse'
+import AdminSideBar from "../components/AdminSideBar";
+import AdminCourse from "../components/AdminCourse";
+import Footer from "../components/Footer";
 
 function AdminCoursePage() {
   return (
     <div className="min-h-screen flex flex-row">
+      <div>
         <AdminSideBar />
-      <div className="w-full max-h-screen overflow-auto p-10 ">
+      </div>
+      <div className="w-full  ">
         <AdminCourse />
+        <Footer />
       </div>
     </div>
-  )
+  );
 }
 
-export default AdminCoursePage
+export default AdminCoursePage;

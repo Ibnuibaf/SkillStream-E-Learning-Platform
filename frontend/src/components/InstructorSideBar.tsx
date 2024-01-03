@@ -5,7 +5,7 @@ import {
   MdDashboard,
   MdPlayLesson,
   MdOutlineMarkUnreadChatAlt,
-  MdNotifications,
+  // MdNotifications,
   MdLogout,
 } from "react-icons/md";
 import { useDispatch, useSelector } from "react-redux";
@@ -92,7 +92,7 @@ function InstructorSideBar() {
                   <span className="text-sm font-medium">Chats</span>
                 </Link>
               </li>
-              <li>
+              {/* <li>
                 <Link
                   to={"/instructor/notifications"}
                   className="flex flex-row items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 text-gray-500 hover:text-gray-300"
@@ -105,7 +105,7 @@ function InstructorSideBar() {
                     5
                   </span>
                 </Link>
-              </li>
+              </li> */}
               <li>
                 <Link
                   to={"/profile"}

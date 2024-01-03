@@ -58,13 +58,12 @@ class UserRepository {
             {
               _id: id,
               role: UserRole.Student,
-              isBlock: false,
-              verified: true,
+              isBlock: false
             },
             { name: 1, avatar: 1 }
           )
         : await Users.find(
-            { role: UserRole.Student, isBlock: false, verified: true },
+            { role: UserRole.Student, isBlock: false },
             { name: 1, avatar: 1 }
           );
       return {
@@ -130,6 +129,12 @@ class UserRepository {
   async createUser(details: IUserBody) {
     try {
       const userDetails = await Users.create(details);
+      if(!userDetails){
+        return {
+          success: false,
+          message: "user details nopt stored",
+        };
+      }
       return {
         success: true,
         message: "user details fetched",

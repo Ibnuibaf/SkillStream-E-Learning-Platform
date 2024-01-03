@@ -1,4 +1,4 @@
-import { RiShoppingCart2Fill, RiNotification4Line } from "react-icons/ri";
+import { RiShoppingCart2Fill } from "react-icons/ri";
 import { Link } from "react-router-dom";
 import {  useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../redux/slices/authSlice";
@@ -36,9 +36,9 @@ function AuthSection() {
       <button>
         <RiShoppingCart2Fill size={24}></RiShoppingCart2Fill>
       </button>
-      <Link to={"/notifications"} className="">
+      {/* <Link to={"/notifications"} className="">
         <RiNotification4Line size={24}></RiNotification4Line>
-      </Link>
+      </Link> */}
       <Link to={"/profile"} className="flex items-center gap-1">
         <img
           src={userDetails.user?.avatar}

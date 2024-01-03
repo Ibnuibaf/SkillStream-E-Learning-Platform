@@ -458,7 +458,7 @@ function CourseList() {
               </button>
             </div>
             <div>
-              <button>Filter</button>
+              {/* <button>Filter</button> */}
             </div>
           </div>
           <div className="grid mt-5 grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-7">

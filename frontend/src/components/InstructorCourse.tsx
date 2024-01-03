@@ -373,7 +373,7 @@ function InstructorCourse() {
   // useEffect(() => {
   // }, [courseDetails]);
   return (
-    <>
+    <div className="p-10">
       {courseDetailView ? (
         <div className="">
           <div className="flex justify-end my-2 gap-2">
@@ -1423,7 +1423,7 @@ function InstructorCourse() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
 

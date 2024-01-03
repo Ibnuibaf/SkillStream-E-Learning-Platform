@@ -1,8 +1,9 @@
-import  { useEffect } from "react";
+import { useEffect } from "react";
 import BasicHeader from "../components/BasicHeader";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import LearningsList from "../components/LearningsList";
+import Footer from "../components/Footer";
 
 function MyLearningPage() {
   const token = localStorage.getItem("SkillStreamToken");
@@ -12,15 +13,18 @@ function MyLearningPage() {
       toast("Logging to access");
       navigate("/login");
     }
-  }, [token,navigate]);
+  }, [token, navigate]);
   return (
     <div>
-      <div className="px-10 py-4">
-        <BasicHeader />
+      <div className="min-h-screen">
+        <div className="px-10 py-4">
+          <BasicHeader />
+        </div>
+        <div className="py-4">
+          <LearningsList />
+        </div>
       </div>
-      <div className="py-4">
-        <LearningsList/>
-      </div>
+      <Footer />
     </div>
   );
 }

@@ -1,5 +1,6 @@
 import AdminSideBar from "../components/AdminSideBar";
 import CategoriesTab from "../components/CategoriesTab";
+import Footer from "../components/Footer";
 
 function AdminCategoryPage() {
   return (
@@ -7,8 +8,9 @@ function AdminCategoryPage() {
       <div>
         <AdminSideBar />
       </div>
-      <div className="w-full max-h-screen overflow-auto">
-        <CategoriesTab/>
+      <div className="w-full ">
+        <CategoriesTab />
+        <Footer />
       </div>
     </div>
   );

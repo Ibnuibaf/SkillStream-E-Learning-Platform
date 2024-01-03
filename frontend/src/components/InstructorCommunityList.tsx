@@ -29,7 +29,7 @@ function InstructorCommunityList() {
         getCommunities()
     },[])
   return (
-    <div>
+    <div className="p-10 h-[95vh] ">
       <div className="px-10">
         <div className="text-2xl font-semibold my-3">
           <p>My Communites</p>

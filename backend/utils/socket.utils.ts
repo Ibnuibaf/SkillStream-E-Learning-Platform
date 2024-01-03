@@ -12,12 +12,12 @@ class SocketUtils {
 
   configureSocketIO = async (io: Server) => {
     io.on("connection", (socket: Socket) => {
-    //   console.log("A user connected");
+      // console.log("A user connected");
 
       // Joining a Room
       socket.on("join", (roomId) => {
         socket.join(roomId);
-        console.log(`User joined room ${roomId} hahahahahah`);
+        console.log(`User joined room ${roomId} `);
       });
 
       // Leaving a Room
@@ -60,31 +60,9 @@ class SocketUtils {
         }
       });
 
-    //   socket.on("getChatHistory", async (data) => {
-    //     const chatHistory = await this.communityRepository.getChatHistory(
-    //       data.roomId
-    //     );
-    //     io.to(data.roomId).emit("chatHistory", chatHistory); // Use io.emit instead of socket.emit
-    //   });
-
-      //   // Typing Indicator
-      //   socket.on("typing", (data) => {
-      //     socket
-      //       .to(data.roomId)
-      //       .emit("typing", { user: data.user, isTyping: data.isTyping });
-      //   });
-
-      //   // Private Messaging
-      //   socket.on("privateMessage", (data) => {
-      //     io.to(data.targetUserId).emit("privateMessage", {
-      //       sender: data.sender,
-      //       message: data.message,
-      //     });
-      //   });
-
       // Disconnect
       socket.on("disconnect", () => {
-        // console.log("User disconnected");
+        console.log("User disconnected");
       });
     });
   };

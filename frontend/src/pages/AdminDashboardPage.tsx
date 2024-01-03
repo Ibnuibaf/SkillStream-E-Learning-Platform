@@ -1,12 +1,20 @@
 // import React from 'react'
-import AdminSideBar from '../components/AdminSideBar'
+import AdminDashboard from "../components/AdminDashboard";
+import AdminSideBar from "../components/AdminSideBar";
+import Footer from "../components/Footer";
 
 function AdminDashboardPage() {
   return (
     <div className="min-h-screen flex flex-row ">
-        <AdminSideBar/>
+      <div>
+        <AdminSideBar />
+      </div>
+      <div className="w-full ">
+        <AdminDashboard />
+        <Footer />
+      </div>
     </div>
-  )
+  );
 }
 
-export default AdminDashboardPage
+export default AdminDashboardPage;

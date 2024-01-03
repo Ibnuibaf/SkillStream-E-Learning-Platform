@@ -159,7 +159,7 @@ function AdminCourse() {
   }, [dispatch]);
 
   return (
-    <>
+    <div className=" p-10">
       {courseDetailView ? (
         <div className="">
           <div className="flex justify-end my-2 gap-2">
@@ -720,7 +720,7 @@ function AdminCourse() {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 }
 

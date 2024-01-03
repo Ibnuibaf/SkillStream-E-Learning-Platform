@@ -195,8 +195,8 @@ class UserUsecase {
             status: HttpStatus.ServerError,
             data: {
               success: false,
-              message: "Retry another password by matching confirmation",
-            },
+              message: "Account Exist already",
+            }
           };
         }
 

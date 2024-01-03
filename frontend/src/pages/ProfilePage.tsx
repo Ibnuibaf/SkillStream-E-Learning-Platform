@@ -1,9 +1,10 @@
 // import React from 'react'
-import { useNavigate } from 'react-router-dom';
-import BasicHeader from '../components/BasicHeader'
-import { useEffect } from 'react';
-import { toast } from 'react-toastify';
-import ProfileTab from '../components/ProfileTab';
+import { useNavigate } from "react-router-dom";
+import BasicHeader from "../components/BasicHeader";
+import { useEffect } from "react";
+import { toast } from "react-toastify";
+import ProfileTab from "../components/ProfileTab";
+import Footer from "../components/Footer";
 
 function ProfilePage() {
   const token = localStorage.getItem("SkillStreamToken");
@@ -15,11 +16,14 @@ function ProfilePage() {
     }
   }, [token]);
   return (
-    <div className=' px-10 py-4'>
-        <BasicHeader/>
-        <ProfileTab/>
+    <div className="">
+      <div className="min-h-screen  px-10 py-4">
+        <BasicHeader />
+        <ProfileTab />
+      </div>
+      <Footer />
     </div>
-  )
+  );
 }
 
-export default ProfilePage
+export default ProfilePage;

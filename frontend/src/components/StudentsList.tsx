@@ -24,7 +24,7 @@ function StudentsList() {
   }, []);
   return (
    
-        <div className="px-10">
+        <div className="p-10 min-h-screen">
           <div className="text-2xl font-semibold my-3">
             <p>My Chats</p>
           </div>

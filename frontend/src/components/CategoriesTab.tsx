@@ -230,6 +230,7 @@ function CategoriesTab() {
           ))}
         </div>
       </div>
+      
     </div>
   );
 }

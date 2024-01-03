@@ -1,6 +1,7 @@
 // import React from "react";
 import StudentsTable from "../components/StudentsTable";
 import AdminSideBar from "../components/AdminSideBar";
+import Footer from "../components/Footer";
 
 function AdminStudentPage() {
   return (
@@ -8,8 +9,9 @@ function AdminStudentPage() {
       <div className="">
         <AdminSideBar />
       </div>
-      <div className="w-full max-h-screen overflow-auto">
+      <div className="w-full ">
         <StudentsTable />
+        <Footer/>
       </div>
     </div>
   );

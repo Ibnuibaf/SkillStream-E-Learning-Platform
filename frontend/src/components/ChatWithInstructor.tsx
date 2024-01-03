@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // import React from 'react'
 
 import { useEffect, useState } from "react";
@@ -8,6 +9,7 @@ import { selectUser } from "../redux/slices/authSlice";
 import api from "../axios/api";
 import axios from "axios";
 import { FaPlusCircle } from "react-icons/fa";
+// import { toast } from "react-toastify";
 
 interface Message {
   user: string;
@@ -20,7 +22,6 @@ function ChatWithInstructor() {
   const navigate = useNavigate();
   // const dispatch: AppDispatch = useDispatch();
   const user = useSelector(selectUser).user;
-  // const courses = useSelector(selectcourses).courses;
   const query = new URLSearchParams(window.location.search);
   //   console.log(query);
   const instructorId = query.get("instructor");
@@ -35,19 +36,7 @@ function ChatWithInstructor() {
   const [loading, setLoading] = useState(false);
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
 
-  const getPersonalChat = async () => {
-    try {
-      const res = await api.get(
-        `/personal/find?instructor=${instructorId}`
-      );
-      setChatHistory(res.data.personalchat.chats);
-      setRoomId(res.data.personalchat._id);
-      console.log(roomId);
-      console.log(chatHistory);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  
 
   const getInstructorDetails = async () => {
     try {
@@ -57,31 +46,37 @@ function ChatWithInstructor() {
       console.error(error);
     }
   };
-
+  
+  
   useEffect(() => {
     if (!query.size || !instructorId) {
       navigate("/mylearning");
     } else {
-      getPersonalChat();
-
-      // const isPurchased = user?.learnings.find(
-      //   (learn) => learn.course == courseId
-      // );
-      // if (isPurchased || isInstructor) {
+      const getPersonalChat = async () => {
+        try {
+          const res = await api.get(`/personal/find?instructor=${instructorId}`);
+          setChatHistory(res.data.personalchat.chats);
+          setRoomId(res.data.personalchat._id);
+          console.log(roomId);
+          console.log(chatHistory);
+    
+          socket.emit("join", roomId);
+          socket.off("receive_personal_message");
+          socket.on("receive_personal_message", (data:any) => {
+            setChatHistory((prevChatHistory) => [...prevChatHistory, data]);
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      };
       getInstructorDetails();
-      // if (roomId) {
-        socket.emit("join", roomId);
-        socket.off("receive_personal_message");
-        socket.off("receive_personal_message");
-        socket.on("receive_personal_message", (data) => {
-          setChatHistory((prevChatHistory) => [...prevChatHistory, data]);
-        });
-      // }
-      // } else {
-      //   navigate("/mylearning");
-      // }
+      getPersonalChat();
     }
-  }, []);
+    return () => {
+      socket.off("receive_personal_message");
+      socket.emit("leave", roomId);
+    };
+  }, [instructorId]);
 
   const sendMessage = async () => {
     try {
@@ -147,7 +142,7 @@ function ChatWithInstructor() {
                 </div>
               </div>
             ) : (
-              <div key={index} className="px-3 py-2">
+              <div key={index} className="px-3 py-2 ">
                 <div>
                   {/* <p className="text-xs text-gray-300">{chat.user}</p> */}
                   <div className="bg-purple-950 w-max pl-4 pr-2 py-1 rounded-r-lg rounded-b-lg">
