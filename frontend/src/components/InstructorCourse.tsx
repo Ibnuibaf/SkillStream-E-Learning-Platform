@@ -3,8 +3,8 @@ import { FaPlus } from "react-icons/fa";
 import { GrAnnounce } from "react-icons/gr";
 import { LuReplace } from "react-icons/lu";
 import { RiDragDropLine } from "react-icons/ri";
-import { MdDelete } from "react-icons/md";
-import { IoIosClose } from "react-icons/io";
+import { MdDelete, MdWarningAmber } from "react-icons/md";
+import { IoIosClose, IoMdStar } from "react-icons/io";
 import { FaRegCirclePlay } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
 import { getCategories } from "../redux/actions/categoriesActions";
@@ -27,7 +27,7 @@ interface ICoupon {
 }
 
 interface IReviews {
-  user: { name: string; _id: string } ;
+  user: { name: string; _id: string };
   rating: number;
   feedback: string;
 }
@@ -47,7 +47,7 @@ interface ICourse {
   category: { name: string; _id: string } | string;
   instructor: { name: string; _id?: string } | string;
   cover: string;
-  preview?:string
+  preview?: string;
   reviews?: IReviews[];
   lessons: ILesson[];
   announcements: string[];
@@ -186,7 +186,10 @@ function InstructorCourse() {
       );
       if (confirmed) {
         if (user && user._id) {
-          setCourseDetails({ ...courseDetails, instructor: user._id as string });
+          setCourseDetails({
+            ...courseDetails,
+            instructor: user._id as string,
+          });
         }
         console.log(courseDetails);
 
@@ -1053,7 +1056,91 @@ function InstructorCourse() {
               </div>
             </div>
           ) : step == 6 ? (
-            ""
+            <div className="border p-5 px-10 mt-6 rounded-lg text-start">
+              {newCourse ? (
+                <div className="flex justify-center items-center h-[70vh]">
+                  <div className="border-4 border-pink-600 p-5">
+                    <div className="flex justify-between items-center">
+                      <p className="text-3xl  font-semibold">
+                        Course Statistics
+                      </p>
+                      <MdWarningAmber size={50} className="text-pink-600" />
+                    </div>
+                    <p className="mt-5 text-xl font-bold">
+                      After Course Created you can see the Statistics
+                    </p>
+                  </div>
+                </div>
+              ) : (
+                <>
+                  <div className="mb-5">
+                    <p className="text-3xl underline underline-offset-4 font-semibold">
+                      Course Statistics
+                    </p>
+                  </div>
+                  <div className="flex">
+                    <div className="flex rounded items-end  bg-white text-black gap-3 px-10 shadow-md shadow-purple-500">
+                      <p className="text-lg font-medium">Total Enrollments:</p>
+                      <p className="text-2xl font-medium text-violet-400 bg-gray-700 rounded px-1 my-1">
+                        {courseDetails.enrollers?.length}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="py-4 px-6 border mt-6">
+                    <div>
+                      <p className="text-xl font-semibold">FeedBacks</p>
+                    </div>
+                    <div className="max-h-[50vh] overflow-y-auto overflow-x-hidden grid grid-cols-3 gap-2 mt-5">
+                      {courseDetails.reviews?.map((review) => (
+                        <div className="bg-purple-900 rounded-xl p-2 h-[15vh]">
+                          <div className="flex justify-between">
+                            <p className="text-lg font-medium truncate">
+                              {review.user.name}
+                            </p>
+                            <div className="flex items-center text-orange-500">
+                              {review.rating == 1 ? (
+                                <IoMdStar />
+                              ) : review.rating == 2 ? (
+                                <>
+                                  <IoMdStar />
+                                  <IoMdStar />
+                                </>
+                              ) : review.rating == 3 ? (
+                                <>
+                                  <IoMdStar />
+                                  <IoMdStar />
+                                  <IoMdStar />
+                                </>
+                              ) : review.rating == 4 ? (
+                                <>
+                                  <IoMdStar />
+                                  <IoMdStar />
+                                  <IoMdStar />
+                                  <IoMdStar />
+                                </>
+                              ) : review.rating == 5 ? (
+                                <>
+                                  <IoMdStar />
+                                  <IoMdStar />
+                                  <IoMdStar />
+                                  <IoMdStar />
+                                  <IoMdStar />
+                                </>
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                          </div>
+                          <div className="line-clamp-3">
+                            <p>{review.feedback}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
           ) : (
             <div className="border p-5 px-10 mt-6 rounded-lg text-start">
               <div className="">

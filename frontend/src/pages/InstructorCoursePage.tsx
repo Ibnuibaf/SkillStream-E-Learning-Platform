@@ -3,13 +3,14 @@ import InstructorCourse from "../components/InstructorCourse";
 import InstructorSideBar from "../components/InstructorSideBar";
 
 function InstructorCoursePage() {
-  
   return (
     <div className="min-h-screen flex flex-row">
-        <InstructorSideBar />
+      <InstructorSideBar />
       <div className="w-full ">
-        <InstructorCourse />
-        <Footer/>
+        <div className="min-h-screen">
+          <InstructorCourse />
+        </div>
+        <Footer />
       </div>
     </div>
   );

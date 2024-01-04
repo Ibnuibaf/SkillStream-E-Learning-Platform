@@ -58,7 +58,7 @@ class UserRepository {
             {
               _id: id,
               role: UserRole.Student,
-              isBlock: false
+              isBlock: false,
             },
             { name: 1, avatar: 1 }
           )
@@ -129,7 +129,7 @@ class UserRepository {
   async createUser(details: IUserBody) {
     try {
       const userDetails = await Users.create(details);
-      if(!userDetails){
+      if (!userDetails) {
         return {
           success: false,
           message: "user details nopt stored",
@@ -266,6 +266,67 @@ class UserRepository {
         message: "user details updated",
         data: userDetails,
       };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to update ${error}`,
+      };
+    }
+  }
+  async userWalletWithdraw(userId: string, amount: number) {
+    try {
+      const userDetails = await Users.findById(userId);
+      if (!userDetails) {
+        return {
+          success: false,
+          message: "No user found",
+        };
+      }
+      if (userDetails.wallet.balance < amount) {
+        return {
+          success: true,
+          message: "Amount has been made withdrawal",
+        };
+      }
+      userDetails.wallet.balance = Math.floor(
+        userDetails.wallet.balance - amount
+      );
+      userDetails.wallet.transactions.push({
+        date: new Date(),
+        amount: amount,
+        type: "dr",
+        remark: "Withdraw amount from Wallet",
+      });
+      await userDetails.save();
+      return {
+        success: true,
+        message: "Amount has been made withdrawal",
+        data: userDetails,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to update ${error}`,
+      };
+    }
+  }
+  async updateUserTeachings(userId: string, updates: any) {
+    try {
+      const userDetails = await Users.findById(userId);
+      if (!userDetails) {
+        return {
+          success: false,
+          message: "No user found",
+        };
+      }
+      userDetails.teachings.push(updates);
+      const result = await userDetails.save();
+
+      if (result) {
+        return { success: true };
+      } else {
+        return { success: false, message: "Failed to save community" };
+      }
     } catch (error) {
       return {
         success: false,

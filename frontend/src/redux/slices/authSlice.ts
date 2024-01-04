@@ -10,6 +10,15 @@ interface ILearning {
   course: string;
   progress: string[];
 }
+interface IWallet {
+  balance: string | number;
+  transactions: {
+    date: Date;
+    amount: string | number;
+    type: string;
+    remark: string;
+  }[];
+}
 interface UserType {
   _id: string;
   name: string;
@@ -24,6 +33,8 @@ interface UserType {
     "2": string;
   };
   learnings:ILearning[]
+  teachings:string[]
+  wallet:IWallet
 }
 
 const initialState: AuthState = {

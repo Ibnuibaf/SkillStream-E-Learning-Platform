@@ -10,9 +10,11 @@ import api from "../axios/api";
 import { TiTick } from "react-icons/ti";
 import { AppDispatch } from "../redux/store";
 import { getUser } from "../redux/actions/authActions";
+import { useNavigate } from "react-router-dom";
 
 function ProfileTab() {
   const dispatch: AppDispatch = useDispatch();
+  const navigate=useNavigate()
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
   const passwordRegex =
@@ -255,6 +257,30 @@ function ProfileTab() {
                   )}
                 </div>
               </div>
+              {user.role != "student" && (
+                <div className="p-4">
+                  <div className="border flex justify-between">
+                    <div className="flex gap-2 w-full">
+                      <div className="bg-white text-black px-6 flex items-center text-xl font-medium">
+                        <p>Wallet</p>
+                      </div>
+                      <div className="flex w-full items-center justify-end px-2">
+                        <div className="flex items-end">
+                          <p>Balance:</p>&nbsp;
+                          <p className="font-bold text-violet-500 text-xl">
+                            &#8377; {user.wallet.balance}/-
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <button className="bg-purple-900 px-4 py-2 hover:bg-purple-700" onClick={()=>navigate('/mywithdrawals')}>
+                        Withdraw
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
               <div className="flex justify-center">
                 <div className="border flex justify-center p-2   m-3">
                   <div className="bg-slate-800 p-2 rounded w-full flex flex-col justify-between">

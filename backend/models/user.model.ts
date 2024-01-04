@@ -12,7 +12,7 @@ const userSchema = new mongoose.Schema<IUser>({
   },
   password: {
     type: String,
-    default:"googleAuth"
+    default: "googleAuth",
   },
   avatar: {
     type: String,
@@ -42,6 +42,28 @@ const userSchema = new mongoose.Schema<IUser>({
       ],
     },
   ],
+  teachings: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: "Course",
+    },
+  ],
+  wallet: {
+    balance: {
+      type: Number,
+      default: 0,
+    },
+    transactions: [
+      {
+        date: {
+          type: Date,
+        },
+        amount: Number,
+        type: { type: String, enum: ["dr", "cr"] },
+        remark: String,
+      },
+    ],
+  },
   isBlock: {
     type: Boolean,
     default: false,

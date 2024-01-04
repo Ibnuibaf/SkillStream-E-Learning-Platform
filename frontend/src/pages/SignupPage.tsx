@@ -8,6 +8,7 @@ function SignupPage() {
     <div>
       <div className="h-screen px-10 py-4">
         <BasicHeader />
+
         <SignupSection />
       </div>
       <Footer />

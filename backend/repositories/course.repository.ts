@@ -55,8 +55,8 @@ class CourseRepository {
         ? await Courses.find({
             title: { $regex: regex, $options: "i" },
             instructor: id,
-          })
-        : await Courses.find({ instructor: id });
+          }).populate("reviews.user", "name")
+        : await Courses.find({ instructor: id }).populate("reviews.user", "name");
 
       return {
         success: true,

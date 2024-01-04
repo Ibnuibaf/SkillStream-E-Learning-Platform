@@ -102,10 +102,17 @@ Router.patch(
   (req: Request, res: Response) => userController.updateUserDetails(req, res)
 );
 Router.patch(
+  "/wallet/withdraw",
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.authUser(req, res, next),
+  (req: Request, res: Response) => userController.userWalletWithdraw(req, res)
+);
+Router.patch(
   "/payment",
   (req: Request, res: Response, next: NextFunction) =>
     authMiddleware.authUser(req, res, next),
   (req: Request, res: Response) => stripePayments.paymentIntent(req, res)
 );
+
 
 export default Router;

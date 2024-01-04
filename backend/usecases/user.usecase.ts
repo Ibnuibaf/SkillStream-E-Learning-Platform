@@ -631,6 +631,32 @@ class UserUsecase {
       };
     }
   }
+  async userWalletWithdraw(details: any) {
+    try {
+      let { user,amount } = details;
+      // console.log(user,details);
+      const response = await this.userRepository.userWalletWithdraw(
+        user,
+        amount
+      );
+      // console.log(response);
+      return {
+        status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
+        data: {
+          success: response.success,
+          message: response.message,
+        },
+      };
+    } catch (error) {
+      return {
+        status: HttpStatus.ServerError,
+        data: {
+          success: false,
+          message: "server error",
+        },
+      };
+    }
+  }
   async updateUser(details: any) {
     try {
       const { _id } = details;

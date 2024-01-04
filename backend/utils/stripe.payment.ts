@@ -24,8 +24,7 @@ class StripePayments {
       res
         .status(HttpStatus.ServerError)
         .send({ success: false, message: "Course already purchased" });
-    }else{
-
+    } else {
       const session = await stripe.checkout.sessions.create({
         line_items: [
           {
@@ -43,25 +42,29 @@ class StripePayments {
           },
         ],
         mode: "payment",
-        success_url: `http://localhost:5173/purchase?success=true&userId=${userId}&courseId=${course._id}&price=${course.price}`,
+        success_url: `http://localhost:5173/purchase?success=true&userId=${userId}&courseId=${
+          course._id
+        }&price=${Math.floor(
+          course.price - (course.offer * course.price) / 100
+        )}`,
         cancel_url: `http://localhost:5173/purchase?canceled=true`,
       });
-  
+
       res.send({ url: session.url });
     }
   }
-  async paymentIntent(req:Request,res:Response){
-    const {instructor,user}=req.body
-    const payment=await stripe.paymentIntents.create({
+  async paymentIntent(req: Request, res: Response) {
+    const { instructor, user } = req.body;
+    const payment = await stripe.paymentIntents.create({
       amount: 130,
       currency: "INR",
-      automatic_payment_methods:{
-        enabled:true
-      }
-    })
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    });
     res.send({
-      clientSecret:payment.client_secret
-    })
+      clientSecret: payment.client_secret,
+    });
   }
 }
 

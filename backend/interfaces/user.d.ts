@@ -4,6 +4,15 @@ interface ILearning {
   course: ObjectId;
   progress: ObjectId[];
 }
+interface IWallet {
+  balance: number;
+  transactions: {
+    date: Date;
+    amount: string | number;
+    type: string;
+    remark: string;
+  }[];
+}
 interface IUser {
   id: string;
   name?: string;
@@ -13,9 +22,11 @@ interface IUser {
   avatar?: string;
   role?: string;
   isBlock?: boolean;
-  verification?:object;
-  verified?:boolean
-  learnings:ILearning[]
+  verification?: object;
+  verified?: boolean;
+  learnings: ILearning[];
+  teachings: ObjectId[] | string[];
+  wallet:IWallet
 }
 
 export default IUser;

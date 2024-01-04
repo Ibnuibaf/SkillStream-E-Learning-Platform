@@ -7,6 +7,7 @@ import courseRoute from "./routes/course.route.";
 import orderRoute from "./routes/order.route";
 import communityRoute from "./routes/community.route";
 import personalchatRoute from "./routes/personalchat.route";
+import paymentRoute from "./routes/payment.route";
 // import configureSocketIO from './utils/socket.utils';
 import SocketUtils from "./utils/socket.utils";
 import CommunityRepository from "./repositories/community.repository";
@@ -29,6 +30,7 @@ app.use("/api/course", courseRoute);
 app.use("/api/order", orderRoute);
 app.use("/api/community", communityRoute);
 app.use("/api/personal", personalchatRoute);
+app.use("/api/payment", paymentRoute);
 server.listen(3000, () => {
   console.log("Server listening on http://localhost:3000/");
   connectDB();

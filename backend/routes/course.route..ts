@@ -11,7 +11,11 @@ const userRepository = new UserRepository();
 const authMiddleware = new AuthMiddleware(userRepository);
 const courseRepository = new CourseRepository();
 const communityRepository = new CommunityRepository();
-const courseUsecase = new CourseUsecase(courseRepository, communityRepository);
+const courseUsecase = new CourseUsecase(
+  courseRepository,
+  communityRepository,
+  userRepository
+);
 const courseController = new CourseController(courseUsecase);
 
 Router.get("/", (req: Request, res: Response) =>
@@ -28,8 +32,7 @@ Router.get(
   "/admin",
   (req: Request, res: Response, next: NextFunction) =>
     authMiddleware.authUser(req, res, next),
-  (req: Request, res: Response) =>
-    courseController.getCourses(req, res)
+  (req: Request, res: Response) => courseController.getCourses(req, res)
 );
 Router.post(
   "/create",

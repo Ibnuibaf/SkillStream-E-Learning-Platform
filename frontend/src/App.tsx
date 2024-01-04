@@ -27,6 +27,8 @@ import InstructorCommunitiesPage from "./pages/InstructorCommunitiesPage";
 import PersonalChatPage from "./pages/PeronalChatPage"
 import InstructorStudentsList from "./pages/InstructorStudentsList";
 import InstructorChatPage from "./pages/InstructorChatPage";
+import WithdrawalPage from "./pages/WithdrawalPage";
+import AdminPaymentsPage from "./pages/AdminPaymentsPage";
 function App() {
   const dispatch:AppDispatch=useDispatch()
   const token = localStorage.getItem("SkillStreamToken");
@@ -56,6 +58,7 @@ function App() {
           <Route path="/courses" element={<CoursesPage/>}/>
           <Route path="/mylearning" element={<MyLearningPage/>}/>
           <Route path="/profile" element={<ProfilePage/>}/>
+          <Route path="/mywithdrawals" element={<WithdrawalPage/>}/>
           <Route path="/personal/chat" element={<PersonalChatPage />}/>
           <Route path="/instructor" element={<InstructorHomePage/>}/>
           <Route path="/instructor/courses" element={<InstructorCoursePage/>}/>
@@ -67,6 +70,7 @@ function App() {
           <Route path="/admin/instructors" element={<AdminInstructorPage/>}/>
           <Route path="/admin/categories" element={<AdminCategoryPage/>}/>
           <Route path="/admin/courses" element={<AdminCoursePage/>}/>
+          <Route path="/admin/payments" element={<AdminPaymentsPage/>}/>
           <Route path="/purchase" element={<PurchaseConfirmPage/>}/>
           <Route path="/community" element={<CommunityPage/>}/>
         </Routes>
