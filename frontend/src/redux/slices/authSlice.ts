@@ -9,6 +9,7 @@ interface AuthState {
 interface ILearning {
   course: string;
   progress: string[];
+  certificate:boolean
 }
 interface IWallet {
   balance: string | number;

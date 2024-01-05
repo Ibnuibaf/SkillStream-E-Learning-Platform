@@ -151,6 +151,17 @@ class UserController {
       });
     }
   }
+  async learningCertify(req: Request, res: Response) {
+    try {
+      const response = await this.userUsecase.learningCertify(req.body,req.headers["authorization"] as string);
+      res.status(response.status).send(response.data);
+    } catch (error) {
+      res.status(500).send({
+        success: false,
+        message: "server error",
+      });
+    }
+  }
   async updateRole(req: Request, res: Response) {
     try {
       const response = await this.userUsecase.updateRole(req.body);

@@ -71,15 +71,7 @@ Router.get(
 Router.post("/register", (req: Request, res: Response) =>
   userController.createUser(req, res)
 );
-// Router.get("/google", (req: Request, res: Response) =>
-//   passport.authenticate("google", ["profile", "email"] as any)
-// );
-// Router.get("/google/callback", (req: Request, res: Response) =>
-//   passport.authenticate("google",{
-//     successRedirect: "http://localhost:5173",
-//     failureRedirect:"http://localhost:5173/login"
-//   })
-// );
+
 Router.post("/otp", (req: Request, res: Response) =>
   userController.sendOTP(req, res)
 );
@@ -108,11 +100,18 @@ Router.patch(
   (req: Request, res: Response) => userController.userWalletWithdraw(req, res)
 );
 Router.patch(
+  "/learning/certify",
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.authUser(req, res, next),
+  (req: Request, res: Response) => userController.learningCertify(req, res)
+);
+Router.patch(
   "/payment",
   (req: Request, res: Response, next: NextFunction) =>
     authMiddleware.authUser(req, res, next),
   (req: Request, res: Response) => stripePayments.paymentIntent(req, res)
 );
+
 
 
 export default Router;

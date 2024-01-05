@@ -67,9 +67,9 @@ class UserUsecase {
       };
     }
   }
-  async getInstructors(query:any) {
+  async getInstructors(query: any) {
     try {
-      const {id}=query
+      const { id } = query;
       const response = await this.userRepository.getInstructors(id);
       return {
         status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
@@ -89,9 +89,9 @@ class UserUsecase {
       };
     }
   }
-  async getStudents(query:any) {
+  async getStudents(query: any) {
     try {
-      const {id}=query
+      const { id } = query;
       const response = await this.userRepository.getStudents(id);
       return {
         status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
@@ -196,7 +196,7 @@ class UserUsecase {
             data: {
               success: false,
               message: "Account Exist already",
-            }
+            },
           };
         }
 
@@ -633,13 +633,35 @@ class UserUsecase {
   }
   async userWalletWithdraw(details: any) {
     try {
-      let { user,amount } = details;
+      let { user, amount } = details;
       // console.log(user,details);
       const response = await this.userRepository.userWalletWithdraw(
         user,
         amount
       );
       // console.log(response);
+      return {
+        status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
+        data: {
+          success: response.success,
+          message: response.message,
+        },
+      };
+    } catch (error) {
+      return {
+        status: HttpStatus.ServerError,
+        data: {
+          success: false,
+          message: "server error",
+        },
+      };
+    }
+  }
+  async learningCertify(details: any,token:string) {
+    try {
+      const user = this.decodeToken(token);
+      let { learning } = details;
+      const response = await this.userRepository.learningCertify(user.id,learning);
       return {
         status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {

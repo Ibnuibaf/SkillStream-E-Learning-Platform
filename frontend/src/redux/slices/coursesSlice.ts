@@ -42,7 +42,7 @@ interface ICoursesType {
   mcq:IMCQ[]
   announcements: string[];
   coupons: ICouponType[];
-  reviews?: IReviews[];
+  reviews: IReviews[];
   price: number;
   offer: number;
   instructor: { name: string; _id: string } | string;

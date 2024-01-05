@@ -40,6 +40,10 @@ const userSchema = new mongoose.Schema<IUser>({
           ref: "Course",
         },
       ],
+      certificate:{
+        type:Boolean,
+        default:false
+      }
     },
   ],
   teachings: [

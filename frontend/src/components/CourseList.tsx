@@ -53,7 +53,7 @@ interface ICourse {
   announcements: string[];
   coupons: ICoupon[];
   price: number;
-  reviews?: IReviews[];
+  reviews: IReviews[];
   offer: number;
   isApproved?: boolean;
   isBlock?: boolean;
@@ -78,6 +78,7 @@ function CourseList() {
     category: "",
     cover: "",
     lessons: [],
+    reviews:[],
     mcq: [],
     instructor: "",
     announcements: [],
@@ -473,9 +474,9 @@ function CourseList() {
           <div className="grid mt-5 grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-7">
             {selectedCategory.id
               ? courses.map((course) =>
-                  (typeof courseDetails.category === "object"
-                    ? courseDetails.category._id
-                    : courseDetails.category) == selectedCategory.id &&
+                  (typeof course.category === "object"
+                    ? course.category._id
+                    : course.category) == selectedCategory.id &&
                   !course.isBlock &&
                   course.isApproved ? (
                     <div
@@ -503,11 +504,65 @@ function CourseList() {
                               {course.lessons.length}x Lesson
                             </p>
                           </div>
-                          <div className="flex items-center">
-                            <IoMdStar size={16} color="orange" />
-                            <IoMdStar size={16} color="orange" />
-                            <IoMdStar size={16} color="orange" />
-                            <IoMdStar size={16} color="orange" />
+                          <div className="flex justify-end">
+                            {course.reviews.reduce(
+                              (sum, review) => sum + review.rating,
+                              0
+                            ) /
+                              course.reviews?.length ==
+                            1 ? (
+                              <div className="flex items-center">
+                                <IoMdStar size={18} color="orange" />
+                              </div>
+                            ) : course.reviews.reduce(
+                                (sum, review) => sum + review.rating,
+                                0
+                              ) /
+                                course.reviews?.length ==
+                              2 ? (
+                              <div className="flex items-center">
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                              </div>
+                            ) : course.reviews.reduce(
+                                (sum, review) => sum + review.rating,
+                                0
+                              ) /
+                                course.reviews?.length ==
+                              3 ? (
+                              <div className="flex items-center">
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                              </div>
+                            ) : course.reviews.reduce(
+                                (sum, review) => sum + review.rating,
+                                0
+                              ) /
+                                course.reviews?.length ==
+                              4 ? (
+                              <div className="flex items-center">
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                              </div>
+                            ) : course.reviews.reduce(
+                                (sum, review) => sum + review.rating,
+                                0
+                              ) /
+                                course.reviews?.length ==
+                              5 ? (
+                              <div className="flex items-center">
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                              </div>
+                            ) : (
+                              ""
+                            )}
                           </div>
                         </div>
                         <div className="min-h-[8vh] pt-1">
@@ -531,11 +586,11 @@ function CourseList() {
                           <img src="" alt="" />
                           <div className="space-y-[-4px]">
                             <p className="text-lg">
-                              {typeof courseDetails.instructor == "object"
-                                ? courseDetails.instructor.name
-                                : courseDetails.instructor}
+                              {typeof course.instructor == "object"
+                                ? course.instructor.name
+                                : course.instructor}
                             </p>
-                            <p className="text-xs italic">English Teacher</p>
+                            {/* <p className="text-xs italic">English Teacher</p> */}
                           </div>
                         </div>
                         <div>
@@ -546,9 +601,9 @@ function CourseList() {
                                 : "bg-pink-500"
                             } px-2 rounded-full text-white text-xs py-1 font-medium`}
                           >
-                            {typeof courseDetails.category === "object"
-                              ? courseDetails.category.name
-                              : courseDetails.category}
+                            {typeof course.category === "object"
+                              ? course.category.name
+                              : course.category}
                           </p>
                         </div>
                       </div>
@@ -584,11 +639,65 @@ function CourseList() {
                               {course.lessons.length}x Lesson
                             </p>
                           </div>
-                          <div className="flex items-center">
-                            <IoMdStar size={16} color="orange" />
-                            <IoMdStar size={16} color="orange" />
-                            <IoMdStar size={16} color="orange" />
-                            <IoMdStar size={16} color="orange" />
+                          <div className="flex justify-end">
+                            {course.reviews.reduce(
+                              (sum, review) => sum + review.rating,
+                              0
+                            ) /
+                              course.reviews?.length ==
+                            1 ? (
+                              <div className="flex items-center">
+                                <IoMdStar size={18} color="orange" />
+                              </div>
+                            ) : course.reviews.reduce(
+                                (sum, review) => sum + review.rating,
+                                0
+                              ) /
+                                course.reviews?.length ==
+                              2 ? (
+                              <div className="flex items-center">
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                              </div>
+                            ) : course.reviews.reduce(
+                                (sum, review) => sum + review.rating,
+                                0
+                              ) /
+                                course.reviews?.length ==
+                              3 ? (
+                              <div className="flex items-center">
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                              </div>
+                            ) : course.reviews.reduce(
+                                (sum, review) => sum + review.rating,
+                                0
+                              ) /
+                                course.reviews?.length ==
+                              4 ? (
+                              <div className="flex items-center">
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                              </div>
+                            ) : course.reviews.reduce(
+                                (sum, review) => sum + review.rating,
+                                0
+                              ) /
+                                course.reviews?.length ==
+                              5 ? (
+                              <div className="flex items-center">
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                              </div>
+                            ) : (
+                              ""
+                            )}
                           </div>
                         </div>
                         <div className="min-h-[8vh] pt-1">
@@ -612,12 +721,12 @@ function CourseList() {
                           <img src="" alt="" />
                           <div className="space-y-[-4px]">
                             <p className="text-lg">
-                              {typeof courseDetails.instructor == "object"
-                                ? courseDetails.instructor.name
-                                : courseDetails.instructor}
+                              {typeof course.instructor == "object"
+                                ? course.instructor.name
+                                : course.instructor}
                             </p>
 
-                            <p className="text-xs italic">English Teacher</p>
+                            {/* <p className="text-xs italic">English Teacher</p> */}
                           </div>
                         </div>
                         <div>
@@ -628,9 +737,9 @@ function CourseList() {
                                 : "bg-pink-500"
                             } px-2 rounded-full text-white text-xs py-1 font-medium`}
                           >
-                            {typeof courseDetails.category === "object"
-                              ? courseDetails.category.name
-                              : courseDetails.category}
+                            {typeof course.category === "object"
+                              ? course.category.name
+                              : course.category}
                           </p>
                         </div>
                       </div>

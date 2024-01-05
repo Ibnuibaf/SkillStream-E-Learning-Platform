@@ -3,6 +3,7 @@ import { ObjectId } from "mongoose";
 interface ILearning {
   course: ObjectId;
   progress: ObjectId[];
+  certificate:boolean
 }
 interface IWallet {
   balance: number;

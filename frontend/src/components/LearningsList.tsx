@@ -11,6 +11,8 @@ import { LuMoveLeft } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import InstructorsList from "./InstructorsList";
 import McqTestTab from "./McqTestTab";
+import { useSelector } from "react-redux";
+import { selectUser } from "../redux/slices/authSlice";
 
 interface ILesson {
   _id?: string;
@@ -23,7 +25,11 @@ interface IMCQ {
   options: string[];
   answer: number;
 }
-
+interface IReviews {
+  user: { name: string; _id: string };
+  rating: number;
+  feedback: string;
+}
 interface ICourse {
   _id: string;
   title: string;
@@ -33,8 +39,9 @@ interface ICourse {
   category: { name: string; _id: string } | string;
   instructor: { name: string; _id?: string } | string;
   cover: string;
-  mcq:IMCQ[]
+  mcq: IMCQ[];
   lessons: ILesson[];
+  reviews: IReviews[];
   announcements: string[];
   coupons?: string[];
   price: number;
@@ -43,12 +50,15 @@ interface ICourse {
   isBlock: boolean;
 }
 interface ILearnings {
+  _id: string;
   course: ICourse;
   progress: string[];
+  certificate: boolean;
 }
 
 function LearningsList() {
   const navigate = useNavigate();
+  const user = useSelector(selectUser).user;
   const [learnings, setLearnings] = useState<ILearnings[]>();
   const [view, setView] = useState("courses");
   const [isLearningsView, setIsLearningsView] = useState(false);
@@ -99,13 +109,13 @@ function LearningsList() {
               type="button"
               className="border flex items-center gap-1 rounded px-2 font-medium bg-gray-300 text-gray-800 hover:bg-gray-500 hover:text-white"
               onClick={() => {
-                setIsTestView(false)
+                setIsTestView(false);
               }}
             >
               <LuMoveLeft /> Back
             </button>
           </div>
-          <McqTestTab learning={learningsDetails as ILearnings}/>
+          <McqTestTab learning={learningsDetails as ILearnings} />
         </>
       ) : isLearningsView ? (
         <>
@@ -271,6 +281,15 @@ function LearningsList() {
             >
               Instructors
             </button>
+            <button
+              type="button"
+              className={`border-2 px-4 py-1 text-lg hover:bg-white hover:text-black transition duration-300 ${
+                view == "certificates" ? "bg-white text-black" : ""
+              }`}
+              onClick={() => setView("certificates")}
+            >
+              Instructors
+            </button>
           </div>
           <div className="">
             {view == "communities" ? (
@@ -329,11 +348,65 @@ function LearningsList() {
                             x Lesson
                           </p>
                         </div>
-                        <div className="flex items-center">
-                          <IoMdStar size={16} color="orange" />
-                          <IoMdStar size={16} color="orange" />
-                          <IoMdStar size={16} color="orange" />
-                          <IoMdStar size={16} color="orange" />
+                        <div className="flex justify-end">
+                          {course.course.reviews.reduce(
+                            (sum, review) => sum + review.rating,
+                            0
+                          ) /
+                            course.course.reviews?.length ==
+                          1 ? (
+                            <div className="flex items-center">
+                              <IoMdStar size={18} color="orange" />
+                            </div>
+                          ) : course.course.reviews.reduce(
+                              (sum, review) => sum + review.rating,
+                              0
+                            ) /
+                              course.course.reviews?.length ==
+                            2 ? (
+                            <div className="flex items-center">
+                              <IoMdStar size={18} color="orange" />
+                              <IoMdStar size={18} color="orange" />
+                            </div>
+                          ) : course.course.reviews.reduce(
+                              (sum, review) => sum + review.rating,
+                              0
+                            ) /
+                              course.course.reviews?.length ==
+                            3 ? (
+                            <div className="flex items-center">
+                              <IoMdStar size={18} color="orange" />
+                              <IoMdStar size={18} color="orange" />
+                              <IoMdStar size={18} color="orange" />
+                            </div>
+                          ) : course.course.reviews.reduce(
+                              (sum, review) => sum + review.rating,
+                              0
+                            ) /
+                              course.course.reviews?.length ==
+                            4 ? (
+                            <div className="flex items-center">
+                              <IoMdStar size={18} color="orange" />
+                              <IoMdStar size={18} color="orange" />
+                              <IoMdStar size={18} color="orange" />
+                              <IoMdStar size={18} color="orange" />
+                            </div>
+                          ) : course.course.reviews.reduce(
+                              (sum, review) => sum + review.rating,
+                              0
+                            ) /
+                              course.course.reviews?.length ==
+                            5 ? (
+                            <div className="flex items-center">
+                              <IoMdStar size={18} color="orange" />
+                              <IoMdStar size={18} color="orange" />
+                              <IoMdStar size={18} color="orange" />
+                              <IoMdStar size={18} color="orange" />
+                              <IoMdStar size={18} color="orange" />
+                            </div>
+                          ) : (
+                            ""
+                          )}
                         </div>
                       </div>
                       <div className="min-h-[8vh] pt-1">
@@ -381,8 +454,140 @@ function LearningsList() {
                   </div>
                 ))}
               </div>
-            ) : (
+            ) : view == "instructors" ? (
               <InstructorsList />
+            ) : (
+              <div className="px-10">
+                <div className="text-2xl font-semibold my-3">
+                  <p>My Certificates</p>
+                </div>
+                <div className=" max-h-[60vh] overflow-y-auto overflow-x-hidden grid grid-cols-2 gap-4">
+                  {learnings?.map((learning) => (
+                    <div className="border-2  text-start flex rounded-lg">
+                      <div className="h-64 w-96">
+                        <img
+                          src={learning.course.cover}
+                          alt=""
+                          className="h-full w-full rounded-l-lg"
+                        />
+                      </div>
+                      <div className="px-4 py-2 flex flex-col justify-between">
+                        <div>
+                          <div className="flex justify-end">
+                            {learning.course.reviews.reduce(
+                              (sum, review) => sum + review.rating,
+                              0
+                            ) /
+                              learning.course.reviews?.length ==
+                            1 ? (
+                              <div className="flex items-center">
+                                <IoMdStar size={18} color="orange" />
+                              </div>
+                            ) : learning.course.reviews.reduce(
+                                (sum, review) => sum + review.rating,
+                                0
+                              ) /
+                                learning.course.reviews?.length ==
+                              2 ? (
+                              <div className="flex items-center">
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                              </div>
+                            ) : learning.course.reviews.reduce(
+                                (sum, review) => sum + review.rating,
+                                0
+                              ) /
+                                learning.course.reviews?.length ==
+                              3 ? (
+                              <div className="flex items-center">
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                              </div>
+                            ) : learning.course.reviews.reduce(
+                                (sum, review) => sum + review.rating,
+                                0
+                              ) /
+                                learning.course.reviews?.length ==
+                              4 ? (
+                              <div className="flex items-center">
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                              </div>
+                            ) : learning.course.reviews.reduce(
+                                (sum, review) => sum + review.rating,
+                                0
+                              ) /
+                                learning.course.reviews?.length ==
+                              5 ? (
+                              <div className="flex items-center">
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                                <IoMdStar size={18} color="orange" />
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                          <div className="py-2">
+                            <button className="w-full bg-pink-600 rounded-full hover:bg-pink-600/80">
+                              Download Certificate
+                            </button>
+                          </div>
+                          <p className="text-2xl truncate font-semibold font-serif">
+                            {learning.course.title}
+                          </p>
+                          <div className="flex justify-between items-end gap-2">
+                            <p className="text-lg">Certification Test: </p>
+                            <span className="text-pink-600 font-semibold text-xl">
+                              Completed
+                            </span>
+                          </div>
+                          <div className="flex gap-2">
+                            <p>Attendee name:</p>
+                            <span className="font-medium">
+                              {user?.name.toUpperCase()}
+                            </span>
+                          </div>
+                        </div>
+                        <div>
+                          <p>Course Progress:</p>
+                          <div className="flex items-center  my-2 px-3 ">
+                            <div className="mt-1 rounded-full bg-gray-500 w-full">
+                              <p
+                                className="bg-pink-600 text-white rounded-full  text-center font-medium text-xs"
+                                style={{
+                                  width: `${Math.min(
+                                    100,
+                                    Math.floor(
+                                      (learning.progress.length /
+                                        learning.course.lessons.length) *
+                                        100
+                                    )
+                                  )}%`,
+                                }}
+                              >
+                                {`${Math.min(
+                                  100,
+                                  Math.floor(
+                                    (learning.progress.length /
+                                      learning.course.lessons.length) *
+                                      100
+                                  )
+                                )}%`}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
           </div>
         </>

@@ -310,6 +310,31 @@ class UserRepository {
       };
     }
   }
+  async learningCertify(userId: string, learning: string) {
+    try {
+      const user = await Users.updateOne(
+        { _id: userId, "learnings._id": learning },
+        { $set: { "learnings.$.certificate": true } },
+        { new: true }
+      );
+      if(!user){
+        return {
+          success: true,
+          message: "Failed to update certificate",
+        };
+      }
+      return {
+        success: true,
+        message: "Updated the certificate of user",
+        data: user,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to update ${error}`,
+      };
+    }
+  }
   async updateUserTeachings(userId: string, updates: any) {
     try {
       const userDetails = await Users.findById(userId);
