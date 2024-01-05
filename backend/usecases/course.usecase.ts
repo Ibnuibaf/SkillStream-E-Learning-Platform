@@ -53,7 +53,7 @@ class CourseUsecase {
           },
         };
       }
-      await this.userRepository.updateUserTeachings(user.id,res.data._id)
+      await this.userRepository.updateUserTeachings(user.id, res.data._id);
       const response = await this.communityRepository.createCommunity({
         course: res.data._id,
         chats: [],
@@ -87,6 +87,42 @@ class CourseUsecase {
           success: res.success,
           message: res.message,
           courses: res.courses,
+        },
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        data: {
+          success: false,
+          message: "server error",
+        },
+      };
+    }
+  }
+  async getTopCourse() {
+    try {
+      const res = await this.courseRepository.getTopCourse();
+      if (!res.courses) {
+        return {
+          status: res.success ? 200 : 500,
+          data: {
+            success: res.success,
+            message: res.message,
+          },
+        };
+      }
+      let topCourse=res.courses[0];
+      res.courses.forEach((course) => {
+        if(course.enrollers.length>topCourse.enrollers.length){
+          topCourse=course
+        }
+      });
+      return {
+        status: res.success ? 200 : 500,
+        data: {
+          success: res.success,
+          message: res.message,
+          topCourse
         },
       };
     } catch (error) {

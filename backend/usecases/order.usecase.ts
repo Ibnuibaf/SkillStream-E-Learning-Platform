@@ -1,3 +1,4 @@
+import { HttpStatus } from "../enums/HttpStatus.enum";
 import CourseRepository from "../repositories/course.repository";
 import OrderRepository from "../repositories/order.repository";
 import UserRepository from "../repositories/user.repository";
@@ -29,7 +30,25 @@ class OrderUsecase {
           },
         };
       }
-      const orderRes = await this.orderRepository.createOrder(body);
+      const response = await this.courseRepository.findCourse(body.courseId);
+      if (!response.course) {
+        return {
+          status: 500,
+          data: {
+            success: false,
+            message: "No Course Found",
+          },
+        };
+      }
+      const orderRes = await this.orderRepository.createOrder({
+        userId: body.userId,
+        courseId: body.courseId,
+        price: Math.floor(
+          response.course?.price -
+            (response.course?.offer * response.course?.price) / 100
+        ) as number,
+        date: new Date(),
+      });
       if (!orderRes.order) {
         return {
           status: 500,
@@ -78,6 +97,49 @@ class OrderUsecase {
         data: {
           success: true,
           message: "Order Saved",
+        },
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        data: {
+          success: false,
+          message: "server error",
+        },
+      };
+    }
+  }
+  async getOrders() {
+    try {
+      const res = await this.orderRepository.getOrders();
+      return {
+        status: res.success ? HttpStatus.Success : HttpStatus.ServerError,
+        data: {
+          success: res.success,
+          message: res.message,
+          orders: res.orders
+        },
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        data: {
+          success: false,
+          message: "server error",
+        },
+      };
+    }
+  }
+  async getMonthlySales() {
+    try {
+      const res = await this.orderRepository.getMonthlySales();
+      return {
+        status: res.success ? HttpStatus.Success : HttpStatus.ServerError,
+        data: {
+          success: res.success,
+          message: res.message,
+          monthlyData: res.monthlyData,
+          monthlyCount: res.monthlyCount
         },
       };
     } catch (error) {

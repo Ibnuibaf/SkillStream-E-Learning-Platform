@@ -186,6 +186,7 @@ function LearningsList() {
                 <button
                   className={`px-6 py-2 border-2 hover:bg-white hover:text-black `}
                   onClick={() => setIsTestView(true)}
+                  disabled={learningsDetails?.certificate}
                 >
                   Take Certificate
                 </button>
@@ -462,130 +463,133 @@ function LearningsList() {
                   <p>My Certificates</p>
                 </div>
                 <div className=" max-h-[60vh] overflow-y-auto overflow-x-hidden grid grid-cols-2 gap-4">
-                  {learnings?.map((learning) => (
-                    <div className="border-2  text-start flex rounded-lg">
-                      <div className="h-64 w-96">
-                        <img
-                          src={learning.course.cover}
-                          alt=""
-                          className="h-full w-full rounded-l-lg"
-                        />
-                      </div>
-                      <div className="px-4 py-2 flex flex-col justify-between">
-                        <div>
-                          <div className="flex justify-end">
-                            {learning.course.reviews.reduce(
-                              (sum, review) => sum + review.rating,
-                              0
-                            ) /
-                              learning.course.reviews?.length ==
-                            1 ? (
-                              <div className="flex items-center">
-                                <IoMdStar size={18} color="orange" />
-                              </div>
-                            ) : learning.course.reviews.reduce(
-                                (sum, review) => sum + review.rating,
-                                0
-                              ) /
-                                learning.course.reviews?.length ==
-                              2 ? (
-                              <div className="flex items-center">
-                                <IoMdStar size={18} color="orange" />
-                                <IoMdStar size={18} color="orange" />
-                              </div>
-                            ) : learning.course.reviews.reduce(
-                                (sum, review) => sum + review.rating,
-                                0
-                              ) /
-                                learning.course.reviews?.length ==
-                              3 ? (
-                              <div className="flex items-center">
-                                <IoMdStar size={18} color="orange" />
-                                <IoMdStar size={18} color="orange" />
-                                <IoMdStar size={18} color="orange" />
-                              </div>
-                            ) : learning.course.reviews.reduce(
-                                (sum, review) => sum + review.rating,
-                                0
-                              ) /
-                                learning.course.reviews?.length ==
-                              4 ? (
-                              <div className="flex items-center">
-                                <IoMdStar size={18} color="orange" />
-                                <IoMdStar size={18} color="orange" />
-                                <IoMdStar size={18} color="orange" />
-                                <IoMdStar size={18} color="orange" />
-                              </div>
-                            ) : learning.course.reviews.reduce(
-                                (sum, review) => sum + review.rating,
-                                0
-                              ) /
-                                learning.course.reviews?.length ==
-                              5 ? (
-                              <div className="flex items-center">
-                                <IoMdStar size={18} color="orange" />
-                                <IoMdStar size={18} color="orange" />
-                                <IoMdStar size={18} color="orange" />
-                                <IoMdStar size={18} color="orange" />
-                                <IoMdStar size={18} color="orange" />
-                              </div>
-                            ) : (
-                              ""
-                            )}
+                  {learnings?.map(
+                    (learning) =>
+                      learning.certificate && (
+                        <div className="border-2  text-start flex rounded-lg">
+                          <div className="h-64 w-96">
+                            <img
+                              src={learning.course.cover}
+                              alt=""
+                              className="h-full w-full rounded-l-lg"
+                            />
                           </div>
-                          <div className="py-2">
-                            <button className="w-full bg-pink-600 rounded-full hover:bg-pink-600/80">
-                              Download Certificate
-                            </button>
-                          </div>
-                          <p className="text-2xl truncate font-semibold font-serif">
-                            {learning.course.title}
-                          </p>
-                          <div className="flex justify-between items-end gap-2">
-                            <p className="text-lg">Certification Test: </p>
-                            <span className="text-pink-600 font-semibold text-xl">
-                              Completed
-                            </span>
-                          </div>
-                          <div className="flex gap-2">
-                            <p>Attendee name:</p>
-                            <span className="font-medium">
-                              {user?.name.toUpperCase()}
-                            </span>
-                          </div>
-                        </div>
-                        <div>
-                          <p>Course Progress:</p>
-                          <div className="flex items-center  my-2 px-3 ">
-                            <div className="mt-1 rounded-full bg-gray-500 w-full">
-                              <p
-                                className="bg-pink-600 text-white rounded-full  text-center font-medium text-xs"
-                                style={{
-                                  width: `${Math.min(
-                                    100,
-                                    Math.floor(
-                                      (learning.progress.length /
-                                        learning.course.lessons.length) *
-                                        100
-                                    )
-                                  )}%`,
-                                }}
-                              >
-                                {`${Math.min(
-                                  100,
-                                  Math.floor(
-                                    (learning.progress.length /
-                                      learning.course.lessons.length) *
-                                      100
-                                  )
-                                )}%`}
+                          <div className="px-4 py-2 flex flex-col justify-between">
+                            <div>
+                              <div className="flex justify-end">
+                                {learning.course.reviews.reduce(
+                                  (sum, review) => sum + review.rating,
+                                  0
+                                ) /
+                                  learning.course.reviews?.length ==
+                                1 ? (
+                                  <div className="flex items-center">
+                                    <IoMdStar size={18} color="orange" />
+                                  </div>
+                                ) : learning.course.reviews.reduce(
+                                    (sum, review) => sum + review.rating,
+                                    0
+                                  ) /
+                                    learning.course.reviews?.length ==
+                                  2 ? (
+                                  <div className="flex items-center">
+                                    <IoMdStar size={18} color="orange" />
+                                    <IoMdStar size={18} color="orange" />
+                                  </div>
+                                ) : learning.course.reviews.reduce(
+                                    (sum, review) => sum + review.rating,
+                                    0
+                                  ) /
+                                    learning.course.reviews?.length ==
+                                  3 ? (
+                                  <div className="flex items-center">
+                                    <IoMdStar size={18} color="orange" />
+                                    <IoMdStar size={18} color="orange" />
+                                    <IoMdStar size={18} color="orange" />
+                                  </div>
+                                ) : learning.course.reviews.reduce(
+                                    (sum, review) => sum + review.rating,
+                                    0
+                                  ) /
+                                    learning.course.reviews?.length ==
+                                  4 ? (
+                                  <div className="flex items-center">
+                                    <IoMdStar size={18} color="orange" />
+                                    <IoMdStar size={18} color="orange" />
+                                    <IoMdStar size={18} color="orange" />
+                                    <IoMdStar size={18} color="orange" />
+                                  </div>
+                                ) : learning.course.reviews.reduce(
+                                    (sum, review) => sum + review.rating,
+                                    0
+                                  ) /
+                                    learning.course.reviews?.length ==
+                                  5 ? (
+                                  <div className="flex items-center">
+                                    <IoMdStar size={18} color="orange" />
+                                    <IoMdStar size={18} color="orange" />
+                                    <IoMdStar size={18} color="orange" />
+                                    <IoMdStar size={18} color="orange" />
+                                    <IoMdStar size={18} color="orange" />
+                                  </div>
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                              <div className="py-2">
+                                <button className="w-full bg-pink-600 rounded-full hover:bg-pink-600/80">
+                                  Download Certificate
+                                </button>
+                              </div>
+                              <p className="text-2xl truncate font-semibold font-serif">
+                                {learning.course.title}
                               </p>
+                              <div className="flex justify-between items-end gap-2">
+                                <p className="text-lg">Certification Test: </p>
+                                <span className="text-pink-600 font-semibold text-xl">
+                                  Completed
+                                </span>
+                              </div>
+                              <div className="flex gap-2">
+                                <p>Attendee name:</p>
+                                <span className="font-medium">
+                                  {user?.name.toUpperCase()}
+                                </span>
+                              </div>
+                            </div>
+                            <div>
+                              <p>Course Progress:</p>
+                              <div className="flex items-center  my-2 px-3 ">
+                                <div className="mt-1 rounded-full bg-gray-500 w-full">
+                                  <p
+                                    className="bg-pink-600 text-white rounded-full  text-center font-medium text-xs"
+                                    style={{
+                                      width: `${Math.min(
+                                        100,
+                                        Math.floor(
+                                          (learning.progress.length /
+                                            learning.course.lessons.length) *
+                                            100
+                                        )
+                                      )}%`,
+                                    }}
+                                  >
+                                    {`${Math.min(
+                                      100,
+                                      Math.floor(
+                                        (learning.progress.length /
+                                          learning.course.lessons.length) *
+                                          100
+                                      )
+                                    )}%`}
+                                  </p>
+                                </div>
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                  ))}
+                      )
+                  )}
                 </div>
               </div>
             )}

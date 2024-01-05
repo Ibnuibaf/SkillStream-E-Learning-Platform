@@ -1,10 +1,10 @@
 import { ObjectId } from "mongoose"
 
 interface IOrder{
-    _id:string|ObjectId
     userId:string|ObjectId
     courseId:string|ObjectId
     price:number
+    date:Date
 }
 
 export default IOrder

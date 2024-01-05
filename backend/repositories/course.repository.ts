@@ -35,12 +35,47 @@ class CourseRepository {
             .populate("instructor", "name")
             .populate("category", "name")
             .populate("reviews.user", "name");
-      console.log(courses);
+      // console.log(courses);
 
       return {
         success: true,
         message: "Fetch all caetgories",
         courses,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to fetch ${error}`,
+      };
+    }
+  }
+  async getTopCourse() {
+    try {
+      const courses = await Courses.find({},{title:1,enrollers:1,instructor:1})
+        .populate("instructor", "name")
+      // console.log(courses);
+
+      return {
+        success: true,
+        message: "Fetch all courses",
+        courses,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to fetch ${error}`,
+      };
+    }
+  }
+  async findCourse(id:string) {
+    try {
+      const course = await Courses.findById(id)
+      // console.log(course);
+
+      return {
+        success: true,
+        message: "Fetch course data",
+        course,
       };
     } catch (error) {
       return {
@@ -56,7 +91,10 @@ class CourseRepository {
             title: { $regex: regex, $options: "i" },
             instructor: id,
           }).populate("reviews.user", "name")
-        : await Courses.find({ instructor: id }).populate("reviews.user", "name");
+        : await Courses.find({ instructor: id }).populate(
+            "reviews.user",
+            "name"
+          );
 
       return {
         success: true,

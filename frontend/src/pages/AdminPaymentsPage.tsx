@@ -6,14 +6,14 @@ import AdminSideBar from "../components/AdminSideBar";
 function AdminPaymentsPage() {
   return (
     <div className="min-h-screen flex flex-row ">
-    <div>
-      <AdminSideBar />
+      <div>
+        <AdminSideBar />
+      </div>
+      <div className="w-full ">
+        <AdminPaymentTab />
+        <Footer />
+      </div>
     </div>
-    <div className="w-full ">
-      <AdminPaymentTab />
-      <Footer />
-    </div>
-  </div>
   );
 }
 

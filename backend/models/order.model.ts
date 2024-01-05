@@ -4,17 +4,20 @@ import IOrder from '../interfaces/order'
 const orderSchema=new mongoose.Schema<IOrder>({
     userId:{
         type:mongoose.Types.ObjectId,
-        ref:"users",
+        ref:"User",
         required:true
     },
     courseId:{
         type:mongoose.Types.ObjectId,
-        ref:"courses",
+        ref:"Course",
         required:true
     },
     price:{
         type:Number,
         required:true
+    },
+    date:{
+        type:Date,
     }
 })
 

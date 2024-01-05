@@ -33,6 +33,17 @@ class CourseController {
       });
     }
   }
+  async getTopCourse(req: Request, res: Response) {
+    try {
+      const response = await this.courseUsecase.getTopCourse();
+      res.status(response.status).send(response.data);
+    } catch (error) {
+      res.status(500).send({
+        success: false,
+        message: "server error",
+      });
+    }
+  }
 
   async getInstructorCourses(req: Request, res: Response) {
     try {

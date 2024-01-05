@@ -22,6 +22,14 @@ Router.get("/", (req: Request, res: Response) =>
   courseController.getCourses(req, res)
 );
 Router.get(
+  "/top",
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.authUser(req, res, next),
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.adminCheck(req, res, next),
+  (req: Request, res: Response) => courseController.getTopCourse(req, res)
+);
+Router.get(
   "/instructor",
   (req: Request, res: Response, next: NextFunction) =>
     authMiddleware.authUser(req, res, next),

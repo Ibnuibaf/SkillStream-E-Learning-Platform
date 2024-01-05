@@ -7,8 +7,6 @@ import OrderRepository from "../repositories/order.repository";
 import OrderUsecase from "../usecases/order.usecase";
 import OrderController from "../controllers/order.controller";
 
-
-
 const userRepository = new UserRepository();
 const stripePayments = new StripePayments(userRepository);
 const courseRepository = new CourseRepository();
@@ -23,6 +21,18 @@ const orderController = new OrderController(orderUsecase);
 
 const Router = express.Router();
 
+Router.get(
+  "/",
+  (req: Request, res: Response, next: NextFunction) => {
+    authMiddleware.authUser(req, res, next);
+  },
+  (req: Request, res: Response, next: NextFunction) => {
+    authMiddleware.adminCheck(req, res, next);
+  },
+  (req: Request, res: Response) => {
+    orderController.getOrders(req, res);
+  }
+);
 Router.post(
   "/checkout-session",
   (req: Request, res: Response, next: NextFunction) => {
@@ -39,7 +49,19 @@ Router.post(
     authMiddleware.authUser(req, res, next);
   },
   (req: Request, res: Response) => {
-    orderController.createOrder(req,res)
+    orderController.createOrder(req, res);
+  }
+);
+Router.get(
+  "/monthly-enrollment",
+  (req: Request, res: Response, next: NextFunction) => {
+    authMiddleware.authUser(req, res, next);
+  },
+  (req: Request, res: Response, next: NextFunction) => {
+    authMiddleware.adminCheck(req, res, next);
+  },
+  (req: Request, res: Response) => {
+    orderController.getMonthlySales(req, res);
   }
 );
 
