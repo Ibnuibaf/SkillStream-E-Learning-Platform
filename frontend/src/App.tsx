@@ -30,6 +30,7 @@ import InstructorChatPage from "./pages/InstructorChatPage";
 import WithdrawalPage from "./pages/WithdrawalPage";
 import AdminPaymentsPage from "./pages/AdminPaymentsPage";
 import AdminReportsPage from "./pages/AdminReportsPage";
+import SubscribeConfirmPage from "./pages/SubscribeConfirmPage";
 function App() {
   const dispatch:AppDispatch=useDispatch()
   const token = localStorage.getItem("SkillStreamToken");
@@ -74,6 +75,7 @@ function App() {
           <Route path="/admin/payments" element={<AdminPaymentsPage/>}/>
           <Route path="/admin/reports" element={<AdminReportsPage/>}/>
           <Route path="/purchase" element={<PurchaseConfirmPage/>}/>
+          <Route path="/subscribe" element={<SubscribeConfirmPage/>}/>
           <Route path="/community" element={<CommunityPage/>}/>
         </Routes>
       </GoogleOAuthProvider>

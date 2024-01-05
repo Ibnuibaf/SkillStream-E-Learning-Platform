@@ -524,13 +524,13 @@ function InstructorCourse() {
             >
               <button onClick={() => setStep(2)}>Additional</button>
             </div>
-            <div
+            {/* <div
               className={`border w-full py-2 ${
                 step == 3 ? "bg-gray-500 font-medium" : ""
               }`}
             >
               <button onClick={() => setStep(3)}>Promotion</button>
-            </div>
+            </div> */}
             <div
               className={`border w-full py-2 ${
                 step == 4 ? "bg-gray-500 font-medium" : ""

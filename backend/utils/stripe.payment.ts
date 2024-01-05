@@ -47,11 +47,34 @@ class StripePayments {
         }&price=${Math.floor(
           course.price - (course.offer * course.price) / 100
         )}`,
-        cancel_url: `http://localhost:5173/purchase?canceled=true`,
+        cancel_url: `http://localhost:5173/`,
       });
 
       res.send({ url: session.url });
     }
+  }
+  async subscribeSession(req: Request, res: Response) {
+    const { instructor, student } = req.body;
+
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          price_data: {
+            currency: "USD",
+            product_data: {
+              name: "Instructor Subscription"
+            },
+            unit_amount: 130 * 100,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: "payment",
+      success_url: `http://localhost:5173/subscribe?success=true&student=${student}&instructor=${instructor}`,
+      cancel_url: `http://localhost:5173/`,
+    });
+
+    res.send({ url: session.url });
   }
   async paymentIntent(req: Request, res: Response) {
     const { instructor, user } = req.body;

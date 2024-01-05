@@ -24,6 +24,28 @@ class PersonalchatRepository {
       };
     }
   }
+  async findPersonals() {
+    try {
+      const personalchats = await PersonalChats.find();
+      if (!personalchats) {
+        return {
+          success: false,
+          message: `server error`,
+        };
+      }
+
+      return {
+        success: true,
+        message: "Personalchat Added",
+        personalchats
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to fetch ${error}`,
+      };
+    }
+  }
   //   async getChatHistory(roomId: string) {
   //     try {
   //       const response = await PersonalChats.findOne({ course: roomId });

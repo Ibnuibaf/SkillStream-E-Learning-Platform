@@ -289,7 +289,7 @@ function LearningsList() {
               }`}
               onClick={() => setView("certificates")}
             >
-              Instructors
+              Certificates
             </button>
           </div>
           <div className="">

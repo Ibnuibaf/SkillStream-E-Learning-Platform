@@ -87,6 +87,12 @@ Router.post(
     authMiddleware.authUser(req, res, next),
   (req: Request, res: Response) => userController.updateRole(req, res)
 );
+Router.post(
+  "/subscribe-session",
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.authUser(req, res, next),
+  (req: Request, res: Response) => stripePayments.subscribeSession(req, res)
+);
 Router.patch(
   "/update",
   (req: Request, res: Response, next: NextFunction) =>

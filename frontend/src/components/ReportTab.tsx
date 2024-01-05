@@ -46,7 +46,7 @@ function ReportTab() {
                   Course
                 </th>
                 <th scope="col" className="px-6 py-3">
-                  Instructor
+                  User
                 </th>
                 <th scope="col" className="px-6 py-3">
                   Total Amount

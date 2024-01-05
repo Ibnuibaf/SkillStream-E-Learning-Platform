@@ -27,6 +27,9 @@ const PersonalchatShcema = new mongoose.Schema<IPersonalChat>({
       },
     },
   ],
+  validity:{
+    type:Date
+  }
 });
 
 const PersonalchatModel = mongoose.model("Personalchat", PersonalchatShcema);

@@ -175,7 +175,7 @@ function AdminCourse() {
   }, [dispatch]);
 
   return (
-    <div className=" p-10">
+    <div className=" p-10 min-h-screen">
       {courseDetailView ? (
         <div className="">
           <div className="flex justify-end my-2 gap-2">
@@ -252,13 +252,13 @@ function AdminCourse() {
             >
               <button onClick={() => setStep(2)}>Additional</button>
             </div>
-            <div
+            {/* <div
               className={`border w-full py-2 ${
                 step == 3 ? "bg-gray-500 font-medium" : ""
               }`}
             >
               <button onClick={() => setStep(3)}>Promotion</button>
-            </div>
+            </div> */}
             <div
               className={`border w-full py-2 ${
                 step == 4 ? "bg-gray-500 font-medium" : ""

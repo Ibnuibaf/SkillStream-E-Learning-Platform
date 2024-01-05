@@ -10,6 +10,27 @@ class PersonalchatUsecase {
   constructor(personalchatRepository: PersonalchatRepository) {
     this.personalchatRepository = personalchatRepository;
   }
+  async findPersonals() {
+    try {
+      const response = await this.personalchatRepository.findPersonals();
+      return {
+        status: response.success ? 200 : 500,
+        data: {
+          success: response.success,
+          message: response.message,
+          personalchats: response.personalchats,
+        },
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        data: {
+          success: false,
+          message: "server error",
+        },
+      };
+    }
+  }
   async findPersonalchat(
     query: { student: string; instructor: string },
     token: string
@@ -51,6 +72,35 @@ class PersonalchatUsecase {
           success: response.success,
           message: response.message,
           personalchats: response.personalchats,
+        },
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        data: {
+          success: false,
+          message: "server error",
+        },
+      };
+    }
+  }
+  async createPersonalChat(body: any) {
+    try {
+      const { student, instructor } = body;
+      const today = new Date();
+      const validity = new Date(today);
+      validity.setDate(today.getDate() + 30);
+      const response = await this.personalchatRepository.createPersonalchat({
+        student,
+        instructor,
+        chats: [],
+        validity: validity,
+      });
+      return {
+        status: response.success ? 200 : 500,
+        data: {
+          success: response.success,
+          message: response.message,
         },
       };
     } catch (error) {

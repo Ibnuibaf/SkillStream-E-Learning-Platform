@@ -10,4 +10,5 @@ export interface IPersonalChat{
     student:string|ObjectId
     instructor:string|ObjectId
     chats:IChat[]
+    validity:Date
 }
