@@ -37,7 +37,11 @@ interface ILesson {
   content: string;
   duration: number | string;
 }
-
+interface IMCQ {
+  question: string;
+  options: string[];
+  answer: number;
+}
 interface ICourse {
   _id?: string;
   title: string;
@@ -49,6 +53,7 @@ interface ICourse {
   cover: string;
   preview?: string;
   reviews?: IReviews[];
+  mcq: IMCQ[];
   lessons: ILesson[];
   announcements: string[];
   coupons: ICoupon[];
@@ -78,6 +83,12 @@ function InstructorCourse() {
     title: "",
   });
   const [isLessonUpdate, setIsLessonUpdate] = useState<number | null>(null);
+  const [mcqDetails, setMcqDetails] = useState<IMCQ>({
+    question: "",
+    options: [],
+    answer: -1,
+  });
+  const [selectedMCQ, setSelectedMCQ] = useState(-1);
   const [announcement, setAnnouncement] = useState("");
   const [selectedPosOption, setSelectedPosOption] = useState("");
   const [courseDetails, setCourseDetails] = useState<ICourse>({
@@ -89,6 +100,7 @@ function InstructorCourse() {
     cover: "",
     lessons: [],
     instructor: "",
+    mcq: [],
     announcements: [],
     coupons: [],
     price: 0,
@@ -110,6 +122,76 @@ function InstructorCourse() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0];
     setLesson(selectedFile || null);
+  };
+  const handleOptionChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    index: number
+  ) => {
+    const { options } = mcqDetails;
+    options[index] = e.target.value;
+    setMcqDetails({...mcqDetails})
+    // console.log(mcqDetails);
+  };
+  const setMcqToArray = () => {
+    if (
+      !mcqDetails.question ||
+      !mcqDetails.options[0] ||
+      !mcqDetails.options[1] ||
+      !mcqDetails.options[2] ||
+      !mcqDetails.options[3] ||
+      mcqDetails.answer < 0
+    ) {
+      // console.log(mcqDetails);
+      // console.log(!mcqDetails.question);
+      // console.log(!(mcqDetails.options.length > 3));
+      // console.log(mcqDetails.answer < 0);
+
+      toast("Enter necessary details");
+    } else {
+      const mcqs = courseDetails.mcq;
+      const newMCQArr:IMCQ[]=[]
+      mcqs.forEach((mcq) => {
+        newMCQArr.push(mcq)
+      });
+      newMCQArr.push(mcqDetails)
+      setCourseDetails({ ...courseDetails,mcq:newMCQArr });
+      setMcqDetails({
+        question: "",
+        options: ["","","",""],
+        answer: -1,
+      });
+    }
+  };
+  const updateMcqInArray = () => {
+    if (
+      !mcqDetails.question ||
+      !mcqDetails.options[0] ||
+      !mcqDetails.options[1] ||
+      !mcqDetails.options[2] ||
+      !mcqDetails.options[3] ||
+      mcqDetails.answer < 0
+    ) {
+      toast("Enter necessary details");
+    } else {
+      const mcqs = courseDetails.mcq;
+      const newMCQArr:IMCQ[]=[]
+      mcqs.forEach((mcq, index) => {
+        if (index == selectedMCQ) {
+          mcq = mcqDetails;
+          // console.log(mcq,"Here its is");
+        }
+        newMCQArr.push(mcq)
+      });
+      // console.log(newMCQArr,"Updates mcqs");
+      setCourseDetails({ ...courseDetails, mcq: newMCQArr });
+      // console.log(courseDetails.mcq);
+      setMcqDetails({
+        question: "",
+        options: ["","","",""],
+        answer: -1,
+      });
+      setSelectedMCQ(-1)
+    }
   };
   const setLessonToArray = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if (selectedContent.content && selectedContent.title) {
@@ -205,6 +287,7 @@ function InstructorCourse() {
           instructor: "",
           cover: "",
           lessons: [],
+          mcq: [],
           announcements: [],
           coupons: [],
           price: 0,
@@ -258,6 +341,7 @@ function InstructorCourse() {
           lessons: [],
           instructor: "",
           announcements: [],
+          mcq: [],
           coupons: [],
           price: 0,
           offer: 0,
@@ -392,6 +476,7 @@ function InstructorCourse() {
                   cover: "",
                   instructor: "",
                   lessons: [],
+                  mcq: [],
                   announcements: [],
                   coupons: [],
                   price: 0,
@@ -960,7 +1045,157 @@ function InstructorCourse() {
           ) : step == 3 ? (
             ""
           ) : step == 4 ? (
-            ""
+            <div className="border p-5 px-10 mt-6 rounded-lg text-start flex justify-between gap-6">
+              <div className="border max-w-[20vw] ">
+                <div className="p-1 bg-purple-950 border-b">
+                  <p className="text-xl font-medium px-4 ">Questions</p>
+                </div>
+                <div className="w-[20vw] h-[65vh] px-4 py-2 overflow-y-auto">
+                  {courseDetails.mcq.map((mc, index) => (
+                    <div
+                      className="flex bg-purple-700 px-4 py-1 rounded-md gap-2 cursor-pointer mb-2"
+                      onClick={() => {
+                        setMcqDetails(mc);
+                        setSelectedMCQ(index);
+                      }}
+                    >
+                      <p>{index + 1}.</p>
+                      <p className="truncate">{mc.question}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="w-full ">
+                <div className="flex justify-center py-2">
+                  <p className="text-2xl font-semibold">
+                    Add MCQ to the course
+                  </p>
+                </div>
+                <div>
+                  <div>
+                    <input
+                      type="text"
+                      className="bg-transparent border w-full py-1 text-lg px-2 outline-none"
+                      placeholder="Enter the question for mcq.."
+                      value={mcqDetails.question}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                        setMcqDetails({
+                          ...mcqDetails,
+                          question: e.target.value,
+                        })
+                      }
+                    />
+                    <p className="text-violet-300 text-xs">
+                      Give a questions to the row.
+                    </p>
+                  </div>
+                  <div className="p-2 grid grid-cols-2 border mx-2 mt-5 gap-3">
+                    <div>
+                      <input
+                        type="text"
+                        value={mcqDetails.options[0]}
+                        className="bg-transparent border w-full py-1 px-2 outline-none"
+                        placeholder="Enter the option for question"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          handleOptionChange(e, 0)
+                        }
+                      />
+                      <p className="text-violet-300 text-xs">
+                        Specify a option No.1
+                      </p>
+                    </div>
+                    <div>
+                      <input
+                        type="text"
+                        value={mcqDetails.options[1]}
+                        className="bg-transparent border w-full py-1 px-2 outline-none"
+                        placeholder="Enter the option for question"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          handleOptionChange(e, 1)
+                        }
+                      />
+                      <p className="text-violet-300 text-xs">
+                        Specify a option No.2
+                      </p>
+                    </div>
+                    <div>
+                      <input
+                        type="text"
+                        value={mcqDetails.options[2]}
+                        className="bg-transparent border w-full py-1 px-2 outline-none"
+                        placeholder="Enter the option for question"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          handleOptionChange(e, 2)
+                        }
+                      />
+                      <p className="text-violet-300 text-xs">
+                        Specify a option No.3
+                      </p>
+                    </div>
+                    <div>
+                      <input
+                        type="text"
+                        value={mcqDetails.options[3]}
+                        className="bg-transparent border w-full py-1 px-2 outline-none"
+                        placeholder="Enter the option for question"
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                          handleOptionChange(e, 3)
+                        }
+                      />
+                      <p className="text-violet-300 text-xs">
+                        Specify a option No.4
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-5">
+                    <select
+                      name=""
+                      id=""
+                      className="bg-transparent border w-full py-1 px-2 outline-none"
+                      onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                        setMcqDetails({
+                          ...mcqDetails,
+                          answer: Number(e.target.value),
+                        })
+                      }
+                    >
+                      <option value="" selected={!mcqDetails.answer}>
+                        --Select the right answer--
+                      </option>
+                      <option value={0} selected={mcqDetails.answer == 0}>
+                        1
+                      </option>
+                      <option value={1} selected={mcqDetails.answer == 1}>
+                        2
+                      </option>
+                      <option value={2} selected={mcqDetails.answer == 2}>
+                        3
+                      </option>
+                      <option value={3} selected={mcqDetails.answer == 3}>
+                        4
+                      </option>
+                    </select>
+                  </div>
+                  <div className="flex justify-end mt-3">
+                    {selectedMCQ < 0 ? (
+                      <button
+                        className="border-2 border-pink-500 text-pink-500 px-6 py-1 hover:text-white hover:bg-pink-500 transition duration-300 text-xl"
+                        onClick={setMcqToArray}
+                      >
+                        +Add
+                      </button>
+                    ) : (
+                      <button
+                        className="border-2 border-pink-500 text-pink-500 px-6 py-1 hover:text-white hover:bg-pink-500 transition duration-300 text-xl"
+                        onClick={updateMcqInArray}
+                      >
+                        Update
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </div>
           ) : step == 5 ? (
             <div className="border p-5 px-10 mt-6 rounded-lg text-start">
               <div className="">

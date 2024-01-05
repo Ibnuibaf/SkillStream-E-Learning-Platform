@@ -47,6 +47,13 @@ const CourseSchema = new mongoose.Schema<ICourse>({
       ref: "User",
     },
   ],
+  mcq:[{
+    question:String,
+    options:[{
+      type:String
+    }],
+    answer:Number
+  }],
   reviews: [
     {
       user: { type: mongoose.Types.ObjectId, ref: "User" },

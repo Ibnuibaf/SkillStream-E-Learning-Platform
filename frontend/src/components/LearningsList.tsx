@@ -10,12 +10,18 @@ import axios from "axios";
 import { LuMoveLeft } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import InstructorsList from "./InstructorsList";
+import McqTestTab from "./McqTestTab";
 
 interface ILesson {
   _id?: string;
   title: string;
   content: string;
   duration: number | string;
+}
+interface IMCQ {
+  question: string;
+  options: string[];
+  answer: number;
 }
 
 interface ICourse {
@@ -27,6 +33,7 @@ interface ICourse {
   category: { name: string; _id: string } | string;
   instructor: { name: string; _id?: string } | string;
   cover: string;
+  mcq:IMCQ[]
   lessons: ILesson[];
   announcements: string[];
   coupons?: string[];
@@ -45,6 +52,7 @@ function LearningsList() {
   const [learnings, setLearnings] = useState<ILearnings[]>();
   const [view, setView] = useState("courses");
   const [isLearningsView, setIsLearningsView] = useState(false);
+  const [isTestView, setIsTestView] = useState(false);
   const [isAnnouncementView, setIsAnnouncementView] = useState(false);
   const [learningsDetails, setLearningsDetails] = useState<ILearnings>();
   const [selectedLesson, setSelectedLesson] = useState<ILesson>();
@@ -84,7 +92,22 @@ function LearningsList() {
   }, []);
   return (
     <div className="px-10">
-      {isLearningsView ? (
+      {isTestView ? (
+        <>
+          <div className="flex justify-start px-4 pb-2">
+            <button
+              type="button"
+              className="border flex items-center gap-1 rounded px-2 font-medium bg-gray-300 text-gray-800 hover:bg-gray-500 hover:text-white"
+              onClick={() => {
+                setIsTestView(false)
+              }}
+            >
+              <LuMoveLeft /> Back
+            </button>
+          </div>
+          <McqTestTab learning={learningsDetails as ILearnings}/>
+        </>
+      ) : isLearningsView ? (
         <>
           <div className="flex justify-start px-4 pb-2">
             <button
@@ -149,6 +172,12 @@ function LearningsList() {
                   onClick={() => setIsAnnouncementView(true)}
                 >
                   Announcements
+                </button>
+                <button
+                  className={`px-6 py-2 border-2 hover:bg-white hover:text-black `}
+                  onClick={() => setIsTestView(true)}
+                >
+                  Take Certificate
                 </button>
               </div>
             </div>

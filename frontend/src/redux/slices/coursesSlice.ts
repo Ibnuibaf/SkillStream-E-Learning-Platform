@@ -6,6 +6,11 @@ interface ICoursesState {
   loading: boolean;
   error: string;
 }
+interface IMCQ{
+  question:string
+  options:string[]
+  answer:number
+}
 interface IReviews {
   user: { name: string; _id: string } ;
   rating: number;
@@ -34,6 +39,7 @@ interface ICoursesType {
   preview?: string;
   cover: string;
   lessons: ILessonType[];
+  mcq:IMCQ[]
   announcements: string[];
   coupons: ICouponType[];
   reviews?: IReviews[];

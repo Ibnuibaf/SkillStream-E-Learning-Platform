@@ -61,7 +61,7 @@ function AuthorizePage() {
 
       const res = await axios.post(
         "http://localhost:3000/api/user/authorize",
-        { updates: Authorization, id: user?.id },
+        { updates: Authorization, id: user?._id },
         {
           headers: {
             Authorization: token,

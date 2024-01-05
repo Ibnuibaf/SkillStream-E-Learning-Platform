@@ -22,8 +22,13 @@ interface ICoupon {
   from: Date;
   to: Date;
 }
+interface IMCQ {
+  question: string;
+  options: string[];
+  answer: number;
+}
 interface IReviews {
-  user: { name: string; _id: string } ;
+  user: { name: string; _id: string };
   rating: number;
   feedback: string;
 }
@@ -43,6 +48,7 @@ interface ICourse {
   preview?: string;
   cover: string;
   lessons: ILesson[];
+  mcq: IMCQ[];
   instructor: { name: string; _id: string } | string;
   announcements: string[];
   coupons: ICoupon[];
@@ -72,6 +78,7 @@ function CourseList() {
     category: "",
     cover: "",
     lessons: [],
+    mcq: [],
     instructor: "",
     announcements: [],
     coupons: [],
@@ -90,27 +97,29 @@ function CourseList() {
       if (user?._id) {
         await setReview({ ...review, user: user?._id });
       }
-      const isExist = courseDetails.reviews?.find((revi) =>
-         revi.user._id as string == user?._id
+      const isExist = courseDetails.reviews?.find(
+        (revi) => (revi.user._id as string) == user?._id
       );
       if (isExist) {
         setReview({
-          user:"",
-          rating:"",
-          feedback:""
-        })
+          user: "",
+          rating: "",
+          feedback: "",
+        });
         return toast("Already updated feedback");
       }
-      const isPurchased=user?.learnings.find((learn)=>learn.course==courseDetails._id)
-      if(!isPurchased){
+      const isPurchased = user?.learnings.find(
+        (learn) => learn.course == courseDetails._id
+      );
+      if (!isPurchased) {
         setReview({
-          user:"",
-          rating:"",
-          feedback:""
-        })
-        return toast("purchase course first to review course")
+          user: "",
+          rating: "",
+          feedback: "",
+        });
+        return toast("purchase course first to review course");
       }
-      
+
       if (!review.feedback || !review.rating || !review.user) {
         return toast("Enter necessary Details");
       }
@@ -119,7 +128,7 @@ function CourseList() {
       }).then(async (confirm) => {
         if (confirm) {
           try {
-             await api.patch("/course/review", {
+            await api.patch("/course/review", {
               user: review.user,
               feedback: review.feedback,
               rating: review.rating,
@@ -139,10 +148,10 @@ function CourseList() {
       toast("Login to your account to review on course");
     }
     setReview({
-      user:"",
-      rating:"",
-      feedback:""
-    })
+      user: "",
+      rating: "",
+      feedback: "",
+    });
   };
   const makePayment = async () => {
     if (token) {
@@ -193,9 +202,9 @@ function CourseList() {
       (course) => course.category == selectedCategory.id
     );
   }, [selectCategories]);
-  useEffect(()=>{
+  useEffect(() => {
     console.log(review);
-  },[review])
+  }, [review]);
   return (
     <div>
       <div className=" flex  bordre-2 bg-slate-900 justify-between text-md overflow-x-auto font-medium">
@@ -377,7 +386,9 @@ function CourseList() {
                     Review
                   </button>
                 </div>
-                <p className="text-gray-300 text-xs">Update your review about this course</p>
+                <p className="text-gray-300 text-xs">
+                  Update your review about this course
+                </p>
               </div>
               <p className="text-xl font-medium">Reviews</p>
               <div className="flex min-h-[18vh] w-full overflow-x-auto gap-2">
@@ -457,9 +468,7 @@ function CourseList() {
                 <MdSearch size={24} />
               </button>
             </div>
-            <div>
-              {/* <button>Filter</button> */}
-            </div>
+            <div>{/* <button>Filter</button> */}</div>
           </div>
           <div className="grid mt-5 grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-7">
             {selectedCategory.id

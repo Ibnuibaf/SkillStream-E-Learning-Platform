@@ -3,6 +3,11 @@ import ICoupon from "./coupon"
 import ILesson from "./lesson"
 import IReviews from "./reviews"
 
+interface IMCQ{
+    question:string
+    options:string[]
+    answer:number
+}
 interface ICourse{
     _id?:string|ObjectId
     title:string
@@ -14,6 +19,7 @@ interface ICourse{
     preview:string
     lessons:ILesson[]
     announcements:string[]
+    mcq:IMCQ[]
     coupons:ICoupon[]
     reviews:IReviews[]
     instructor:string|ObjectId

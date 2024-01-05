@@ -13,6 +13,7 @@ import axios from "axios";
 import { LuReplace } from "react-icons/lu";
 import ReactPlayer from "react-player";
 import { FaRegCirclePlay } from "react-icons/fa6";
+import { IoMdStar } from "react-icons/io";
 
 interface ICoupon {
   code: string;
@@ -21,13 +22,19 @@ interface ICoupon {
   to: Date;
 }
 
+interface IMCQ {
+  question: string;
+  options: string[];
+  answer: number;
+}
+
 interface ILesson {
   title: string;
   content: string;
   duration: number | string;
 }
 interface IReviews {
-  user: { name: string; _id: string } ;
+  user: { name: string; _id: string };
   rating: number;
   feedback: string;
 }
@@ -38,14 +45,16 @@ interface ICourse {
   description: string;
   language: string;
   level: string;
-  category: { name: string; _id: string }|string;
+  category: { name: string; _id: string } | string;
   cover: string;
-    preview?:string
-    lessons: ILesson[];
-  instructor: { name: string; _id?: string }|string;
+  preview?: string;
+  mcq: IMCQ[];
+  lessons: ILesson[];
+  instructor: { name: string; _id?: string } | string;
   announcements: string[];
   coupons: ICoupon[];
   price: number;
+
   reviews?: IReviews[];
   offer: number;
   isApproved?: boolean;
@@ -58,6 +67,11 @@ function AdminCourse() {
   const categories = useSelector(selectCategories).categories;
   const [courseDetailView, setCourseDetailview] = useState(false);
   const [search, setSearch] = useState("");
+  const [mcqDetails, setMcqDetails] = useState<IMCQ>({
+    question: "",
+    options: [],
+    answer: -1,
+  });
   // const [submitStage, setSubmitStage] = useState(false);
   const [courseDetails, setCourseDetails] = useState<ICourse>({
     title: "",
@@ -66,7 +80,8 @@ function AdminCourse() {
     level: "",
     category: "",
     cover: "",
-    instructor:"",
+    mcq: [],
+    instructor: "",
     lessons: [],
     announcements: [],
     coupons: [],
@@ -127,8 +142,9 @@ function AdminCourse() {
           level: "",
           category: "",
           cover: "",
+          mcq: [],
           lessons: [],
-          instructor:"",
+          instructor: "",
           announcements: [],
           coupons: [],
           price: 0,
@@ -174,8 +190,9 @@ function AdminCourse() {
                   category: "",
                   cover: "",
                   lessons: [],
+                  mcq: [],
                   announcements: [],
-                  instructor:"",
+                  instructor: "",
                   coupons: [],
                   price: 0,
                   offer: 0,
@@ -437,7 +454,108 @@ function AdminCourse() {
           ) : step == 3 ? (
             ""
           ) : step == 4 ? (
-            ""
+            <div className="border p-5 px-10 mt-6 rounded-lg text-start flex justify-between gap-6">
+              <div className="border max-w-[20vw] ">
+                <div className="p-1 bg-purple-950 border-b">
+                  <p className="text-xl font-medium px-4 ">Questions</p>
+                </div>
+                <div className="w-[20vw] h-[65vh] px-4 py-2 overflow-y-auto">
+                  {courseDetails.mcq.map((mc, index) => (
+                    <div
+                      className="flex bg-purple-700 px-4 py-1 rounded-md gap-2 cursor-pointer mb-2"
+                      onClick={() => {
+                        setMcqDetails(mc);
+                      }}
+                    >
+                      <p>{index + 1}.</p>
+                      <p className="truncate">{mc.question}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="w-full ">
+                <div className="flex justify-center py-2">
+                  <p className="text-2xl font-semibold">MCQ to the course</p>
+                </div>
+                <div>
+                  <div>
+                    <input
+                      type="text"
+                      className="bg-transparent border w-full py-1 text-lg px-2 outline-none"
+                      value={mcqDetails.question}
+                      disabled
+                    />
+                    <p className="text-violet-300 text-xs">
+                      A questions to the row.
+                    </p>
+                  </div>
+                  <div className="p-2 grid grid-cols-2 border mx-2 mt-5 gap-3">
+                    <div>
+                      <input
+                        type="text"
+                        value={mcqDetails.options[0]}
+                        className="bg-transparent border w-full py-1 px-2 outline-none"
+                        disabled
+                      />
+                      <p className="text-violet-300 text-xs">a option No.1</p>
+                    </div>
+                    <div>
+                      <input
+                        type="text"
+                        value={mcqDetails.options[1]}
+                        className="bg-transparent border w-full py-1 px-2 outline-none"
+                        disabled
+                      />
+                      <p className="text-violet-300 text-xs">a option No.2</p>
+                    </div>
+                    <div>
+                      <input
+                        type="text"
+                        value={mcqDetails.options[2]}
+                        className="bg-transparent border w-full py-1 px-2 outline-none"
+                        disabled
+                      />
+                      <p className="text-violet-300 text-xs">a option No.3</p>
+                    </div>
+                    <div>
+                      <input
+                        type="text"
+                        value={mcqDetails.options[3]}
+                        className="bg-transparent border w-full py-1 px-2 outline-none"
+                        disabled
+                      />
+                      <p className="text-violet-300 text-xs">a option No.4</p>
+                    </div>
+                  </div>
+                  <div className="mt-5 flex items-end gap-2">
+                    <p>Answer : </p>
+                    <input
+                      type="text"
+                      value={mcqDetails.answer + 1}
+                      className="bg-transparent border  py-1 px-2 outline-none"
+                      disabled
+                    />
+                  </div>
+                  {/* <div className="flex justify-end mt-3">
+                    {selectedMCQ < 0 ? (
+                      <button
+                        className="border-2 border-pink-500 text-pink-500 px-6 py-1 hover:text-white hover:bg-pink-500 transition duration-300 text-xl"
+                        onClick={setMcqToArray}
+                      >
+                        +Add
+                      </button>
+                    ) : (
+                      <button
+                        className="border-2 border-pink-500 text-pink-500 px-6 py-1 hover:text-white hover:bg-pink-500 transition duration-300 text-xl"
+                        onClick={updateMcqInArray}
+                      >
+                        Update
+                      </button>
+                    )}
+                  </div> */}
+                </div>
+              </div>
+            </div>
           ) : step == 5 ? (
             <div className="border p-5 px-10 mt-6 rounded-lg text-start">
               <div className="">
@@ -479,7 +597,73 @@ function AdminCourse() {
               </div>
             </div>
           ) : step == 6 ? (
-            ""
+            <>
+              <div className="mb-5">
+                <p className="text-3xl underline underline-offset-4 font-semibold">
+                  Course Statistics
+                </p>
+              </div>
+              <div className="flex">
+                <div className="flex rounded items-end  bg-white text-black gap-3 px-10 shadow-md shadow-purple-500">
+                  <p className="text-lg font-medium">Total Enrollments:</p>
+                  <p className="text-2xl font-medium text-violet-400 bg-gray-700 rounded px-1 my-1">
+                    {courseDetails.enrollers?.length}
+                  </p>
+                </div>
+              </div>
+              <div className="py-4 px-6 border mt-6">
+                <div>
+                  <p className="text-xl font-semibold">FeedBacks</p>
+                </div>
+                <div className="max-h-[50vh] overflow-y-auto overflow-x-hidden grid grid-cols-3 gap-2 mt-5">
+                  {courseDetails.reviews?.map((review) => (
+                    <div className="bg-purple-900 rounded-xl p-2 h-[15vh]">
+                      <div className="flex justify-between">
+                        <p className="text-lg font-medium truncate">
+                          {review.user.name}
+                        </p>
+                        <div className="flex items-center text-orange-500">
+                          {review.rating == 1 ? (
+                            <IoMdStar />
+                          ) : review.rating == 2 ? (
+                            <>
+                              <IoMdStar />
+                              <IoMdStar />
+                            </>
+                          ) : review.rating == 3 ? (
+                            <>
+                              <IoMdStar />
+                              <IoMdStar />
+                              <IoMdStar />
+                            </>
+                          ) : review.rating == 4 ? (
+                            <>
+                              <IoMdStar />
+                              <IoMdStar />
+                              <IoMdStar />
+                              <IoMdStar />
+                            </>
+                          ) : review.rating == 5 ? (
+                            <>
+                              <IoMdStar />
+                              <IoMdStar />
+                              <IoMdStar />
+                              <IoMdStar />
+                              <IoMdStar />
+                            </>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      </div>
+                      <div className="line-clamp-3">
+                        <p>{review.feedback}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </>
           ) : (
             <div className="border p-5 px-10 mt-6 rounded-lg text-start">
               <div className="">
@@ -532,7 +716,11 @@ function AdminCourse() {
                     name=""
                     id=""
                     className="border bg-transparent py-2 px-3"
-                    value={typeof courseDetails.category === 'object' ? courseDetails.category.name : courseDetails.category}
+                    value={
+                      typeof courseDetails.category === "object"
+                        ? courseDetails.category.name
+                        : courseDetails.category
+                    }
                     disabled
                   >
                     {categories.map((cat) =>
@@ -560,36 +748,52 @@ function AdminCourse() {
                   informative, and optimized.
                 </p>
               </div>
-              <div className="mt-5 ">
-                <p className="text-xl font-medium mb-2">Cover Image</p>
-                <div className="">
-                  {courseDetails.cover ? (
-                    <div className="h-52 w-[60%] flex items-start gap-2">
-                      <img
-                        src={`${courseDetails.cover}`}
-                        alt=""
-                        className="h-full"
+              <div className="flex justify-between">
+                <div className="mt-5 w-full">
+                  <p className="text-xl font-medium mb-2">Cover Image</p>
+                  <div className="">
+                    {courseDetails.cover ? (
+                      <div className="h-52 w-[60%] flex items-start gap-2">
+                        <img
+                          src={`${courseDetails.cover}`}
+                          alt=""
+                          className="h-full"
+                        />
+                      </div>
+                    ) : (
+                      <div className="flex justify-between">
+                        <div className="border bg-transparent pt-2 pb-1 px-2 w-full outline-none flex justify-between items-center">
+                          <input id="upload" type="file" disabled />
+                          <label
+                            className="button bg-white text-black px-3 py-1 hover:cursor-pointer"
+                            htmlFor="upload"
+                          >
+                            Upload File
+                          </label>
+                        </div>
+                        <button
+                          disabled
+                          className="border px-4 py-1 bg-slate-600 hover:bg-slate-600/30"
+                        >
+                          Upload
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+                <div className="mt-5 w-full">
+                  <p className="text-xl font-medium mb-2">Preview Video</p>
+                  <div className="">
+                    <div className="h-52 w-96 flex items-start gap-2">
+                      <ReactPlayer
+                        url={courseDetails.preview}
+                        controls
+                        playing={false}
+                        width={"100%"}
+                        height={"100%"}
                       />
                     </div>
-                  ) : (
-                    <div className="flex justify-between">
-                      <div className="border bg-transparent pt-2 pb-1 px-2 w-full outline-none flex justify-between items-center">
-                        <input id="upload" type="file" disabled />
-                        <label
-                          className="button bg-white text-black px-3 py-1 hover:cursor-pointer"
-                          htmlFor="upload"
-                        >
-                          Upload File
-                        </label>
-                      </div>
-                      <button
-                        disabled
-                        className="border px-4 py-1 bg-slate-600 hover:bg-slate-600/30"
-                      >
-                        Upload
-                      </button>
-                    </div>
-                  )}
+                  </div>
                 </div>
               </div>
             </div>
