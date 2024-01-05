@@ -67,6 +67,23 @@ class CourseRepository {
       };
     }
   }
+  async getInstructorAnalyse(id:string) {
+    try {
+      const courses = await Courses.find({instructor:id},{title:1,enrollers:1,instructor:1})
+      // console.log(courses);
+
+      return {
+        success: true,
+        message: "Fetch all courses",
+        courses,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to fetch ${error}`,
+      };
+    }
+  }
   async findCourse(id:string) {
     try {
       const course = await Courses.findById(id)

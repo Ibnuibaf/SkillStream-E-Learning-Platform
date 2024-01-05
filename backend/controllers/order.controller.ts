@@ -40,6 +40,17 @@ class OrderController {
       });
     }
   }
+  async getMonthlyInstructorSales(req: Request, res: Response) {
+    try {
+      const response = await this.orderUsecase.getMonthlyInstructorSales(req.headers["authorization"] as string);
+      res.status(response.status).send(response.data);
+    } catch (error) {
+      res.status(500).send({
+        success: false,
+        message: "server error",
+      });
+    }
+  }
 }
 
 export default OrderController;

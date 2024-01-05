@@ -1,9 +1,14 @@
 import { HttpStatus } from "../enums/HttpStatus.enum";
+import jwt from "jsonwebtoken";
 import CourseRepository from "../repositories/course.repository";
 import OrderRepository from "../repositories/order.repository";
 import UserRepository from "../repositories/user.repository";
+import MyJWTPayLoad from "../interfaces/jwt";
 
 class OrderUsecase {
+  private decodeToken(token: string): MyJWTPayLoad {
+    return jwt.verify(token, "itssecret") as MyJWTPayLoad;
+  }
   private orderRepository: OrderRepository;
   private userRepository: UserRepository;
   private courseRepository: CourseRepository;
@@ -117,7 +122,7 @@ class OrderUsecase {
         data: {
           success: res.success,
           message: res.message,
-          orders: res.orders
+          orders: res.orders,
         },
       };
     } catch (error) {
@@ -139,7 +144,50 @@ class OrderUsecase {
           success: res.success,
           message: res.message,
           monthlyData: res.monthlyData,
-          monthlyCount: res.monthlyCount
+          monthlyCount: res.monthlyCount,
+        },
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        data: {
+          success: false,
+          message: "server error",
+        },
+      };
+    }
+  }
+  async getMonthlyInstructorSales(token: string) {
+    try {
+      const user = this.decodeToken(token);
+      const courseRes = await this.courseRepository.getInstructorAnalyse(
+        user.id
+      );
+      if (!courseRes.courses) {
+        return {
+          status: courseRes.success
+            ? HttpStatus.Success
+            : HttpStatus.ServerError,
+          data: {
+            success: courseRes.success,
+            message: courseRes.message,
+          },
+        };
+      }
+      let instructorCourses: string[] = [];
+      for (let i = 0; i < courseRes.courses.length; i++) {
+        instructorCourses.push(courseRes.courses[i]._id as string);
+      }
+      const res = await this.orderRepository.getMonthlyInstructorSales(
+        instructorCourses
+      );
+      return {
+        status: res.success ? HttpStatus.Success : HttpStatus.ServerError,
+        data: {
+          success: res.success,
+          message: res.message,
+          monthlyCount: res.monthlyCount,
+          monthlyRevenue: res.monthlyRevenue,
         },
       };
     } catch (error) {

@@ -64,5 +64,14 @@ Router.get(
     orderController.getMonthlySales(req, res);
   }
 );
+Router.get(
+  "/instructor/monthly-enrollment",
+  (req: Request, res: Response, next: NextFunction) => {
+    authMiddleware.authUser(req, res, next);
+  },
+  (req: Request, res: Response) => {
+    orderController.getMonthlyInstructorSales(req, res);
+  }
+);
 
 export default Router;

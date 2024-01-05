@@ -30,6 +30,12 @@ Router.get(
   (req: Request, res: Response) => courseController.getTopCourse(req, res)
 );
 Router.get(
+  "/instructor/analyse",
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.authUser(req, res, next),
+  (req: Request, res: Response) => courseController.getInstructorAnalyse(req, res)
+);
+Router.get(
   "/instructor",
   (req: Request, res: Response, next: NextFunction) =>
     authMiddleware.authUser(req, res, next),

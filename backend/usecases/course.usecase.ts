@@ -111,10 +111,10 @@ class CourseUsecase {
           },
         };
       }
-      let topCourse=res.courses[0];
+      let topCourse = res.courses[0];
       res.courses.forEach((course) => {
-        if(course.enrollers.length>topCourse.enrollers.length){
-          topCourse=course
+        if (course.enrollers.length > topCourse.enrollers.length) {
+          topCourse = course;
         }
       });
       return {
@@ -122,7 +122,44 @@ class CourseUsecase {
         data: {
           success: res.success,
           message: res.message,
-          topCourse
+          topCourse,
+        },
+      };
+    } catch (error) {
+      return {
+        status: 500,
+        data: {
+          success: false,
+          message: "server error",
+        },
+      };
+    }
+  }
+  async getInstructorAnalyse(token: string) {
+    try {
+      const user = this.decodeToken(token);
+      const res = await this.courseRepository.getInstructorAnalyse(user.id);
+      if (!res.courses) {
+        return {
+          status: res.success ? 200 : 500,
+          data: {
+            success: res.success,
+            message: res.message,
+          },
+        };
+      }
+      let enrollers = 0;
+
+      res.courses.forEach((course) => {
+        enrollers += course.enrollers.length;
+      });
+      return {
+        status: res.success ? 200 : 500,
+        data: {
+          success: res.success,
+          message: res.message,
+          enrollers,
+          courses: res.courses.length,
         },
       };
     } catch (error) {
