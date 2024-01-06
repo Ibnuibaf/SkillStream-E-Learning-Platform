@@ -78,7 +78,7 @@ function CourseList() {
     category: "",
     cover: "",
     lessons: [],
-    reviews:[],
+    reviews: [],
     mcq: [],
     instructor: "",
     announcements: [],
@@ -276,12 +276,65 @@ function CourseList() {
                   </p>
                   <div className="flex items-center gap-2">
                     <p>Rating:</p>{" "}
-                    <div className="text-orange-500 flex gap-0.5 ">
-                      <IoMdStar size={18} />
-                      <IoMdStar size={18} />
-                      <IoMdStar size={18} />
-                      <IoMdStar size={18} />
-                      <IoMdStar size={18} />
+                    <div className="flex justify-end">
+                      {courseDetails.reviews.reduce(
+                        (sum, review) => sum + review.rating,
+                        0
+                      ) /
+                        courseDetails.reviews?.length ==
+                      1 ? (
+                        <div className="flex items-center">
+                          <IoMdStar size={18} color="orange" />
+                        </div>
+                      ) : courseDetails.reviews.reduce(
+                          (sum, review) => sum + review.rating,
+                          0
+                        ) /
+                          courseDetails.reviews?.length ==
+                        2 ? (
+                        <div className="flex items-center">
+                          <IoMdStar size={18} color="orange" />
+                          <IoMdStar size={18} color="orange" />
+                        </div>
+                      ) : courseDetails.reviews.reduce(
+                          (sum, review) => sum + review.rating,
+                          0
+                        ) /
+                          courseDetails.reviews?.length ==
+                        3 ? (
+                        <div className="flex items-center">
+                          <IoMdStar size={18} color="orange" />
+                          <IoMdStar size={18} color="orange" />
+                          <IoMdStar size={18} color="orange" />
+                        </div>
+                      ) : courseDetails.reviews.reduce(
+                          (sum, review) => sum + review.rating,
+                          0
+                        ) /
+                          courseDetails.reviews?.length ==
+                        4 ? (
+                        <div className="flex items-center">
+                          <IoMdStar size={18} color="orange" />
+                          <IoMdStar size={18} color="orange" />
+                          <IoMdStar size={18} color="orange" />
+                          <IoMdStar size={18} color="orange" />
+                        </div>
+                      ) : courseDetails.reviews.reduce(
+                          (sum, review) => sum + review.rating,
+                          0
+                        ) /
+                          courseDetails.reviews?.length ==
+                        5 ? (
+                        <div className="flex items-center">
+                          <IoMdStar size={18} color="orange" />
+                          <IoMdStar size={18} color="orange" />
+                          <IoMdStar size={18} color="orange" />
+                          <IoMdStar size={18} color="orange" />
+                          <IoMdStar size={18} color="orange" />
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </div>
                   </div>
                 </div>
@@ -581,11 +634,15 @@ function CourseList() {
                           {course.description}
                         </p>
                       </div>
-                      <div className="flex items-center justify-between border-t my-2 px-3 ">
-                        <div>
-                          <img src="" alt="" />
-                          <div className="space-y-[-4px]">
-                            <p className="text-lg">
+                      <div className="flex items-center justify-between border-t my-2 px-3 pt-2 ">
+                        <div className="flex items-center gap-2">
+                          <img
+                            src="https://cdn0.iconfinder.com/data/icons/user-interface-vol-3-12/66/68-512.png"
+                            alt=""
+                            className="h-7 w-7"
+                          />
+                          <div className=" flex items-center">
+                            <p className=" font-semibold">
                               {typeof course.instructor == "object"
                                 ? course.instructor.name
                                 : course.instructor}
@@ -716,16 +773,19 @@ function CourseList() {
                           {course.description}
                         </p>
                       </div>
-                      <div className="flex items-center justify-between border-t my-2 px-3 ">
-                        <div>
-                          <img src="" alt="" />
-                          <div className="space-y-[-4px]">
-                            <p className="text-lg">
+                      <div className="flex items-center justify-between border-t my-2 px-3 pt-2 ">
+                        <div className="flex items-center gap-2">
+                          <img
+                            src="https://cdn0.iconfinder.com/data/icons/user-interface-vol-3-12/66/68-512.png"
+                            alt=""
+                            className="h-7 w-7"
+                          />
+                          <div className=" flex items-center">
+                            <p className=" font-semibold">
                               {typeof course.instructor == "object"
                                 ? course.instructor.name
                                 : course.instructor}
                             </p>
-
                             {/* <p className="text-xs italic">English Teacher</p> */}
                           </div>
                         </div>

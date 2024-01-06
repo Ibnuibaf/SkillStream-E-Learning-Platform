@@ -1,41 +1,43 @@
+import { Suspense, lazy, useEffect } from "react";
 import "./App.css";
-import {BrowserRouter,Routes,Route} from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastContainer, toast } from 'react-toastify';
-import LandingPage from "./pages/LandingPage";
-import LoginPage from "./pages/LoginPage";
-import SignupPage from "./pages/SignupPage";
-import CoursesPage from "./pages/CoursesPage";
-import ProfilePage from "./pages/ProfilePage";
-import InstructorHomePage from "./pages/InstructorHomePage";
-import AdminDashboardPage from "./pages/AdminDashboardPage";
-import AdminStudentPage from "./pages/AdminStudentPage";
-import AdminInstructorPage from "./pages/AdminInstructorPage";
-import ForgotPage from "./pages/ForgotPage";
-import { useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "./redux/store";
 import { getUser } from "./redux/actions/authActions";
-import AdminCategoryPage from "./pages/AdminCategoryPage";
-import InstructorCoursePage from "./pages/InstructorCoursePage";
-import AdminCoursePage from "./pages/AdminCoursePage";
-import PurchaseConfirmPage from "./pages/PurchaseConfirmPage";
-import MyLearningPage from "./pages/MyLearningPage";
-import CommunityPage from "./pages/CommunityPage";
-import {GoogleOAuthProvider} from "@react-oauth/google"
-import InstructorCommunitiesPage from "./pages/InstructorCommunitiesPage";
-import PersonalChatPage from "./pages/PeronalChatPage"
-import InstructorStudentsList from "./pages/InstructorStudentsList";
-import InstructorChatPage from "./pages/InstructorChatPage";
-import WithdrawalPage from "./pages/WithdrawalPage";
-import AdminPaymentsPage from "./pages/AdminPaymentsPage";
-import AdminReportsPage from "./pages/AdminReportsPage";
-import SubscribeConfirmPage from "./pages/SubscribeConfirmPage";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+const LandingPage = lazy(() => import("./pages/LandingPage"));
+
+const LoginPage = lazy(() => import('./pages/LoginPage'));
+const SignupPage = lazy(() => import('./pages/SignupPage'));
+const CoursesPage = lazy(() => import('./pages/CoursesPage'));
+const ProfilePage = lazy(() => import('./pages/ProfilePage'));
+const InstructorHomePage = lazy(() => import('./pages/InstructorHomePage'));
+const AdminDashboardPage = lazy(() => import('./pages/AdminDashboardPage'));
+const AdminStudentPage = lazy(() => import('./pages/AdminStudentPage'));
+const AdminInstructorPage = lazy(() => import('./pages/AdminInstructorPage'));
+const ForgotPage = lazy(() => import('./pages/ForgotPage'));
+const AdminCategoryPage = lazy(() => import('./pages/AdminCategoryPage'));
+const InstructorCoursePage = lazy(() => import('./pages/InstructorCoursePage'));
+const AdminCoursePage = lazy(() => import('./pages/AdminCoursePage'));
+const PurchaseConfirmPage = lazy(() => import('./pages/PurchaseConfirmPage'));
+const MyLearningPage = lazy(() => import('./pages/MyLearningPage'));
+const CommunityPage = lazy(() => import('./pages/CommunityPage'));
+const InstructorCommunitiesPage = lazy(() => import('./pages/InstructorCommunitiesPage'));
+const PersonalChatPage = lazy(() => import('./pages/PeronalChatPage'));
+const InstructorStudentsList = lazy(() => import('./pages/InstructorStudentsList'));
+const InstructorChatPage = lazy(() => import('./pages/InstructorChatPage'));
+const WithdrawalPage = lazy(() => import('./pages/WithdrawalPage'));
+const AdminPaymentsPage = lazy(() => import('./pages/AdminPaymentsPage'));
+const AdminReportsPage = lazy(() => import('./pages/AdminReportsPage'));
+const SubscribeConfirmPage = lazy(() => import('./pages/SubscribeConfirmPage'));
+import Spinner from "./components/Spinner";
+
 function App() {
-  const dispatch:AppDispatch=useDispatch()
+  const dispatch: AppDispatch = useDispatch();
   const token = localStorage.getItem("SkillStreamToken");
   useEffect(() => {
-
     const fetchData = async () => {
       try {
         await dispatch(getUser());
@@ -44,44 +46,43 @@ function App() {
         toast("Error fetching user data");
       }
     };
-    if(token){
+    if (token) {
       fetchData();
     }
-  }, [dispatch,token]);
+  }, [dispatch, token]);
   return (
     <div className="min-h-screen">
       <BrowserRouter>
-      <GoogleOAuthProvider clientId="596357550935-jhld1mlmi7hjda08ret8ju85lt7rftnm.apps.googleusercontent.com">
-        <Routes>
-          <Route path="/" element={<LandingPage/>}/>
-          <Route path="/login" element={<LoginPage/>}/>
-          <Route path="/forgot" element={<ForgotPage/>}/>
-          <Route path="/signup" element={<SignupPage/>}/>
-          <Route path="/courses" element={<CoursesPage/>}/>
-          <Route path="/mylearning" element={<MyLearningPage/>}/>
-          <Route path="/profile" element={<ProfilePage/>}/>
-          <Route path="/mywithdrawals" element={<WithdrawalPage/>}/>
-          <Route path="/personal/chat" element={<PersonalChatPage />}/>
-          <Route path="/instructor" element={<InstructorHomePage/>}/>
-          <Route path="/instructor/courses" element={<InstructorCoursePage/>}/>
-          <Route path="/instructor/chats" element={<InstructorStudentsList/>}/>
-          <Route path="/instructor/personal/chat" element={<InstructorChatPage/>}/>
-          <Route path="/instructor/communities" element={<InstructorCommunitiesPage/>}/>
-          <Route path="/admin" element={<AdminDashboardPage/>}/>
-          <Route path="/admin/students" element={<AdminStudentPage/>}/>
-          <Route path="/admin/instructors" element={<AdminInstructorPage/>}/>
-          <Route path="/admin/categories" element={<AdminCategoryPage/>}/>
-          <Route path="/admin/courses" element={<AdminCoursePage/>}/>
-          <Route path="/admin/payments" element={<AdminPaymentsPage/>}/>
-          <Route path="/admin/reports" element={<AdminReportsPage/>}/>
-          <Route path="/purchase" element={<PurchaseConfirmPage/>}/>
-          <Route path="/subscribe" element={<SubscribeConfirmPage/>}/>
-          <Route path="/community" element={<CommunityPage/>}/>
-        </Routes>
-      </GoogleOAuthProvider>
+        <GoogleOAuthProvider clientId="596357550935-jhld1mlmi7hjda08ret8ju85lt7rftnm.apps.googleusercontent.com">
+          <Routes>
+            <Route  path="/" element={ <Suspense fallback={<Spinner />}> <LandingPage /> </Suspense> } />
+            <Route path="/login" element={<Suspense fallback={<Spinner />}><LoginPage /></Suspense>} />
+            <Route path="/forgot" element={<Suspense fallback={<Spinner />}><ForgotPage /></Suspense>} />
+            <Route path="/signup" element={<Suspense fallback={<Spinner />}><SignupPage /></Suspense>} />
+            <Route path="/courses" element={<Suspense fallback={<Spinner />}><CoursesPage /></Suspense>} />
+            <Route path="/mylearning" element={<Suspense fallback={<Spinner />}><MyLearningPage /></Suspense>} />
+            <Route path="/profile" element={<Suspense fallback={<Spinner />}><ProfilePage /></Suspense>} />
+            <Route path="/mywithdrawals" element={<Suspense fallback={<Spinner />}><WithdrawalPage /></Suspense>} />
+            <Route path="/personal/chat" element={<Suspense fallback={<Spinner />}><PersonalChatPage /></Suspense>} />
+            <Route path="/instructor" element={<Suspense fallback={<Spinner />}><InstructorHomePage /></Suspense>} />
+            <Route path="/instructor/courses" element={<Suspense fallback={<Spinner />}><InstructorCoursePage /></Suspense>} />
+            <Route path="/instructor/chats" element={<Suspense fallback={<Spinner />}><InstructorStudentsList /></Suspense>} />
+            <Route path="/instructor/personal/chat" element={<Suspense fallback={<Spinner />}><InstructorChatPage /></Suspense>} />
+            <Route path="/instructor/communities" element={<Suspense fallback={<Spinner />}><InstructorCommunitiesPage /></Suspense>} />
+            <Route path="/admin" element={<Suspense fallback={<Spinner />}><AdminDashboardPage /></Suspense>} />
+            <Route path="/admin/students" element={<Suspense fallback={<Spinner />}><AdminStudentPage /></Suspense>} />
+            <Route path="/admin/instructors" element={<Suspense fallback={<Spinner />}><AdminInstructorPage /></Suspense>} />
+            <Route path="/admin/categories" element={<Suspense fallback={<Spinner />}><AdminCategoryPage /></Suspense>} />
+            <Route path="/admin/courses" element={<Suspense fallback={<Spinner />}><AdminCoursePage /></Suspense>} />
+            <Route path="/admin/payments" element={<Suspense fallback={<Spinner />}><AdminPaymentsPage /></Suspense>} />
+            <Route path="/admin/reports" element={<Suspense fallback={<Spinner />}><AdminReportsPage /></Suspense>} />
+            <Route path="/purchase" element={<Suspense fallback={<Spinner />}><PurchaseConfirmPage /></Suspense>} />
+            <Route path="/subscribe" element={<Suspense fallback={<Spinner />}><SubscribeConfirmPage /></Suspense>} />
+            <Route path="/community" element={<Suspense fallback={<Spinner />}><CommunityPage /></Suspense>} />
+          </Routes>
+        </GoogleOAuthProvider>
       </BrowserRouter>
-      <ToastContainer/>
-    
+      <ToastContainer />
     </div>
   );
 }

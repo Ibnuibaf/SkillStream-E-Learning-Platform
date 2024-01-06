@@ -94,86 +94,88 @@ function InstructorsList() {
         <p>My Instructors</p>
       </div>
       <div className=" max-h-[60vh] overflow-y-auto overflow-x-hidden grid grid-cols-7 gap-4">
-        {instructors?.map((instructor) =>
-          personalChats.find((chat) => chat.instructor == instructor._id) ? (
-            <div
-              className="flex flex-col items-center justify-between gap-4 bg-purple-500 rounded-3xl mb-2 px-4 py-5 h-[32vh]  text-start "
-              // onClick={() =>
-              //   navigate(`/personal/chat?instructor=${instructor._id}`)
-              // }
-            >
-              <div className="flex flex-col  items-center">
-                <div className="h-16 w-16 rounded-full">
-                  <img
-                    src={instructor.avatar}
-                    alt=""
-                    className="h-full w-full rounded-full"
-                  />
+        {instructors?.map(
+          (instructor) =>
+            instructor._id != user?._id &&
+            (personalChats.find((chat) => chat.instructor == instructor._id) ? (
+              <div
+                className="flex flex-col items-center justify-between gap-4 bg-purple-500 rounded-3xl mb-2 px-4 py-5 h-[32vh]  text-start "
+                // onClick={() =>
+                //   navigate(`/personal/chat?instructor=${instructor._id}`)
+                // }
+              >
+                <div className="flex flex-col  items-center">
+                  <div className="h-16 w-16 rounded-full">
+                    <img
+                      src={instructor.avatar}
+                      alt=""
+                      className="h-full w-full rounded-full"
+                    />
+                  </div>
+                  <p className="text-xl mt-5">{instructor.name}</p>
                 </div>
-                <p className="text-xl mt-5">{instructor.name}</p>
-              </div>
-              <div className="flex flex-col w-full">
-                <div className="font-medium text-lg">
-                  <p className="text-sm text-start ">Validity upto </p>
-                  <p className="text-center">
-                    {new Date(
-                      personalChats.find(
-                        (chat) => chat.instructor == instructor._id
-                      )?.validity as Date
-                    ).toLocaleDateString()}
-                  </p>
-                </div>
+                <div className="flex flex-col w-full">
+                  <div className="font-medium text-lg">
+                    <p className="text-sm text-start ">Validity upto </p>
+                    <p className="text-center">
+                      {new Date(
+                        personalChats.find(
+                          (chat) => chat.instructor == instructor._id
+                        )?.validity as Date
+                      ).toLocaleDateString()}
+                    </p>
+                  </div>
 
-                <button
-                  type="button"
-                  onClick={() =>
-                    navigate(`/personal/chat?instructor=${instructor._id}`)
-                  }
-                  disabled={
-                    new Date(
-                      personalChats.find(
-                        (chat) => chat.instructor === instructor._id
-                      )?.validity as Date
-                    ) < new Date()
-                  }
-                  className="bg-white text-purple-500 px-4 py-1 rounded-3xl hover:bg-purple-800 hover:text-white cursor-pointer"
-                >
-                  Chat
-                </button>
-              </div>
-            </div>
-          ) : (
-            <div
-              className="flex flex-col items-center justify-between gap-4 bg-purple-500 rounded-3xl mb-2 px-4 py-5 h-[32vh]  text-start "
-              // onClick={() =>
-              //   navigate(`/personal/chat?instructor=${instructor._id}`)
-              // }
-            >
-              <div className="flex flex-col  items-center">
-                <div className="h-16 w-16 rounded-full">
-                  <img
-                    src={instructor.avatar}
-                    alt=""
-                    className="h-full w-full rounded-full"
-                  />
+                  <button
+                    type="button"
+                    onClick={() =>
+                      navigate(`/personal/chat?instructor=${instructor._id}`)
+                    }
+                    disabled={
+                      new Date(
+                        personalChats.find(
+                          (chat) => chat.instructor === instructor._id
+                        )?.validity as Date
+                      ) < new Date()
+                    }
+                    className="bg-white text-purple-500 px-4 py-1 rounded-3xl hover:bg-purple-800 hover:text-white cursor-pointer"
+                  >
+                    Chat
+                  </button>
                 </div>
-                <p className="text-xl mt-5">{instructor.name}</p>
               </div>
-              <div className="flex flex-col w-full">
-                <div className="font-medium text-lg">
-                  <p className="text-sm text-start ">Subscribe for </p>
-                  <p className="text-center">&#8377; 130/month</p>
+            ) : (
+              <div
+                className="flex flex-col items-center justify-between gap-4 bg-purple-500 rounded-3xl mb-2 px-4 py-5 h-[32vh]  text-start "
+                // onClick={() =>
+                //   navigate(`/personal/chat?instructor=${instructor._id}`)
+                // }
+              >
+                <div className="flex flex-col  items-center">
+                  <div className="h-16 w-16 rounded-full">
+                    <img
+                      src={instructor.avatar}
+                      alt=""
+                      className="h-full w-full rounded-full"
+                    />
+                  </div>
+                  <p className="text-xl mt-5">{instructor.name}</p>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => makePayment(instructor._id as string)}
-                  className="bg-white text-purple-500 px-4 py-1 rounded-3xl hover:bg-purple-800 hover:text-white cursor-pointer"
-                >
-                  Subscribe
-                </button>
+                <div className="flex flex-col w-full">
+                  <div className="font-medium text-lg">
+                    <p className="text-sm text-start ">Subscribe for </p>
+                    <p className="text-center">&#8377; 130/month</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => makePayment(instructor._id as string)}
+                    className="bg-white text-purple-500 px-4 py-1 rounded-3xl hover:bg-purple-800 hover:text-white cursor-pointer"
+                  >
+                    Subscribe
+                  </button>
+                </div>
               </div>
-            </div>
-          )
+            ))
         )}
       </div>
     </div>

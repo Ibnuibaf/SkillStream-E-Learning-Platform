@@ -31,10 +31,12 @@ class CourseRepository {
             .populate("instructor", "name")
             .populate("category", "name")
             .populate("reviews.user", "name")
+            .sort({ _id: -1 })
         : await Courses.find()
             .populate("instructor", "name")
             .populate("category", "name")
-            .populate("reviews.user", "name");
+            .populate("reviews.user", "name")
+            .sort({ _id: -1 });
       // console.log(courses);
 
       return {
@@ -51,8 +53,10 @@ class CourseRepository {
   }
   async getTopCourse() {
     try {
-      const courses = await Courses.find({},{title:1,enrollers:1,instructor:1})
-        .populate("instructor", "name")
+      const courses = await Courses.find(
+        {},
+        { title: 1, enrollers: 1, instructor: 1 }
+      ).populate("instructor", "name");
       // console.log(courses);
 
       return {
@@ -67,9 +71,12 @@ class CourseRepository {
       };
     }
   }
-  async getInstructorAnalyse(id:string) {
+  async getInstructorAnalyse(id: string) {
     try {
-      const courses = await Courses.find({instructor:id},{title:1,enrollers:1,instructor:1})
+      const courses = await Courses.find(
+        { instructor: id },
+        { title: 1, enrollers: 1, instructor: 1 }
+      );
       // console.log(courses);
 
       return {
@@ -84,9 +91,9 @@ class CourseRepository {
       };
     }
   }
-  async findCourse(id:string) {
+  async findCourse(id: string) {
     try {
-      const course = await Courses.findById(id)
+      const course = await Courses.findById(id);
       // console.log(course);
 
       return {
