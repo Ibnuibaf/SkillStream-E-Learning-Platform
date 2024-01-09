@@ -357,17 +357,20 @@ class UserUsecase {
       };
     }
   }
-  async sendOTP(email: string) {
+  async sendOTP(body: any) {
     try {
-      const emailExist = await this.userRepository.authenticateUser(email);
-      if (emailExist.data) {
-        return {
-          status: HttpStatus.ServerError,
-          data: {
-            success: false,
-            message: "User email exist already",
-          },
-        };
+      const { email, isRegistration } = body;
+      if (isRegistration) {
+        const emailExist = await this.userRepository.authenticateUser(email);
+        if (emailExist.data) {
+          return {
+            status: HttpStatus.ServerError,
+            data: {
+              success: false,
+              message: "User email exist already",
+            },
+          };
+        }
       }
       const otp: string = `${Math.floor(1000 + Math.random() * 9000)}`;
       let transporter = nodemailer.createTransport({
@@ -657,11 +660,14 @@ class UserUsecase {
       };
     }
   }
-  async learningCertify(details: any,token:string) {
+  async learningCertify(details: any, token: string) {
     try {
       const user = this.decodeToken(token);
       let { learning } = details;
-      const response = await this.userRepository.learningCertify(user.id,learning);
+      const response = await this.userRepository.learningCertify(
+        user.id,
+        learning
+      );
       return {
         status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {

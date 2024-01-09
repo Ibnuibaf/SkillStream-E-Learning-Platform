@@ -58,6 +58,7 @@ function SignupSection() {
       }, 1000);
       const res = await api.post("/user/otp", {
         email: userDetails.email,
+        isRegistration:true
       });
       if (!res.data.otp) {
         setCounter(30);

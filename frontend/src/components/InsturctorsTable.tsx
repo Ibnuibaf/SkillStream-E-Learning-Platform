@@ -8,6 +8,20 @@ import { getInstructors } from "../redux/actions/instructorsActions";
 import { AppDispatch } from "../redux/store";
 import api from "../axios/api";
 
+interface ILearning {
+  course: string;
+  progress: string[];
+  certificate: boolean;
+}
+interface IWallet {
+  balance: string | number;
+  transactions: {
+    date: Date;
+    amount: string | number;
+    type: string;
+    remark: string;
+  }[];
+}
 interface UserType {
   _id: string;
   name: string;
@@ -15,8 +29,15 @@ interface UserType {
   avatar: string;
   role: string;
   isBlock: boolean;
-  verification: object;
   verified: boolean;
+  verification: {
+    "0": string;
+    "1": string;
+    "2": string;
+  };
+  learnings: ILearning[];
+  teachings: string[];
+  wallet: IWallet;
 }
 function InstructorsTable() {
   const token = localStorage.getItem("SkillStreamToken");
@@ -39,7 +60,7 @@ function InstructorsTable() {
   useEffect(() => {
     // getUsersList();
     try {
-       dispatch(getInstructors(""));
+      dispatch(getInstructors(""));
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
         toast(error?.response?.data?.message);
@@ -139,7 +160,7 @@ function InstructorsTable() {
               </div>
               <div className="flex">
                 <div>
-                  <div className="border flex justify-between p-2 gap-4 m-3">
+                  <div className="border flex flex-col justify-between p-2 gap-4 m-3">
                     <div className="bg-slate-800 p-2 rounded">
                       <p className="text-lg">Personal Details</p>
                       <p className="bg-slate-600 my-1 pt-2 pr-8 pl-2 rounded-lg">
@@ -163,7 +184,7 @@ function InstructorsTable() {
                         <span className="font-semibold">
                           Number of courses:{" "}
                         </span>
-                        {detailsView.email.length}
+                        {detailsView.teachings.length}
                       </p>
                       <p className="bg-slate-600 my-1 pt-2 pr-8 pl-2 rounded-lg">
                         <span className="font-semibold">
@@ -177,7 +198,7 @@ function InstructorsTable() {
                       </p>
                     </div>
                   </div>
-                  <div className="border flex justify-between p-2 gap-4 m-3">
+                  {/* <div className="border flex justify-between p-2 gap-4 m-3">
                     <div className="bg-slate-800 p-2 rounded w-full">
                       <p className="text-lg">Bank Details</p>
                       <p className="bg-slate-600 my-1 pt-2 pr-8 pl-2 rounded-lg">
@@ -197,146 +218,32 @@ function InstructorsTable() {
                         {"FDRL00153"}
                       </p>
                     </div>
-                  </div>
+                  </div> */}
                 </div>
                 <div>
                   <div className="border flex justify-between p-2 gap-4 m-3">
                     <div className="bg-slate-800 p-2 rounded w-full">
-                      <p className="text-lg">Instructor Courses</p>
+                      <p className="text-lg">Instructor Transactions</p>
                       <div className=" max-h-[44vh] overflow-x-auto ">
-                        <div className="bg-slate-600 my-1 py-2 px-3  rounded-lg flex justify-between items-center">
-                          <div className="flex items-center gap-1">
-                            <img
-                              src={detailsView.avatar}
-                              alt=""
-                              className="h-8"
-                            />
-                            <span className="font-semibold text-md">
-                              Course Name,subname,details..{" "}
-                            </span>
+                        {detailsView.wallet.transactions.map((trans) => (
+                          <div className="bg-slate-600 my-1 py-2 px-3 gap-3 rounded-lg flex justify-between items-center">
+                            <div className="flex items-center gap-1">
+                              <p className="font-semibold text-md text-violet-400">
+                                {trans.type.toUpperCase()}
+                              </p>
+                              <span className="font-semibold text-md truncate">
+                                {trans.remark}
+                              </span>
+                            </div>
+                            <p className="">
+                              {"Rs. "}
+                              <span className="text-yellow-600 font-semibold">
+                              {Math.floor(trans.amount as number)}
+                                
+                              </span>{"/- "}
+                            </p>
                           </div>
-                          <p className="">
-                            {" "}
-                            Rating:{" "}
-                            <span className="text-yellow-600 font-semibold">
-                              4
-                            </span>{" "}
-                          </p>
-                        </div>
-                        <div className="bg-slate-600 my-1 py-2 px-3  rounded-lg flex justify-between items-center">
-                          <div className="flex items-center gap-1">
-                            <img
-                              src={detailsView.avatar}
-                              alt=""
-                              className="h-8"
-                            />
-                            <span className="font-semibold text-md">
-                              Course Name,subname,details..{" "}
-                            </span>
-                          </div>
-                          <p className="">
-                            {" "}
-                            Rating:{" "}
-                            <span className="text-yellow-600 font-semibold">
-                              4
-                            </span>{" "}
-                          </p>
-                        </div>
-                        <div className="bg-slate-600 my-1 py-2 px-3  rounded-lg flex justify-between items-center">
-                          <div className="flex items-center gap-1">
-                            <img
-                              src={detailsView.avatar}
-                              alt=""
-                              className="h-8"
-                            />
-                            <span className="font-semibold text-md">
-                              Course Name,subname,details..{" "}
-                            </span>
-                          </div>
-                          <p className="">
-                            {" "}
-                            Rating:{" "}
-                            <span className="text-yellow-600 font-semibold">
-                              4
-                            </span>{" "}
-                          </p>
-                        </div>
-                        <div className="bg-slate-600 my-1 py-2 px-3  rounded-lg flex justify-between items-center">
-                          <div className="flex items-center gap-1">
-                            <img
-                              src={detailsView.avatar}
-                              alt=""
-                              className="h-8"
-                            />
-                            <span className="font-semibold text-md">
-                              Course Name,subname,details..{" "}
-                            </span>
-                          </div>
-                          <p className="">
-                            {" "}
-                            Rating:{" "}
-                            <span className="text-yellow-600 font-semibold">
-                              4
-                            </span>{" "}
-                          </p>
-                        </div>
-                        <div className="bg-slate-600 my-1 py-2 px-3  rounded-lg flex justify-between items-center">
-                          <div className="flex items-center gap-1">
-                            <img
-                              src={detailsView.avatar}
-                              alt=""
-                              className="h-8"
-                            />
-                            <span className="font-semibold text-md">
-                              Course Name,subname,details..{" "}
-                            </span>
-                          </div>
-                          <p className="">
-                            {" "}
-                            Rating:{" "}
-                            <span className="text-yellow-600 font-semibold">
-                              4
-                            </span>{" "}
-                          </p>
-                        </div>
-                        <div className="bg-slate-600 my-1 py-2 px-3  rounded-lg flex justify-between items-center">
-                          <div className="flex items-center gap-1">
-                            <img
-                              src={detailsView.avatar}
-                              alt=""
-                              className="h-8"
-                            />
-                            <span className="font-semibold text-md">
-                              Course Name,subname,details..{" "}
-                            </span>
-                          </div>
-                          <p className="">
-                            {" "}
-                            Rating:{" "}
-                            <span className="text-yellow-600 font-semibold">
-                              4
-                            </span>{" "}
-                          </p>
-                        </div>
-                        <div className="bg-slate-600 my-1 py-2 px-3  rounded-lg flex justify-between items-center">
-                          <div className="flex items-center gap-1">
-                            <img
-                              src={detailsView.avatar}
-                              alt=""
-                              className="h-8"
-                            />
-                            <span className="font-semibold text-md">
-                              Course Name,subname,details..{" "}
-                            </span>
-                          </div>
-                          <p className="">
-                            {" "}
-                            Rating:{" "}
-                            <span className="text-yellow-600 font-semibold">
-                              4
-                            </span>{" "}
-                          </p>
-                        </div>
+                        ))}
                       </div>
                     </div>
                   </div>
@@ -377,8 +284,8 @@ function InstructorsTable() {
                 value={search}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setSearch(e.target.value);
-                  if(search.length>3){
-                    getUsersList()
+                  if (search.length > 3) {
+                    getUsersList();
                   }
                 }}
                 required
@@ -430,18 +337,18 @@ function InstructorsTable() {
                       Name
                     </th>
                     <th scope="col" className="px-6 py-3">
-                      Courses Approved
+                      Courses
                     </th>
-                    <th scope="col" className="px-6 py-3">
+                    {/* <th scope="col" className="px-6 py-3">
                       Students
-                    </th>
+                    </th> */}
                     <th scope="col" className="px-6 py-3">
                       Withdrawable
                     </th>
                     <th scope="col" className="px-6 py-3">
                       Role
                     </th>
-                    <th scope="col" className="px-6 py-3">
+                    <th scope="col" className="px-6 py-3" colSpan={2}>
                       Action
                     </th>
                   </tr>
@@ -458,7 +365,7 @@ function InstructorsTable() {
                             >
                               <td
                                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:cursor-pointer"
-                                onClick={() => setDetailsview(instructor)}
+                                // onClick={() => setDetailsview(instructor)}
                               >
                                 {instructor.email}
                               </td>
@@ -466,14 +373,13 @@ function InstructorsTable() {
                                 {instructor.name}
                               </td>
                               <td className="px-6 py-4">
-                                {instructor._id.length}
+                                {instructor.teachings.length}
                               </td>
-                              <td className="px-6 py-4">
+                              {/* <td className="px-6 py-4">
                                 {instructor.name.length}
-                              </td>
+                              </td> */}
                               <td className="px-6 py-4">
-                                {instructor.email.length +
-                                  instructor._id.length}
+                                Rs. {instructor.wallet.balance}/-
                               </td>
                               <td className="px-6 py-4">
                                 {instructor.role.toUpperCase()}
@@ -491,6 +397,7 @@ function InstructorsTable() {
                                 >
                                   {instructor.isBlock ? "UnBlock" : "Block"}
                                 </button>
+                               
                               </td>
                             </tr>
                           );
@@ -504,7 +411,7 @@ function InstructorsTable() {
                             >
                               <td
                                 className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:cursor-pointer"
-                                onClick={() => setDetailsview(instructor)}
+                                // onClick={() => setDetailsview(instructor)}
                               >
                                 {instructor.email}
                               </td>
@@ -512,14 +419,13 @@ function InstructorsTable() {
                                 {instructor.name}
                               </td>
                               <td className="px-6 py-4">
-                                {instructor._id.length}
+                                {instructor.teachings.length}
                               </td>
-                              <td className="px-6 py-4">
+                              {/* <td className="px-6 py-4">
                                 {instructor.name.length}
-                              </td>
+                              </td> */}
                               <td className="px-6 py-4">
-                                {instructor.email.length +
-                                  instructor._id.length}
+                                Rs. {instructor.wallet.balance}/-
                               </td>
                               <td className="px-6 py-4">
                                 {instructor.role.toUpperCase()}
@@ -536,6 +442,13 @@ function InstructorsTable() {
                                   className={`border px-3 rounded font-medium text-blue-600 dark:text-blue-500 hover:underline ms-3`}
                                 >
                                   {instructor.isBlock ? "UnBlock" : "Block"}
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => changeInstructorPending(instructor._id)}
+                                  className={`border px-3 rounded font-medium text-blue-600 dark:text-blue-500 hover:underline ms-3`}
+                                >
+                                  Approve
                                 </button>
                               </td>
                             </tr>

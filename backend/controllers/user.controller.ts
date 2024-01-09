@@ -75,7 +75,7 @@ class UserController {
   }
   async sendOTP(req: Request, res: Response) {
     try {
-      const response = await this.userUsecase.sendOTP(req.body.email);
+      const response = await this.userUsecase.sendOTP(req.body);
       res.status(response.status).send(response.data);
     } catch (error) {
       res.status(500).send({

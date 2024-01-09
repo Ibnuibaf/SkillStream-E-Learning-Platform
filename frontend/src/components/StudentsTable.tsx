@@ -7,6 +7,20 @@ import swal from "sweetalert";
 import { getStudents } from "../redux/actions/studentsActions";
 import { AppDispatch } from "../redux/store";
 
+interface ILearning {
+  course: string;
+  progress: string[];
+  certificate: boolean;
+}
+interface IWallet {
+  balance: string | number;
+  transactions: {
+    date: Date;
+    amount: string | number;
+    type: string;
+    remark: string;
+  }[];
+}
 interface UserType {
   _id: string;
   name: string;
@@ -14,6 +28,15 @@ interface UserType {
   avatar: string;
   role: string;
   isBlock: boolean;
+  verified: boolean;
+  verification: {
+    "0": string;
+    "1": string;
+    "2": string;
+  };
+  learnings: ILearning[];
+  teachings: string[];
+  wallet: IWallet;
 }
 function StudentsTable() {
   const token = localStorage.getItem("SkillStreamToken");
@@ -314,13 +337,13 @@ function StudentsTable() {
                     >
                       <td
                         className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:cursor-pointer"
-                        onClick={() => setDetailsview(student)}
+                        // onClick={() => setDetailsview(student)}
                       >
                         {student.email}
                       </td>
                       <td className="px-6 py-4 text-red-600">{student.name}</td>
-                      <td className="px-6 py-4">{student._id.length}</td>
-                      <td className="px-6 py-4">{student.name.length}</td>
+                      <td className="px-6 py-4">{student.learnings.length}</td>
+                      <td className="px-6 py-4">{(student.learnings.filter((learn)=>learn.certificate==true)).length}</td>
                       <td className="px-6 py-4">
                         {student.role.toUpperCase()}
                       </td>
