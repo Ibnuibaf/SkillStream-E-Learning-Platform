@@ -173,6 +173,39 @@ class UserController {
       });
     }
   }
+  async getWishlist(req: Request, res: Response) {
+    try {
+      const response = await this.userUsecase.getWishlist(req.headers["authorization"] as string);
+      res.status(response.status).send(response.data);
+    } catch (error) {
+      res.status(500).send({
+        success: false,
+        message: "server error",
+      });
+    }
+  }
+  async addToWishlist(req: Request, res: Response) {
+    try {
+      const response = await this.userUsecase.addToWishlist(req.body,req.headers["authorization"] as string);
+      res.status(response.status).send(response.data);
+    } catch (error) {
+      res.status(500).send({
+        success: false,
+        message: "server error",
+      });
+    }
+  }
+  async removeFromWishlist(req: Request, res: Response) {
+    try {
+      const response = await this.userUsecase.removeFromWishlist(req.body,req.headers["authorization"] as string);
+      res.status(response.status).send(response.data);
+    } catch (error) {
+      res.status(500).send({
+        success: false,
+        message: "server error",
+      });
+    }
+  }
   async updateStatus(req: Request, res: Response) {
     try {
 

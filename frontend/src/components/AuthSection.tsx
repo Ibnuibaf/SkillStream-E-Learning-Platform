@@ -1,4 +1,5 @@
-import { RiShoppingCart2Fill } from "react-icons/ri";
+// import { RiShoppingCart2Fill } from "react-icons/ri";
+import { LuHeart } from "react-icons/lu";
 import { Link } from "react-router-dom";
 import {  useDispatch, useSelector } from "react-redux";
 import { selectUser } from "../redux/slices/authSlice";
@@ -33,9 +34,10 @@ function AuthSection() {
       >
         My Learnings
       </Link>
-      <button>
-        <RiShoppingCart2Fill size={24}></RiShoppingCart2Fill>
-      </button>
+      <Link to={"/mywishlist"} className=" flex gap-1 items-start ">
+        <LuHeart size={28}></LuHeart>
+        <p className="relative bg-pink-600 rounded-full px-1 text-sm right-3 bottom-1 font-bold">{userDetails.user.wishlist.length}</p>
+      </Link>
       {/* <Link to={"/notifications"} className="">
         <RiNotification4Line size={24}></RiNotification4Line>
       </Link> */}
@@ -50,9 +52,6 @@ function AuthSection() {
     </div>
   ) : (
     <div className="flex gap-5 items-center">
-      <button>
-        <RiShoppingCart2Fill size={24}></RiShoppingCart2Fill>
-      </button>
       <Link
         to={"/login"}
         className="border rounded-md h-min py-1 px-3 font-semibold duration-300 hover:bg-white hover:text-slate-950"

@@ -58,7 +58,7 @@ function McqTestTab({ learning }: { learning: ILearnings }) {
     setMcqDetails(learning.course.mcq[selectedMCQ]);
   };
   const checkTest = async () => {
-    const confirmed = await swal("Are you sure to Proceed Payment?", {
+    const confirmed = await swal("Are you sure to Check Test?", {
       buttons: ["Cancel", true],
     });
     if (confirmed) {

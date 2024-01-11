@@ -317,7 +317,7 @@ class UserRepository {
         { $set: { "learnings.$.certificate": true } },
         { new: true }
       );
-      if(!user){
+      if (!user) {
         return {
           success: true,
           message: "Failed to update certificate",
@@ -412,6 +412,66 @@ class UserRepository {
         { verification: updates, role: "instructor" },
         { new: true }
       );
+      return {
+        success: true,
+        message: "user details updated",
+        data: userDetails,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to update ${error}`,
+      };
+    }
+  }
+  async getWishlist(id: string) {
+    try {
+      const userDetails = await Users.findById(id).populate("wishlist")
+      return {
+        success: true,
+        message: "user details fetched",
+        data: userDetails?.wishlist,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to fetch ${error}`,
+      };
+    }
+  }
+  async addToWishlist(id: string, course: string) {
+    try {
+      const userDetails = await Users.updateOne(
+        { _id: id },
+        { $addToSet: { wishlist: course } },
+        { new: true }
+      );
+      return {
+        success: true,
+        message: "user details updated",
+        data: userDetails,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to update ${error}`,
+      };
+    }
+  }
+  async removeFromWishlist(id: string, course: string) {
+    try {
+      const userDetails = await Users.findById(id);
+      if (!userDetails) {
+        return{
+          success: false,
+          message: `Failed to find user`,
+        };
+      }
+      const newWishList = userDetails?.wishlist.filter(
+        (courseId ) => courseId as unknown as string != course
+      );
+      userDetails.wishlist = newWishList;
+      await userDetails?.save();
       return {
         success: true,
         message: "user details updated",

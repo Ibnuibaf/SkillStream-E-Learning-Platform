@@ -36,6 +36,7 @@ interface UserType {
   learnings:ILearning[]
   teachings:string[]
   wallet:IWallet
+  wishlist:string[]
 }
 
 const initialState: AuthState = {

@@ -15,6 +15,7 @@ import axios from "axios";
 import ReactPlayer from "react-player";
 import { FaRegCirclePlay } from "react-icons/fa6";
 import swal from "sweetalert";
+import { getUser } from "../redux/actions/authActions";
 
 interface ICoupon {
   code: string;
@@ -153,6 +154,32 @@ function CourseList() {
       rating: "",
       feedback: "",
     });
+  };
+  const addToWishlist = async () => {
+    if (token) {
+      const isExist = user?.wishlist.find(
+        (wish: string) => wish == courseDetails._id
+      );
+      if (!isExist) {
+        try {
+          await api.patch("/user/wishlist/add", {
+            course: courseDetails._id,
+          });
+          toast("Course Added to wishlist");
+          dispatch(getUser())
+        } catch (error: unknown) {
+          if (axios.isAxiosError(error)) {
+            toast(error?.response?.data?.message);
+          } else {
+            toast("An unexpected error occurred");
+          }
+        }
+      } else {
+        toast("Already added, Check your wishlist");
+      }
+    } else {
+      toast("Login to add course to wishlist");
+    }
   };
   const makePayment = async () => {
     if (token) {
@@ -356,7 +383,10 @@ function CourseList() {
                 </div>
                 <div className="flex gap-3 items-center justify-between">
                   <div className="flex gap-3">
-                    <button className="border-2 border-pink-500 text-pink-500 px-4 py-1 text-lg hover:bg-pink-500 hover:text-white transition duration-300">
+                    <button
+                      className="border-2 border-pink-500 text-pink-500 px-4 py-1 text-lg hover:bg-pink-500 hover:text-white transition duration-300"
+                      onClick={addToWishlist}
+                    >
                       Add to Wishlist
                     </button>
                     <button

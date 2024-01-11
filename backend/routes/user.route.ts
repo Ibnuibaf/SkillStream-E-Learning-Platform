@@ -93,6 +93,24 @@ Router.post(
     authMiddleware.authUser(req, res, next),
   (req: Request, res: Response) => stripePayments.subscribeSession(req, res)
 );
+Router.get(
+  "/wishlist",
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.authUser(req, res, next),
+  (req: Request, res: Response) => userController.getWishlist(req, res)
+);
+Router.patch(
+  "/wishlist/add",
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.authUser(req, res, next),
+  (req: Request, res: Response) => userController.addToWishlist(req, res)
+);
+Router.patch(
+  "/wishlist/remove",
+  (req: Request, res: Response, next: NextFunction) =>
+    authMiddleware.authUser(req, res, next),
+  (req: Request, res: Response) => userController.removeFromWishlist(req, res)
+);
 Router.patch(
   "/update",
   (req: Request, res: Response, next: NextFunction) =>
@@ -117,7 +135,5 @@ Router.patch(
     authMiddleware.authUser(req, res, next),
   (req: Request, res: Response) => stripePayments.paymentIntent(req, res)
 );
-
-
 
 export default Router;

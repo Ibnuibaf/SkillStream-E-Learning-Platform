@@ -14,6 +14,7 @@ interface IWallet {
     remark: string;
   }[];
 }
+
 interface IUser {
   id: string;
   name?: string;
@@ -28,6 +29,7 @@ interface IUser {
   learnings: ILearning[];
   teachings: ObjectId[] | string[];
   wallet:IWallet
+  wishlist:ObjectId[] 
 }
 
 export default IUser;

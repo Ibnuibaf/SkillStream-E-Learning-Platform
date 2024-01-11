@@ -764,6 +764,72 @@ class UserUsecase {
       };
     }
   }
+  async getWishlist(token:string) {
+    try {
+      const user=this.decodeToken(token)
+      const response = await this.userRepository.getWishlist(user.id);
+      return {
+        status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
+        data: {
+          success: response.success,
+          message: response.message,
+          wishlist: response.data
+        },
+      };
+    } catch (error) {
+      return {
+        status: HttpStatus.ServerError,
+        data: {
+          success: false,
+          message: "server error",
+        },
+      };
+    }
+  }
+  async addToWishlist(body: any,token:string) {
+    try {
+      const { course } = body;
+      const user=this.decodeToken(token)
+      const response = await this.userRepository.addToWishlist(user.id,course);
+      return {
+        status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
+        data: {
+          success: response.success,
+          message: response.message,
+        },
+      };
+    } catch (error) {
+      return {
+        status: HttpStatus.ServerError,
+        data: {
+          success: false,
+          message: "server error",
+        },
+      };
+    }
+  }
+  async removeFromWishlist(body: any,token:string) {
+    try {
+      const { course } = body;
+      const user=this.decodeToken(token)
+      const response = await this.userRepository.removeFromWishlist(user.id,course);
+      return {
+        status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
+        data: {
+          success: response.success,
+          message: response.message,
+        },
+      };
+    } catch (error) {
+      return {
+        status: HttpStatus.ServerError,
+        data: {
+          success: false,
+          message: "server error",
+        },
+      };
+    }
+  }
 }
 
 export default UserUsecase;

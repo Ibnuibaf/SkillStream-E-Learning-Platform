@@ -40,13 +40,19 @@ const userSchema = new mongoose.Schema<IUser>({
           ref: "Course",
         },
       ],
-      certificate:{
-        type:Boolean,
-        default:false
-      }
+      certificate: {
+        type: Boolean,
+        default: false,
+      },
     },
   ],
   teachings: [
+    {
+      type: mongoose.Types.ObjectId,
+      ref: "Course",
+    },
+  ],
+  wishlist: [
     {
       type: mongoose.Types.ObjectId,
       ref: "Course",
