@@ -20,8 +20,7 @@ class PersonalchatController {
   async findPersonalchat(req: Request, res: Response) {
     try {
       const response = await this.personalchatUsecase.findPersonalchat(
-        req.query as { student: string; instructor: string },
-        req.headers["authorization"] as string
+        req.query as { student: string; instructor: string }
       );
       res.status(response.status).send(response.data);
     } catch (error) {

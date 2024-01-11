@@ -4,10 +4,13 @@ import PersonalchatRepository from "../repositories/personalchat.repository";
 
 class SocketUtils {
   private communityRepository: CommunityRepository;
-  private personalchatRepository: PersonalchatRepository
-  constructor(communityRepository: CommunityRepository,personalchatRepository: PersonalchatRepository) {
+  private personalchatRepository: PersonalchatRepository;
+  constructor(
+    communityRepository: CommunityRepository,
+    personalchatRepository: PersonalchatRepository
+  ) {
     this.communityRepository = communityRepository;
-    this.personalchatRepository=personalchatRepository
+    this.personalchatRepository = personalchatRepository;
   }
 
   configureSocketIO = async (io: Server) => {
@@ -15,9 +18,14 @@ class SocketUtils {
       // console.log("A user connected");
 
       // Joining a Room
-      socket.on("join", (roomId) => {
-        socket.join(roomId);
-        console.log(`User joined room ${roomId} `);
+      socket.on("join", async (details) => {
+        const chatDetails = await this.personalchatRepository.findPersonalchat(
+          details
+        );
+        if (chatDetails.personalchat) {
+          socket.join(`${chatDetails.personalchat?._id}`);
+          console.log(`User joined room ${chatDetails.personalchat?._id} `);
+        }
       });
 
       // Leaving a Room
@@ -36,24 +44,25 @@ class SocketUtils {
           io.to(data.roomId).emit("receive_message", {
             user: data.user,
             message: data.message,
-            image: data.image
+            image: data.image,
           });
         } else {
           console.error(result.message);
         }
       });
       socket.on("send_personal_message", async (data) => {
-        const result = await this.personalchatRepository.addMessageToPersonalchat(
-          data,
-          data.roomId
-        );
+        const result =
+          await this.personalchatRepository.addMessageToPersonalchat(
+            data,
+            data.roomId
+          );
         console.log(data);
-        
+
         if (result.success) {
           io.to(data.roomId).emit("receive_personal_message", {
             user: data.user,
             message: data.message,
-            image: data.image
+            image: data.image,
           });
         } else {
           console.error(result.message);

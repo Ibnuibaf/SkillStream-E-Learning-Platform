@@ -68,7 +68,7 @@ class PersonalchatRepository {
       const personalchat = await PersonalChats.findOne({
         student: student,
         instructor: instructor,
-      }).populate("student","name avatar");
+      }).populate("student","name avatar").populate("instructor","name avatar");
       if (!personalchat) {
         return {
           success: false,

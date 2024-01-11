@@ -33,16 +33,10 @@ class PersonalchatUsecase {
   }
   async findPersonalchat(
     query: { student: string; instructor: string },
-    token: string
   ) {
     try {
       const { student, instructor } = query;
-      const user = await this.decodeToken(token);
-      const response = await this.personalchatRepository.findPersonalchat(
-        student
-          ? { student, instructor: user.id }
-          : { student: user.id, instructor }
-      );
+      const response = await this.personalchatRepository.findPersonalchat({student, instructor });
       return {
         status: response.success ? 200 : 500,
         data: {

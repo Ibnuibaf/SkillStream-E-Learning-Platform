@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// import React from 'react'
+import React from 'react'
 
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 import { selectUser } from "../redux/slices/authSlice";
 import api from "../axios/api";
 import axios from "axios";
 import { FaPlusCircle } from "react-icons/fa";
+import { getUser } from "../redux/actions/authActions";
+import { AppDispatch } from "../redux/store";
 // import { toast } from "react-toastify";
 
 interface Message {
@@ -20,7 +22,7 @@ interface Message {
 function ChatWithInstructor() {
   const socket = io("http://localhost:3000");
   const navigate = useNavigate();
-  // const dispatch: AppDispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const user = useSelector(selectUser).user;
   const query = new URLSearchParams(window.location.search);
   //   console.log(query);
@@ -36,8 +38,6 @@ function ChatWithInstructor() {
   const [loading, setLoading] = useState(false);
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
 
-  
-
   const getInstructorDetails = async () => {
     try {
       const res = await api.get(`/user/instructors?id=${instructorId}`);
@@ -46,37 +46,31 @@ function ChatWithInstructor() {
       console.error(error);
     }
   };
-  
-  
+  const getPersonalChat = async () => {
+    try {
+      const res = await api.get(`/personal/find?instructor=${instructorId}&student=${user?._id}`);
+      setChatHistory(res.data.personalchat.chats);
+      setRoomId(res.data.personalchat._id);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
     if (!query.size || !instructorId) {
       navigate("/mylearning");
     } else {
-      const getPersonalChat = async () => {
-        try {
-          const res = await api.get(`/personal/find?instructor=${instructorId}`);
-          setChatHistory(res.data.personalchat.chats);
-          setRoomId(res.data.personalchat._id);
-          console.log(roomId);
-          console.log(chatHistory);
-    
-          socket.emit("join", roomId);
-          socket.off("receive_personal_message");
-          socket.on("receive_personal_message", (data:any) => {
-            setChatHistory((prevChatHistory) => [...prevChatHistory, data]);
-          });
-        } catch (error) {
-          console.error(error);
-        }
-      };
+      dispatch(getUser())
       getInstructorDetails();
-      getPersonalChat();
+      getPersonalChat()
+      socket.emit("join",{student:user?._id,instructor:instructorId})
+      socket.off("receive_personal_message")
+      socket.on("receive_personal_message",(data)=>{
+        setChatHistory((prevChatHistory)=>[...prevChatHistory,data])
+      })
     }
-    return () => {
-      socket.off("receive_personal_message");
-      socket.emit("leave", roomId);
-    };
-  }, [instructorId]);
+  }, []);
+  
 
   const sendMessage = async () => {
     try {
