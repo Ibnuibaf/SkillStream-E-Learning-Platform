@@ -42,12 +42,12 @@ class StripePayments {
           },
         ],
         mode: "payment",
-        success_url: `http://localhost:5173/purchase?success=true&userId=${userId}&courseId=${
+        success_url: `https://skillstream.chibrahim.online/purchase?success=true&userId=${userId}&courseId=${
           course._id
         }&price=${Math.floor(
           course.price - (course.offer * course.price) / 100
         )}`,
-        cancel_url: `http://localhost:5173/`,
+        cancel_url: `https://skillstream.chibrahim.online/`,
       });
 
       res.send({ url: session.url });
@@ -70,8 +70,8 @@ class StripePayments {
         },
       ],
       mode: "payment",
-      success_url: `http://localhost:5173/subscribe?success=true&student=${student}&instructor=${instructor}`,
-      cancel_url: `http://localhost:5173/`,
+      success_url: `https://skillstream.chibrahim.online/subscribe?success=true&student=${student}&instructor=${instructor}`,
+      cancel_url: `https://skillstream.chibrahim.online/`,
     });
 
     res.send({ url: session.url });
