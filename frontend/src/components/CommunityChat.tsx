@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // import { toast } from "react-toastify";
+const baseURI= import.meta.env.VITE_PUBLIC_BASE_API
 import io from "socket.io-client";
 import { selectUser } from "../redux/slices/authSlice";
 import api from "../axios/api";
@@ -19,7 +20,7 @@ interface Message {
 }
 
 function CommunityChat() {
-  const socket = io("http://localhost:3000");
+  const socket = io(baseURI);
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const user = useSelector(selectUser).user;

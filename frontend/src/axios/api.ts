@@ -1,8 +1,10 @@
 import axios from "axios";
 const token=localStorage.getItem("SkillStreamToken")
+const baseURI= import.meta.env.VITE_PUBLIC_BASE_API
+console.log(baseURI);
 
 const api=axios.create({
-    baseURL:"http://localhost:3000/api/",
+    baseURL:`${baseURI}/api/`,
     headers:{
         Authorization:token||"" 
     }

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import io from "socket.io-client";
 import { selectUser } from "../redux/slices/authSlice";
 import api from "../axios/api";
+const baseURI= import.meta.env.VITE_PUBLIC_BASE_API
 import axios from "axios";
 import { FaPlusCircle } from "react-icons/fa";
 import { getUser } from "../redux/actions/authActions";
@@ -20,7 +21,7 @@ interface Message {
 }
 
 function ChatWithInstructor() {
-  const socket = io("http://localhost:3000");
+  const socket = io(baseURI);
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const user = useSelector(selectUser).user;

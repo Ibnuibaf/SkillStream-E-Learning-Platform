@@ -4,6 +4,7 @@ import { FaRegThumbsDown, FaRegThumbsUp } from "react-icons/fa";
 import { TiTick } from "react-icons/ti";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import api from "../axios/api";
 
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex =
@@ -37,7 +38,7 @@ function ForgotPass() {
       intervalId = setInterval(() => {
         setCounter((prevCounter) => prevCounter - 1);
       }, 1000);
-      const res = await axios.post("http://localhost:3000/api/user/otp", {
+      const res = await api.post("/user/otp", {
         email: userDetails.email,
       });
       if (!res.data.otp) {
@@ -105,8 +106,8 @@ function ForgotPass() {
       //   });
       //   console.log(formData);
 
-      const res = await axios.post(
-        "http://localhost:3000/api/user/recover",
+      const res = await api.post(
+        "/user/recover",
         userDetails
       );
       if (!res.data.user) {

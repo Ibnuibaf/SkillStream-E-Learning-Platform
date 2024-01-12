@@ -72,7 +72,7 @@ function LearningsList() {
       setLearnings(res.data.learnings);
     } catch (error: any) {
       toast(error?.response?.data?.message);
-      window.location.href = "http://localhost:5174/";
+      window.location.href = "/";
     }
   };
   const handleProgress = async (progress: OnProgressProps) => {

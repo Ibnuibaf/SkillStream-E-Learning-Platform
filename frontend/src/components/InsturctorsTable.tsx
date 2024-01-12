@@ -76,8 +76,8 @@ function InstructorsTable() {
     });
     if (confirmed) {
       try {
-        await axios.patch(
-          `http://localhost:3000/api/user/status?_id=${id}&isBlock=${!status}`,
+        await api.patch(
+          `/user/status?_id=${id}&isBlock=${!status}`,
           {},
           {
             headers: {

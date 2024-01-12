@@ -6,6 +6,7 @@ import { selectStudents } from "../redux/slices/studentsSlice";
 import swal from "sweetalert";
 import { getStudents } from "../redux/actions/studentsActions";
 import { AppDispatch } from "../redux/store";
+import api from "../axios/api";
 
 interface ILearning {
   course: string;
@@ -74,8 +75,8 @@ function StudentsTable() {
     });
     if (confirmed) {
       try {
-        await axios.patch(
-          `http://localhost:3000/api/user/status?_id=${id}&isBlock=${!status}`,
+        await api.patch(
+          `/user/status?_id=${id}&isBlock=${!status}`,
           {},
           {
             headers: {
