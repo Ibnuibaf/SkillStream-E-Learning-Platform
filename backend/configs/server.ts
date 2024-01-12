@@ -15,6 +15,7 @@ const createServer = () => {
       origin: "*",
       methods: ["GET", "POST"],
     },
+    transports:["websocket","polling"]
   });
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));

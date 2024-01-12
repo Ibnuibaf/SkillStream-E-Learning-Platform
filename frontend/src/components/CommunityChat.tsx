@@ -67,7 +67,12 @@ function CommunityChat() {
           setChatHistory((prevChatHistory) => [...prevChatHistory, data]);
         });
       } else {
-        navigate("/mylearning");
+        if(user?.role=="student"){
+          navigate("/mylearning");
+
+        }else{
+          navigate("/instructor")
+        }
       }
     }
   }, []);
