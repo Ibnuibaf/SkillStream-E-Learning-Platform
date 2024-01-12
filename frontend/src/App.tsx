@@ -34,7 +34,6 @@ const AdminReportsPage = lazy(() => import('./pages/AdminReportsPage'));
 const SubscribeConfirmPage = lazy(() => import('./pages/SubscribeConfirmPage'));
 import Spinner from "./components/Spinner";
 import WishlistPage from "./pages/WishlistPage";
-import CertificatePage from "./pages/CertificatePage";
 
 function App() {
   const dispatch: AppDispatch = useDispatch();
@@ -65,7 +64,6 @@ function App() {
             <Route path="/mylearning" element={<Suspense fallback={<Spinner />}><MyLearningPage /></Suspense>} />
             <Route path="/profile" element={<Suspense fallback={<Spinner />}><ProfilePage /></Suspense>} />
             <Route path="/mywishlist" element={<Suspense fallback={<Spinner />}><WishlistPage /></Suspense>} />
-            <Route path="/certificate" element={<Suspense fallback={<Spinner />}><CertificatePage /></Suspense>} />
             <Route path="/mywithdrawals" element={<Suspense fallback={<Spinner />}><WithdrawalPage /></Suspense>} />
             <Route path="/personal/chat" element={<Suspense fallback={<Spinner />}><PersonalChatPage /></Suspense>} />
             <Route path="/instructor" element={<Suspense fallback={<Spinner />}><InstructorHomePage /></Suspense>} />

@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState } from "react";
 import { IoIosPlayCircle, IoMdStar } from "react-icons/io";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 import { toast } from "react-toastify";
 import api from "../axios/api";
 import ReactPlayer from "react-player";
@@ -13,6 +14,7 @@ import InstructorsList from "./InstructorsList";
 import McqTestTab from "./McqTestTab";
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/slices/authSlice";
+import Certificate from "./Certificate";
 
 interface ILesson {
   _id?: string;
@@ -537,8 +539,21 @@ function LearningsList() {
                                 )}
                               </div>
                               <div className="py-2">
-                                <button className="w-full bg-pink-600 rounded-full hover:bg-pink-600/80" onClick={()=>navigate("/certificate")}>
-                                  Download Certificate
+                                <button
+                                  className="w-full bg-pink-600 rounded-full hover:bg-pink-600/80"
+                                  // onClick={() => navigate("/certificate")}
+                                >
+                                  <PDFDownloadLink
+                                    document={<Certificate course={learning.course.title} user={user?.name as string} image={learning.course.cover}/>}
+                                    fileName="Cerificate.pdf"
+                                  >
+                                    {({loading }) =>
+                                      loading
+                                        ? "Loading document..."
+                                        : "Download Certificate"
+                                    }
+                                  </PDFDownloadLink>
+                                  
                                 </button>
                               </div>
                               <p className="text-2xl truncate font-semibold font-serif">

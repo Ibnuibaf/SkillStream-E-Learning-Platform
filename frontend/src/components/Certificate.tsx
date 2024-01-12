@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
 });
-function Certificate(props: { course: string; user: string }) {
+function Certificate(props: { course: string; user: string ;image:string}) {
   return (
     <Document>
       <Page size={{ width: 842, height: 595 }} style={styles.page}>
@@ -50,14 +50,14 @@ function Certificate(props: { course: string; user: string }) {
           <Text style={styles.header}>SkillStream Certificate</Text>
 
           <Image
-            src="https://tse1.mm.bing.net/th?id=OIP.gLRgPSxYbz0Z8dSD6Vk-eQHaE8&pid=Api&rs=1&c=1&qlt=95&w=166&h=111"
+            src={props.image}
             style={styles.image}
           />
-          <Text style={styles.content}>Name of candidate: {props.user}</Text>
+          <Text style={styles.content}>Name of candidate: {props.user.toUpperCase()}</Text>
           <Text style={styles.header}>Certificate of Achievement</Text>
           <Text style={styles.content}>
             This is to certify that
-            <Text style={{ fontWeight: "bold" }}> {props.user} </Text>
+            <Text style={{ fontWeight: "bold" }}> {props.user.toUpperCase()} </Text>
             has successfully completed the course in
             <Text style={{ fontStyle: "italic", fontWeight: "bold" }}>
               {" "}
