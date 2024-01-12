@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import api from "../axios/api";
 import { toast } from "react-toastify";
 import { IoIosPlayCircle, IoMdStar } from "react-icons/io";

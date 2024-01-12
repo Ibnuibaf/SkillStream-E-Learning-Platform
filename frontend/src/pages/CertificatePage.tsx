@@ -1,9 +1,14 @@
-import React from 'react'
+// import React from 'react'
+
+import Certificate from "../components/Certificate";
+import { PDFViewer } from "@react-pdf/renderer";
 
 function CertificatePage() {
   return (
-    <div>CertificatePage</div>
-  )
+    <PDFViewer className="min-h-screen min-w-full">
+      <Certificate user={""} course=""/>
+    </PDFViewer>
+  );
 }
 
-export default CertificatePage
+export default CertificatePage;

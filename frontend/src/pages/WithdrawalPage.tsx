@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import  { useEffect } from "react";
 import WithdrawTab from "../components/WithdrawTab";
 import Footer from "../components/Footer";
 import BasicHeader from "../components/BasicHeader";

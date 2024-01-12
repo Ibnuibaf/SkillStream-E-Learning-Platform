@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from "react";
+import  { useState } from "react";
 import { FaArrowAltCircleRight } from "react-icons/fa";
 import { RxCross2 } from "react-icons/rx";
 import { TiTick } from "react-icons/ti";

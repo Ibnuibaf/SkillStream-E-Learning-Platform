@@ -537,7 +537,7 @@ function LearningsList() {
                                 )}
                               </div>
                               <div className="py-2">
-                                <button className="w-full bg-pink-600 rounded-full hover:bg-pink-600/80">
+                                <button className="w-full bg-pink-600 rounded-full hover:bg-pink-600/80" onClick={()=>navigate("/certificate")}>
                                   Download Certificate
                                 </button>
                               </div>

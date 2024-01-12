@@ -956,7 +956,7 @@ function InstructorCourse() {
                     >
                       --At last--
                     </option>
-                    {courseDetails.lessons.map((les, index) =>
+                    {courseDetails.lessons.map((_, index) =>
                       isLessonUpdate !== null &&
                       (isLessonUpdate - 1 == index ||
                         isLessonUpdate == index) ? (
