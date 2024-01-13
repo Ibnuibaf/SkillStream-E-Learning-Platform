@@ -98,11 +98,11 @@ function CategoriesTab() {
   }, [dispatch, token]);
   return (
     <div className="">
-      <div className="flex  bg-slate-950 items-center justify-between px-10 sticky top-0 z-40 h-14">
-        <div className="flex items-center text-2xl font-semibold">
+      <div className="flex bg-slate-950 items-center justify-between px-4 md:px-10 sticky top-0 z-40 h-14">
+        <div className="flex items-center text-xl md:text-2xl font-semibold">
           <p>Category Management</p>
         </div>
-        <div className="relative w-[30vw] flex items-center">
+        <div className="relative w-full md:w-[30vw] flex items-center">
           <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
             <svg
               className="w-4 h-4 text-gray-500 dark:text-gray-400"
@@ -126,14 +126,12 @@ function CategoriesTab() {
             className="block w-full px-4 py-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Search by student's email"
             value={search}
-            onChange={
-              (e: React.ChangeEvent<HTMLInputElement>) => {
-                setSearch(e.target.value)
-                if(search.length>2){
-                  getCategoriesList()
-                }
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              setSearch(e.target.value);
+              if (search.length > 2) {
+                getCategoriesList();
               }
-            }
+            }}
             required
           />
           <button
@@ -145,9 +143,9 @@ function CategoriesTab() {
           </button>
         </div>
       </div>
-      <div className=" min-h-[80vh]  mx-12 mt-5 ">
-        <div className="flex justify-start items-center">
-          <div className="border-2 w-[40%] px-3 py-2">
+      <div className="min-h-[80vh] mx-2 md:mx-12 mt-5 ">
+        <div className="flex flex-col md:flex-row justify-start items-center">
+          <div className="border-2 w-full md:w-[40%] px-3 py-2">
             <div className="p-2 text-start ">
               <p className="text-xl mb-2">Update Categories:</p>
               <input
@@ -196,14 +194,18 @@ function CategoriesTab() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 border p-3 mt-8 max-h-[60vh] overflow-y-auto overflow-x-hidden">
           {categories.map((category) => (
-            <div className={`border p-4 h-max flex justify-between ${category.block?("border-red-400 text-gray-400 bg-neutral-900"):""}`}>
-              <div className="text-start">
-                <p className="flex font-medium">
-                  Name: &nbsp; 
-                </p>
+            <div
+              className={`border p-4 h-max flex flex-col justify-between ${
+                category.block
+                  ? "border-red-400 text-gray-400 bg-neutral-900"
+                  : ""
+              }`}
+            >
+              <div className="text-start mb-4">
+                <p className="flex font-medium">Name: &nbsp;</p>
                 <b> {category.name.toUpperCase()}</b>
               </div>
-              <div className="flex  gap-4">
+              <div className="flex justify-between gap-4">
                 <div className="group flex relative">
                   <button
                     onClick={() => {
@@ -218,7 +220,7 @@ function CategoriesTab() {
                   </span>
                 </div>
                 <div className="group flex relative">
-                  <button onClick={()=>changeCategoryStatus(category)}>
+                  <button onClick={() => changeCategoryStatus(category)}>
                     <MdDisabledVisible size={18} color="orange" />
                   </button>
                   <span className="group-hover:opacity-100 transition-opacity bg-gray-800 px-1 text-sm text-gray-100 rounded-md absolute left-1/2  opacity-0  mx-auto">
@@ -230,7 +232,6 @@ function CategoriesTab() {
           ))}
         </div>
       </div>
-      
     </div>
   );
 }

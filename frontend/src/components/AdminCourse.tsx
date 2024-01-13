@@ -10,7 +10,7 @@ import { selectcourses } from "../redux/slices/coursesSlice";
 import swal from "sweetalert";
 import axios from "axios";
 // import { MdDelete } from "react-icons/md";
-import { LuReplace } from "react-icons/lu";
+// import { LuReplace } from "react-icons/lu";
 import ReactPlayer from "react-player";
 import { FaRegCirclePlay } from "react-icons/fa6";
 import { IoMdStar } from "react-icons/io";
@@ -175,7 +175,7 @@ function AdminCourse() {
   }, [dispatch]);
 
   return (
-    <div className=" p-10 min-h-screen">
+    <div className="p-3 lg:p-10 min-h-screen">
       {courseDetailView ? (
         <div className="">
           <div className="flex justify-end my-2 gap-2">
@@ -282,9 +282,9 @@ function AdminCourse() {
             </div>
           </div>
           {step == 1 ? (
-            <div className="border p-5 px-10 mt-6 rounded-lg text-start">
-              <div className="flex justify-between items-start">
-                <div className="w-[30%]">
+            <div className="border p-2 lg:p-5 lg:px-10 mt-6 rounded-lg text-start">
+              <div className="lg:flex justify-between items-start">
+                <div className="lg:w-[30%] mb-2">
                   <div className="border p-3 mt-2">
                     <div className="flex justify-between items-end gap-2">
                       <p className="text-xl">Lessons List</p>
@@ -296,17 +296,17 @@ function AdminCourse() {
                     <div className="h-[50vh] mt-2 overflow-y-scroll overflow-x-hidden">
                       {courseDetails.lessons.map((lesson, index) => (
                         <div
-                          className="flex gap-2 items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1 cursor-pointer"
+                          className="flex gap-2 truncate items-center bg-purple-900/70 rounded-md py-1 px-3 mb-1 cursor-pointer"
                           onClick={() => {
                             setSelectedContent(lesson);
                           }}
                         >
-                          <p className="italic text-xs text-gray-400">
+                          <p className="italic text-xs text-gray-400 flex truncate">
                             {Math.floor(Number(lesson.duration) / 3600)} :{" "}
                             {Math.floor((Number(lesson.duration) % 3600) / 60)}{" "}
                             : {Math.floor(Number(lesson.duration) % 60)} hrs
                           </p>
-                          <p>{`${index + 1} ${lesson.title}`}</p>
+                          <p className="">{`${index + 1} ${lesson.title}`}</p>
                         </div>
                       ))}
                     </div>
@@ -318,7 +318,7 @@ function AdminCourse() {
                       !selectedContent.content && !selectedContent.content
                         ? "bg-white/80"
                         : ""
-                    } h-[55vh] w-[50vw]`}
+                    } h-[30vh] lg:h-[55vh] lg:w-[50vw]`}
                   >
                     {selectedContent.content ? (
                       <ReactPlayer
@@ -362,47 +362,6 @@ function AdminCourse() {
                         : {Math.floor(Number(selectedContent.duration) % 60)}{" "}
                         hrs
                       </p>
-                    </div>
-                    <div className="flex gap-2  h-max">
-                      {/* <button
-                      className="flex gap-1 py-1 border-2 border-red-800 px-3 text-red-800 hover:bg-red-800 hover:text-white"
-                      title="Delete"
-                      disabled={selectedContent.content ? false : true}
-                      onClick={() => {
-                        swal("Are you sure to replace content?", {
-                          buttons: ["Cancel", true],
-                        }).then((confirm) => {
-                          if (confirm) {
-                            setSelectedContent({
-                              ...selectedContent,
-                              content: "",
-                            });
-                          }
-                        });
-                      }}
-                    >
-                      <MdDelete size={24} />{" "}
-                    </button> */}
-                      <button
-                        className="flex gap-1 py-1 border-2 border-violet-500 px-3 text-violet-500 hover:bg-violet-500 hover:text-white"
-                        title="Replace"
-                        disabled={selectedContent.content ? false : true}
-                        onClick={() => {
-                          swal("Are you sure to replace content?", {
-                            buttons: ["Cancel", true],
-                          }).then((confirm) => {
-                            if (confirm) {
-                              setSelectedContent({
-                                ...selectedContent,
-                                content: "",
-                              });
-                            }
-                          });
-                        }}
-                      >
-                        <LuReplace size={24} />
-                        {" Replace"}
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -454,15 +413,15 @@ function AdminCourse() {
           ) : step == 3 ? (
             ""
           ) : step == 4 ? (
-            <div className="border p-5 px-10 mt-6 rounded-lg text-start flex justify-between gap-6">
-              <div className="border max-w-[20vw] ">
+            <div className="border p-2 lg:p-5 lg:px-10 mt-6 rounded-lg text-start lg:flex justify-between gap-6">
+              <div className="border lg:w-[20vw] ">
                 <div className="p-1 bg-purple-950 border-b">
                   <p className="text-xl font-medium px-4 ">Questions</p>
                 </div>
-                <div className="w-[20vw] h-[65vh] px-4 py-2 overflow-y-auto">
+                <div className=" h-[65vh] px-4 py-2 overflow-y-auto">
                   {courseDetails.mcq.map((mc, index) => (
                     <div
-                      className="flex bg-purple-700 px-4 py-1 rounded-md gap-2 cursor-pointer mb-2"
+                      className="flex bg-purple-700 px-4 py-1  rounded-md gap-2 cursor-pointer mb-2"
                       onClick={() => {
                         setMcqDetails(mc);
                       }}
@@ -489,7 +448,7 @@ function AdminCourse() {
                       A questions to the row.
                     </p>
                   </div>
-                  <div className="p-2 grid grid-cols-2 border mx-2 mt-5 gap-3">
+                  <div className="p-2 grid grid-cols-1 lg:grid-cols-2 border lg:mx-2 mt-5 gap-3">
                     <div>
                       <input
                         type="text"
@@ -567,8 +526,8 @@ function AdminCourse() {
                   be free.
                 </p>
               </div>
-              <div className=" mt-5 flex gap-5">
-                <div className="flex gap-2 items-end">
+              <div className=" mt-5 lg:flex gap-5 ">
+                <div className="flex gap-2 items-end mb-2">
                   <p className="text-lg">Course Price : </p>
                   <select
                     name=""
@@ -583,7 +542,9 @@ function AdminCourse() {
                   </select>
                 </div>
                 <div className="flex gap-2 items-end">
-                  <p className="text-lg">Course Offer % (optional) : </p>
+                  <p className="text-lg">
+                    Course Offer %<br /> (optional) :{" "}
+                  </p>
                   <input
                     type="number"
                     disabled
@@ -616,51 +577,55 @@ function AdminCourse() {
                   <p className="text-xl font-semibold">FeedBacks</p>
                 </div>
                 <div className="max-h-[50vh] overflow-y-auto overflow-x-hidden grid grid-cols-3 gap-2 mt-5">
-                  {courseDetails.reviews?.map((review) => (
-                    <div className="bg-purple-900 rounded-xl p-2 h-[15vh]">
-                      <div className="flex justify-between">
-                        <p className="text-lg font-medium truncate">
-                          {review.user.name}
-                        </p>
-                        <div className="flex items-center text-orange-500">
-                          {review.rating == 1 ? (
-                            <IoMdStar />
-                          ) : review.rating == 2 ? (
-                            <>
+                  {courseDetails.reviews?.length ? (
+                    courseDetails.reviews?.map((review) => (
+                      <div className="bg-purple-900 rounded-xl p-2 h-[15vh]">
+                        <div className="flex justify-between">
+                          <p className="text-lg font-medium truncate">
+                            {review.user.name}
+                          </p>
+                          <div className="flex items-center text-orange-500">
+                            {review.rating == 1 ? (
                               <IoMdStar />
-                              <IoMdStar />
-                            </>
-                          ) : review.rating == 3 ? (
-                            <>
-                              <IoMdStar />
-                              <IoMdStar />
-                              <IoMdStar />
-                            </>
-                          ) : review.rating == 4 ? (
-                            <>
-                              <IoMdStar />
-                              <IoMdStar />
-                              <IoMdStar />
-                              <IoMdStar />
-                            </>
-                          ) : review.rating == 5 ? (
-                            <>
-                              <IoMdStar />
-                              <IoMdStar />
-                              <IoMdStar />
-                              <IoMdStar />
-                              <IoMdStar />
-                            </>
-                          ) : (
-                            ""
-                          )}
+                            ) : review.rating == 2 ? (
+                              <>
+                                <IoMdStar />
+                                <IoMdStar />
+                              </>
+                            ) : review.rating == 3 ? (
+                              <>
+                                <IoMdStar />
+                                <IoMdStar />
+                                <IoMdStar />
+                              </>
+                            ) : review.rating == 4 ? (
+                              <>
+                                <IoMdStar />
+                                <IoMdStar />
+                                <IoMdStar />
+                                <IoMdStar />
+                              </>
+                            ) : review.rating == 5 ? (
+                              <>
+                                <IoMdStar />
+                                <IoMdStar />
+                                <IoMdStar />
+                                <IoMdStar />
+                                <IoMdStar />
+                              </>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+                        </div>
+                        <div className="line-clamp-3">
+                          <p>{review.feedback}</p>
                         </div>
                       </div>
-                      <div className="line-clamp-3">
-                        <p>{review.feedback}</p>
-                      </div>
-                    </div>
-                  ))}
+                    ))
+                  ) : (
+                    <p className="text-gray-300">No Reviews yet.</p>
+                  )}
                 </div>
               </div>
             </>
@@ -800,7 +765,7 @@ function AdminCourse() {
           )}
         </div>
       ) : (
-        <div className="border px-5 py-2">
+        <div className="border lg:px-5 py-2">
           <div className="flex justify-between px-5">
             <div className="text-start ">
               <p className="text-2xl font-medium mb-2">SkillStream Courses</p>
@@ -825,7 +790,7 @@ function AdminCourse() {
                     Search
                   </button>
                 </div>
-                <div>
+                {/* <div>
                   <select
                     name=""
                     id=""
@@ -848,76 +813,76 @@ function AdminCourse() {
                       Top Enrolled
                     </option>
                   </select>
-                </div>
+                </div> */}
               </div>
             </div>
           </div>
           <div className=" mt-4 h-[70vh] overflow-y-auto overflow-x-hidden">
             {courses.map((course) => (
-              <div className="bg-purple-900/30 rounded flex justify-between px-5 mb-2">
-                <div className="text-start flex items-center gap-2">
-                  <div className="bg-slate-950 rounded-t-lg ">
-                    <div className="px-2 text-center">
-                      <p
-                        className={`${
-                          course.isApproved
-                            ? "text-green-500"
-                            : course.isBlock
-                            ? "text-blue-800"
-                            : "text-red-600"
-                        } font-medium text-xs`}
-                      >
-                        {course.isApproved
-                          ? "APPROVED"
-                          : course.isBlock
-                          ? "BLOCKED"
-                          : "PENDING"}
-                      </p>
-                    </div>
+              <div className="bg-purple-900/30 rounded overflow-hidden sm:flex mb-2">
+                <div className="bg-slate-950 rounded-t-lg sm:w-1/3">
+                  <div className="px-2 text-center">
+                    <p
+                      className={`${
+                        course.isBlock
+                          ? "text-blue-800"
+                          : course.isApproved
+                          ? "text-green-500"
+                          : "text-red-600"
+                      } font-medium text-sm py-0.5 `}
+                    >
+                      {course.isBlock
+                        ? "BLOCKED"
+                        : course.isApproved
+                        ? "APPROVED"
+                        : "PENDING"}
+                    </p>
+                  </div>
+                  <div className="flex justify-center h-40 ">
                     <img
                       src={course.cover}
                       alt=""
-                      className="h-[6rem] w-[10rem]"
+                      className="h-full w-full object-cover"
                     />
                   </div>
-                  <div className="">
-                    <div className="pb-2">
-                      <p className="text-xl font-medium">{course.title}</p>
-                      <p className="text-sm">{course.description}</p>
-                      <p className="italic  w-max  mt-1 py-1">
-                        Enrollements :{" "}
-                        <b className="text-purple-600 space-x-[0.9px] border p-1">
-                          <span className="bg-slate-800 rounded px-1">
-                            {course.enrollers.length}
-                          </span>
-                        </b>
-                      </p>
-                    </div>
-
-                    <p className=" text-xs font-light">
-                      Updated on 05 Oct 7.5 total hours
+                </div>
+                <div className="sm:w-2/3 px-4 py-2">
+                  <div className=" text-start">
+                    <p className="text-xl font-medium">{course.title}</p>
+                    <p className="text-sm truncate line-clamp-3">
+                      {course.description}
+                    </p>
+                    <p className="italic mt-1 py-1">
+                      Enrollments :{" "}
+                      <b className="text-purple-600 space-x-[0.9px] border p-1">
+                        <span className="bg-slate-800 rounded px-1">
+                          {course.enrollers.length}
+                        </span>
+                      </b>
                     </p>
                   </div>
-                </div>
-                <div className="text-end ">
-                  <p className="text-sm">rating</p>
-                  <p className="font-semibold text-lg text-purple-600">
-                    &#8377; {course.price}/-
-                  </p>
-                  {course.offer ? (
-                    <p className="italic text-sm">{course.offer}% off</p>
-                  ) : (
-                    ""
-                  )}
-                  <button
-                    onClick={() => {
-                      setCourseDetailview(true);
-                      setCourseDetails(course);
-                    }}
-                    className="border rounded-full px-4 py-1 my-3 text-purple-600 border-purple-600 hover:shadow hover:shadow-violet-800 transition duration-300 hover:bg-purple-600 hover:text-white"
-                  >
-                    Detail/edit
-                  </button>
+                  <div className="text-start ">
+                    <div>
+                      <p className="text-sm">Rating</p>
+                    </div>
+                    <div className="text-purple-600 text-lg font-semibold">
+                      &#8377; {course.price}/- &nbsp;
+                      {course.offer && (
+                        <span className="italic text-sm">
+                          {course.offer}% off
+                        </span>
+                      )}
+                    </div>
+                    <button
+                      onClick={() => {
+                        setCourseDetailview(true);
+                        setCourseDetails(course);
+                      }}
+                      className="border rounded-full px-4 py-1 my-3 text-purple-600 border-purple-600 hover:shadow hover:shadow-violet-800 transition duration-300 hover:bg-purple-600 hover:text-white"
+                    >
+                      Detail/edit
+                    </button>
+                  </div>
                 </div>
               </div>
             ))}

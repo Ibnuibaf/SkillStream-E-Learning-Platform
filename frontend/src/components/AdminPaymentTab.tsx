@@ -46,36 +46,13 @@ function AdminPaymentTab() {
   }, []);
   return (
     <div>
-      <div className="flex  bg-slate-950 items-center justify-between px-10 sticky top-0 z-40 h-14">
+      <div className="flex bg-slate-950 items-center justify-between px-10 sticky top-0 z-40 h-14">
         <div className="flex items-center text-2xl font-semibold">
           <p>Payments Management</p>
         </div>
-        {/* <div className="relative w-[30vw] flex items-center">
-          <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <FaCalendar />
-          </div>
-          <input
-            type="date"
-            id="default-search"
-            className="block w-full px-4 py-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search by Date"
-            value={search}
-            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              setSearch(e.target.value);
-              getPayments();
-            }}
-          />
-          <button
-            type="button"
-            onClick={getPayments}
-            className="text-white absolute end-2.5 top-1/2 transform -translate-y-1/2 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 dark:bg-gray-600 dark:hover:bg-slate-950 dark:focus:ring-slate-950"
-          >
-            Search
-          </button>
-        </div> */}
       </div>
-      <div className="flex justify-center mt-16  w-full">
-        <div className="relative overflow-x-auto shadow-md sm:rounded-lg h-[75vh] w-[50vw]">
+      <div className="flex justify-center mt-16 w-full">
+        <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full md:w-[50vw]">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 sticky top-0">
               <tr>

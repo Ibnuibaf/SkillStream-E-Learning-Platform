@@ -9,7 +9,7 @@ function AdminDashboardPage() {
       <div>
         <AdminSideBar />
       </div>
-      <div className="w-full ">
+      <div className=" ">
         <AdminDashboard />
         <Footer />
       </div>

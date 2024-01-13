@@ -136,45 +136,56 @@ function AdminDashboard() {
     ],
   };
   return (
-    <div className="p-5 h-screen pt-24">
-      <div className="flex justify-center px-40">
-        <div className="flex justify-between  bg-white text-black px-6 py-2 rounded-2xl w-max text-xl font-medium gap-6 shadow-md shadow-purple-400 ">
-          <div className="flex items-center gap-6 truncate ">
+    <div className="p-5 sm:p-10 lg:p-16 xl:p-20 min-h-screen pt-24">
+      <div className="flex flex-col sm:flex-row justify-center sm:justify-between px-4 lg:px-10 xl:px-20">
+        <div className="mb-6 sm:mb-0">
+          {/* #1 Instructor section */}
+          <div className="flex items-center gap-6">
             <div className="flex items-center">
               <FaUserGraduate size={34} />
               <p>#1 Instructor</p>
             </div>
-            <p className="font-bold text-violet-500 underline text-2xl">
-              {topCourse?.instructor.name}{" "}
+            <p className="font-bold text-violet-500 underline text-2xl truncate">
+              {topCourse?.instructor.name}
             </p>
           </div>
-          <div className="flex items-center gap-6 truncate  ">
+        </div>
+
+        <div>
+          {/* #1 Course section */}
+          <div className="flex items-center gap-6">
             <div className="flex items-center">
               <MdPlayLesson size={34} />
               <p>#1 Course</p>
             </div>
-            <p className="font-bold text-violet-500 underline text-2xl">
+            <p className="font-bold text-violet-500 underline text-2xl truncate">
               {topCourse?.title}
             </p>
           </div>
         </div>
       </div>
-      <div className="px-12 pt-8">
-        <div className="border-2 h-max grid grid-cols-2 gap-4">
-          <div className="p-2 ">
-            <p className="text-xl font-medium py-2">Enrollement Revenue Graph</p>
-            <div className="border p-2">
+
+      <div className=" lg:px-10 xl:px-26 pt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          {/* Enrollement Revenue Graph */}
+          <div className="p-2">
+            <p className="text-xl font-medium py-2">Enrollment Revenue Graph</p>
+            <div className="border p-2 sm:min-h-[50vh] lg:min-h-[35vh]">
               <Line data={enrollData} />
             </div>
           </div>
-          <div className="p-2 ">
-            <p className="text-xl font-medium py-2">Enrollement Count Graph</p>
-            <div className="border p-2">
+
+          {/* Enrollment Count Graph */}
+          <div className="p-2">
+            <p className="text-xl font-medium py-2">Enrollment Count Graph</p>
+            <div className="border p-2 sm:min-h-[50vh] lg:min-h-[35vh]">
               <Bar data={countData} />
             </div>
           </div>
         </div>
-        <div className="pt-5 text-lg px-9">
+
+        <div className="pt-5 text-lg px-4 md:px-0 line-clamp-5">
+          {/* Description */}
           <p>
             Empower your educational realm with our admin dashboard—your gateway
             to insightful metrics and impactful decisions. Seamlessly manage
