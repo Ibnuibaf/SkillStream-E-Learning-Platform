@@ -9,6 +9,8 @@ import { Server as SocketIOServer } from "socket.io";
 const createServer = () => {
   const app = express();
   const server = http.createServer(app);
+
+  
   app.use(cors());
   const io = new SocketIOServer(server, {
     cors: {
@@ -17,6 +19,9 @@ const createServer = () => {
     },
     transports:["websocket","polling"]
   });
+
+
+
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(morgan("dev"));
