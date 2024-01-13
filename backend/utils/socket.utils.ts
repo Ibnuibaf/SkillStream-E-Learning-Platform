@@ -25,6 +25,8 @@ class SocketUtils {
         if (chatDetails.personalchat) {
           socket.join(`${chatDetails.personalchat?._id}`);
           console.log(`User joined room ${chatDetails.personalchat?._id} `);
+        } else {
+          socket.join(`${details}`);
         }
       });
 
