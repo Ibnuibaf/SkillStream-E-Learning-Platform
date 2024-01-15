@@ -151,7 +151,7 @@ function CommunityChat() {
                   }-lg rounded-b-lg`}
                 >
                   {chat.image && (
-                    <div className={`h-${chat.image ? "72" : "0"} w-[75vw]`}>
+                    <div className={`h-${chat.image ? "72" : "0"} max-w-[75vw]`}>
                       <img
                         src={chat.image}
                         alt=""

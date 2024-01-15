@@ -137,7 +137,7 @@ function ChatWithInstructor() {
                   {/* <p className="text-xs text-gray-300">{chat.user}</p> */}
                   <div className="bg-purple-950 w-max pl-4 pr-2 py-1 rounded-l-lg rounded-b-lg">
                     {chat.image && (
-                      <div className="h-72 max-w-80">
+                      <div className="h-72 max-w-[75vw]">
                         <img
                           src={chat.image}
                           alt=""
@@ -155,7 +155,7 @@ function ChatWithInstructor() {
                   {/* <p className="text-xs text-gray-300">{chat.user}</p> */}
                   <div className="bg-purple-950 w-max pl-4 pr-2 py-1 rounded-r-lg rounded-b-lg">
                     {chat.image && (
-                      <div className="h-72 max-w-80">
+                      <div className="h-72 max-w-[75vw]">
                         <img
                           src={chat.image}
                           alt=""
