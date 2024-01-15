@@ -17,7 +17,7 @@ function MyLearningPage() {
   return (
     <div>
       <div className="min-h-screen">
-        <div className="px-10 py-4">
+        <div className="">
           <BasicHeader />
         </div>
         <div className="py-4">

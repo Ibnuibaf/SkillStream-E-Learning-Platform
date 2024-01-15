@@ -166,7 +166,7 @@ function CourseList() {
             course: courseDetails._id,
           });
           toast("Course Added to wishlist");
-          dispatch(getUser())
+          dispatch(getUser());
         } catch (error: unknown) {
           if (axios.isAxiosError(error)) {
             toast(error?.response?.data?.message);
@@ -237,7 +237,7 @@ function CourseList() {
     <div>
       <div className=" flex  bordre-2 bg-slate-900 justify-between text-md overflow-x-auto font-medium">
         <button
-          className="border min-w-[15vw] w-full py-2 "
+          className="border min-w-[15rem] w-full py-2 truncate "
           onClick={() => {
             setSelectedCategory({ id: "", name: "" });
             setSelectedCourse("");
@@ -247,7 +247,7 @@ function CourseList() {
         </button>
         {categories.map((cat) => (
           <button
-            className="border min-w-[15vw] w-full py-2 "
+            className="border min-w-[15rem] w-full py-2 truncate "
             onClick={() => {
               setSelectedCategory({ id: cat._id, name: cat.name });
               setSelectedCourse("");
@@ -267,13 +267,13 @@ function CourseList() {
               Back
             </button>
           </div>
-          <div className="flex px-10 mt-6 justify-center items-center gap-10">
-            <div className="w-[50vw] h-[60vh]  rounded-3xl">
+          <div className="lg:flex lg:px-10 mt-6 justify-center items-center gap-10">
+            <div className="lg:w-[50vw] lg:h-[60vh] h-[40vh]  rounded-3xl">
               <ReactPlayer
                 url={courseDetails.preview}
                 controls
                 light={courseDetails.cover}
-                // playing={false}
+                playing={false}
                 width={"100%"}
                 height={"100%"}
                 playIcon={
@@ -281,8 +281,8 @@ function CourseList() {
                 }
               />
             </div>
-            <div className="flex justify-center px-10 text-start">
-              <div className="h-max border-2 p-6 w-[30vw]">
+            <div className="mt-3 lg:mt-0 flex justify-center lg:px-10 text-start">
+              <div className="h-max border-2 p-6 lg:w-[30vw]">
                 <p className="text-2xl font-bold line-clamp-2">
                   {courseDetails.title}
                 </p>
@@ -381,8 +381,8 @@ function CourseList() {
                     ""
                   )}
                 </div>
-                <div className="flex gap-3 items-center justify-between">
-                  <div className="flex gap-3">
+                <div className="lg:flex gap-3 items-center justify-between">
+                  <div className="flex flex-col lg:flex-row gap-3">
                     <button
                       className="border-2 border-pink-500 text-pink-500 px-4 py-1 text-lg hover:bg-pink-500 hover:text-white transition duration-300"
                       onClick={addToWishlist}
@@ -396,16 +396,18 @@ function CourseList() {
                       Buy Now
                     </button>
                   </div>
-                  <div className="w-20  mt-2">
-                    <img src="/stripe.png" alt="" className="w-full h-full" />
+                  <div className="flex justify-center">
+                    <div className="w-20  mt-2">
+                      <img src="/stripe.png" alt="" className="w-full h-full" />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="px-28 mt-10 text-start">
+          <div className="lg:px-28 mt-10 text-start">
             <div className="my-3 flex justify-center ">
-              <div className="border w-[50%] px-5 py-2">
+              <div className="border lg:w-[50%] px-5 py-2">
                 <p className="text-xl font-bold">
                   What you will learn in this Course
                 </p>
@@ -420,7 +422,7 @@ function CourseList() {
               <p className="text-2xl font-medium">Course Content</p>
               <div className="my-2 max-h-[50vh] overflow-y-auto overflow-x-hidden">
                 {courseDetails.lessons.map((lesson, index) => (
-                  <p className="border px-10 py-2 text-lg">
+                  <p className="border px-10 py-2 text-lg truncate">
                     {`${index + 1}. `}
                     {lesson.title.toUpperCase()}
                   </p>
@@ -474,67 +476,69 @@ function CourseList() {
                   Update your review about this course
                 </p>
               </div>
-              <p className="text-xl font-medium">Reviews</p>
-              <div className="flex min-h-[18vh] w-full overflow-x-auto gap-2">
-                {courseDetails.reviews?.map((review) => (
-                  <div className="bg-purple-900/30 rounded-2xl px-5 py-2 w-[20vw]">
-                    <div className="flex justify-between">
-                      <p className="font-semibold">
-                        By{" "}
-                        {typeof review.user == "object"
-                          ? review.user?.name
-                          : review.user}
-                      </p>
-                      <div className="flex items-center text-orange-500">
-                        {review.rating == 1 ? (
-                          <IoMdStar size={18} />
-                        ) : review.rating == 2 ? (
-                          <>
+              <div className="px-3 py-2">
+                <p className="text-xl font-medium">Reviews</p>
+                <div className="flex h-[18vh] mt-2 w-full overflow-x-auto gap-2">
+                  {courseDetails.reviews?.map((review) => (
+                    <div className="bg-purple-900/30 rounded-2xl px-5 py-2 w-[15rem]">
+                      <div className="flex justify-between">
+                        <p className="font-semibold">
+                          By{" "}
+                          {typeof review.user == "object"
+                            ? review.user?.name
+                            : review.user}
+                        </p>
+                        <div className="flex items-center text-orange-500">
+                          {review.rating == 1 ? (
                             <IoMdStar size={18} />
-                            <IoMdStar size={18} />
-                          </>
-                        ) : review.rating == 3 ? (
-                          <>
-                            <IoMdStar size={18} />
-                            <IoMdStar size={18} />
-                            <IoMdStar size={18} />
-                          </>
-                        ) : review.rating == 4 ? (
-                          <>
-                            <IoMdStar size={18} />
-                            <IoMdStar size={18} />
-                            <IoMdStar size={18} />
-                            <IoMdStar size={18} />
-                          </>
-                        ) : review.rating == 5 ? (
-                          <>
-                            <IoMdStar size={18} />
-                            <IoMdStar size={18} />
-                            <IoMdStar size={18} />
-                            <IoMdStar size={18} />
-                            <IoMdStar size={18} />
-                          </>
-                        ) : (
-                          ""
-                        )}
+                          ) : review.rating == 2 ? (
+                            <>
+                              <IoMdStar size={18} />
+                              <IoMdStar size={18} />
+                            </>
+                          ) : review.rating == 3 ? (
+                            <>
+                              <IoMdStar size={18} />
+                              <IoMdStar size={18} />
+                              <IoMdStar size={18} />
+                            </>
+                          ) : review.rating == 4 ? (
+                            <>
+                              <IoMdStar size={18} />
+                              <IoMdStar size={18} />
+                              <IoMdStar size={18} />
+                              <IoMdStar size={18} />
+                            </>
+                          ) : review.rating == 5 ? (
+                            <>
+                              <IoMdStar size={18} />
+                              <IoMdStar size={18} />
+                              <IoMdStar size={18} />
+                              <IoMdStar size={18} />
+                              <IoMdStar size={18} />
+                            </>
+                          ) : (
+                            ""
+                          )}
+                        </div>
                       </div>
+                      <p className="text-gray-300 text-xs md:text-sm lg:text-md">{review.feedback}</p>
                     </div>
-                    <p className="text-gray-300 ">{review.feedback}</p>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           </div>
         </div>
       ) : (
-        <div className="mx-20">
-          <div className="flex justify-between py-5">
+        <div className="lg:mx-20">
+          <div className="flex flex-col lg:flex-row gap-3 justify-between py-5">
             <p className="text-2xl font-semibold">
               {selectedCategory.id
                 ? `${selectedCategory?.name.toUpperCase()}`
                 : "All Categories"}
             </p>
-            <div className="border w-[50vw] h-min pt-1 pb-1 px-4 flex justify-between">
+            <div className="border lg:w-[50vw] h-min pt-1 pb-1 px-4 flex justify-between">
               <input
                 type="text"
                 value={search}
@@ -554,7 +558,7 @@ function CourseList() {
             </div>
             <div>{/* <button>Filter</button> */}</div>
           </div>
-          <div className="grid mt-5 grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-7">
+          <div className="grid mt-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5  gap-7 ">
             {selectedCategory.id
               ? courses.map((course) =>
                   (typeof course.category === "object"
@@ -563,7 +567,7 @@ function CourseList() {
                   !course.isBlock &&
                   course.isApproved ? (
                     <div
-                      className="text-start rounded-3xl bg-white text-black hover:cursor-pointer"
+                      className="text-start rounded-3xl bg-white text-black hover:cursor-pointer  "
                       onClick={() => {
                         setSelectedCourse(course._id);
                         setCourseDetails(course);
@@ -702,13 +706,13 @@ function CourseList() {
               : courses.map((course) =>
                   !course.isBlock && course.isApproved ? (
                     <div
-                      className="text-start rounded-3xl bg-white text-black hover:cursor-pointer"
+                      className="text-start rounded-3xl bg-white text-black hover:cursor-pointer h-96 flex flex-col justify-between"
                       onClick={() => {
                         setSelectedCourse(course._id);
                         setCourseDetails(course);
                       }}
                     >
-                      <div className="h-[25vh] rounded-t-3xl">
+                      <div className="h-2/4  rounded-t-3xl">
                         <img
                           src={course.cover}
                           alt=""
@@ -808,10 +812,10 @@ function CourseList() {
                           <img
                             src="https://cdn0.iconfinder.com/data/icons/user-interface-vol-3-12/66/68-512.png"
                             alt=""
-                            className="h-7 w-7"
+                            className="h-7 w-7 hidden lg:block"
                           />
                           <div className=" flex items-center">
-                            <p className=" font-semibold">
+                            <p className=" font-semibold truncate">
                               {typeof course.instructor == "object"
                                 ? course.instructor.name
                                 : course.instructor}

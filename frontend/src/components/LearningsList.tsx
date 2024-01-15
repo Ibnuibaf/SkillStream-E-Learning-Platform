@@ -103,13 +103,13 @@ function LearningsList() {
     getLearnings();
   }, []);
   return (
-    <div className="px-10">
+    <div className="lg:px-10">
       {isTestView ? (
         <>
           <div className="flex justify-start px-4 pb-2">
             <button
               type="button"
-              className="border flex items-center gap-1 rounded px-2 font-medium bg-gray-300 text-gray-800 hover:bg-gray-500 hover:text-white"
+              className="border text-xs lg:text-md flex items-center gap-1 rounded px-2 font-medium bg-gray-300 text-gray-800 hover:bg-gray-500 hover:text-white"
               onClick={() => {
                 setIsTestView(false);
               }}
@@ -135,8 +135,8 @@ function LearningsList() {
               <LuMoveLeft /> Back
             </button>
           </div>
-          <div className="flex justify-between w-full h-[80vh] gap-4">
-            <div className="w-[70%] ">
+          <div className="lg:flex justify-between w-full  gap-4">
+            <div className="lg:w-[70%] ">
               <div className="h-[90%] ">
                 {selectedLesson ? (
                   <ReactPlayer
@@ -164,13 +164,13 @@ function LearningsList() {
                   <img
                     src={learningsDetails?.course.cover}
                     alt=""
-                    className="h-full w-full rounded-xl shadow-xl shadow-purple-800/30"
+                    className="h-full w-full lg:rounded-xl shadow-xl shadow-purple-800/30"
                   />
                 )}
               </div>
-              <div className="flex gap-2 justify-center mt-5">
+              <div className="flex gap-2 justify-center mt-5 text-sm lg:text-md">
                 <button
-                  className={`px-6 py-2 border-2 hover:bg-white hover:text-black ${
+                  className={`px-4 py-1 border-2 hover:bg-white hover:text-black ${
                     !isAnnouncementView ? "bg-white text-black" : ""
                   }`}
                   onClick={() => setIsAnnouncementView(false)}
@@ -178,7 +178,7 @@ function LearningsList() {
                   Overview
                 </button>
                 <button
-                  className={`px-6 py-2 border-2 hover:bg-white hover:text-black ${
+                  className={`px-4 py-1 border-2 hover:bg-white hover:text-black ${
                     isAnnouncementView ? "bg-white text-black" : ""
                   }`}
                   onClick={() => setIsAnnouncementView(true)}
@@ -186,7 +186,7 @@ function LearningsList() {
                   Announcements
                 </button>
                 <button
-                  className={`px-6 py-2 border-2 hover:bg-white hover:text-black `}
+                  className={`px-4 py-1 border-2 hover:bg-white hover:text-black `}
                   onClick={() => setIsTestView(true)}
                   disabled={learningsDetails?.certificate}
                 >
@@ -194,9 +194,11 @@ function LearningsList() {
                 </button>
               </div>
             </div>
-            <div className="flex justify-center w-[30%]  px-5 py-5 text-start">
+            <div className="flex justify-center lg:w-[30%] px-3 lg:px-5 lg:py-5 py-2 text-start">
               <div className="border px-5 py-2 w-full ">
-                <p className="text-3xl font-semibold my-2">Course Lessons</p>
+                <p className="text-xl md:text-2xl lg:text-3xl font-semibold my-2">
+                  Course Lessons
+                </p>
                 <div className=" mt-5 h-[63vh]  overflow-y-auto overflow-x-hidden ">
                   {learningsDetails?.course.lessons.map((lesson) => (
                     <div
@@ -210,7 +212,7 @@ function LearningsList() {
                           (Number(lesson.duration) % 3600) / 60
                         )} : ${Number(lesson.duration) % 60}`}
                       </p>
-                      <p className="text-lg truncate">{lesson.title}</p>
+                      <p className=" lg:text-lg truncate">{lesson.title}</p>
                     </div>
                   ))}
                   <p className="text-xs text-gray-400 text-center">
@@ -220,7 +222,7 @@ function LearningsList() {
               </div>
             </div>
           </div>
-          <div className="text-start mt-10">
+          <div className="text-start ">
             {isAnnouncementView ? (
               <div>
                 <p className="text-2xl">Announcements</p>
@@ -235,7 +237,7 @@ function LearningsList() {
             ) : (
               <div className="pl-4">
                 <p className="text-2xl">About This Course</p>
-                <dl className="line-clamp-6 mt-4 max-w-4xl">
+                <dl className=" mt-4 max-w-4xl">
                   Deescitption Lorem Ipsum is simply dummy text of the printing
                   and typesetting industry. Lorem Ipsum has been the industry's
                   standard dummy text ever since the 1500s, when an unknown
@@ -252,14 +254,16 @@ function LearningsList() {
           </div>
         </>
       ) : (
-        <>
-          <div className="text-start my-6">
-            <p className="text-3xl font-bold">My Learnings</p>
+        <div className="">
+          <div className="text-start my-2 lg:my-6 px-6">
+            <p className="text-xl md:text-2xl lg:text-3xl font-bold">
+              My Learnings
+            </p>
           </div>
-          <div className="flex gap-1">
+          <div className="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-7 gap-1 px-6">
             <button
               type="button"
-              className={`border-2 px-4 py-1 text-lg hover:bg-white hover:text-black transition duration-300 ${
+              className={`border-2 px-4 py-1 lg:text-lg hover:bg-white hover:text-black transition duration-300 ${
                 view == "courses" ? "bg-white text-black" : ""
               }`}
               onClick={() => setView("courses")}
@@ -268,7 +272,7 @@ function LearningsList() {
             </button>
             <button
               type="button"
-              className={`border-2 px-4 py-1 text-lg hover:bg-white hover:text-black transition duration-300 ${
+              className={`border-2 px-4 py-1 lg:text-lg hover:bg-white hover:text-black transition duration-300 ${
                 view == "communities" ? "bg-white text-black" : ""
               }`}
               onClick={() => setView("communities")}
@@ -277,7 +281,7 @@ function LearningsList() {
             </button>
             <button
               type="button"
-              className={`border-2 px-4 py-1 text-lg hover:bg-white hover:text-black transition duration-300 ${
+              className={`border-2 px-4 py-1 lg:text-lg hover:bg-white hover:text-black transition duration-300 ${
                 view == "instructors" ? "bg-white text-black" : ""
               }`}
               onClick={() => setView("instructors")}
@@ -286,7 +290,7 @@ function LearningsList() {
             </button>
             <button
               type="button"
-              className={`border-2 px-4 py-1 text-lg hover:bg-white hover:text-black transition duration-300 ${
+              className={`border-2 px-4 py-1 lg:text-lg hover:bg-white hover:text-black transition duration-300 ${
                 view == "certificates" ? "bg-white text-black" : ""
               }`}
               onClick={() => setView("certificates")}
@@ -297,31 +301,31 @@ function LearningsList() {
           <div className="">
             {view == "communities" ? (
               <div className="px-10">
-                <div className="text-2xl font-semibold my-3">
+                <div className="text-lg md:text-xl lg:text-2xl font-semibold my-3">
                   <p>My Communites</p>
                 </div>
                 <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden ">
                   {learnings?.map((comm) => (
                     <div
-                      className="flex items-center gap-4 bg-purple-900/60 rounded-3xl mb-2 py-2 px-8  text-start hover:cursor-pointer hover:bg-purple-900/80 cursor-pointer"
+                      className="flex items-center gap-2 lg:gap-4 bg-purple-900/60 rounded-3xl mb-2 lg:py-2 py-1 lg:px-8 px-4  text-start hover:cursor-pointer hover:bg-purple-900/80 cursor-pointer"
                       onClick={() =>
                         navigate(`/community?courseid=${comm.course._id}`)
                       }
                     >
-                      <div className="h-12 w-12 rounded-full">
+                      <div className="w-7 h-7 lg:h-12 lg:w-12 rounded-full">
                         <img
                           src={comm.course.cover}
                           alt=""
                           className="h-full w-full rounded-full"
                         />
                       </div>
-                      <p className="text-xl">{comm.course.title}</p>
+                      <p className="lg:text-xl truncate">{comm.course.title}</p>
                     </div>
                   ))}
                 </div>
               </div>
             ) : view == "courses" ? (
-              <div className="grid mt-5 grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-7">
+              <div className="grid mt-5 grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-7 px-10">
                 {learnings?.map((course) => (
                   <div
                     className="text-start rounded-3xl bg-white text-black hover:cursor-pointer"
@@ -464,19 +468,19 @@ function LearningsList() {
                 <div className="text-2xl font-semibold my-3">
                   <p>My Certificates</p>
                 </div>
-                <div className=" max-h-[60vh] overflow-y-auto overflow-x-hidden grid grid-cols-2 gap-4">
+                <div className=" max-h-[60vh] overflow-y-auto overflow-x-hidden grid md:grid-cols-2 gap-4">
                   {learnings?.map(
                     (learning) =>
                       learning.certificate && (
-                        <div className="border-2  text-start flex rounded-lg">
-                          <div className="h-64 w-96">
+                        <div className="border-2  text-start flex justify-center rounded-lg">
+                          <div className="h-64 w-96 hidden md:block">
                             <img
                               src={learning.course.cover}
                               alt=""
                               className="h-full w-full rounded-l-lg"
                             />
                           </div>
-                          <div className="px-4 py-2 flex flex-col justify-between">
+                          <div className="px-4 py-2 flex flex-col justify-between w-full">
                             <div>
                               <div className="flex justify-end">
                                 {learning.course.reviews.reduce(
@@ -544,32 +548,41 @@ function LearningsList() {
                                   // onClick={() => navigate("/certificate")}
                                 >
                                   <PDFDownloadLink
-                                    document={<Certificate course={learning.course.title} user={user?.name as string} image={learning.course.cover}/>}
+                                    document={
+                                      <Certificate
+                                        course={learning.course.title}
+                                        user={user?.name as string}
+                                        image={learning.course.cover}
+                                      />
+                                    }
                                     fileName="Cerificate.pdf"
                                   >
-                                    {({loading }) =>
+                                    {({ loading }) =>
                                       loading
                                         ? "Loading document..."
                                         : "Download Certificate"
                                     }
                                   </PDFDownloadLink>
-                                  
                                 </button>
                               </div>
-                              <p className="text-2xl truncate font-semibold font-serif">
-                                {learning.course.title}
-                              </p>
-                              <div className="flex justify-between items-end gap-2">
-                                <p className="text-lg">Certification Test: </p>
-                                <span className="text-pink-600 font-semibold text-xl">
-                                  Completed
-                                </span>
-                              </div>
-                              <div className="flex gap-2">
-                                <p>Attendee name:</p>
-                                <span className="font-medium">
-                                  {user?.name.toUpperCase()}
-                                </span>
+                              <div className="flex flex-col  justify-start">
+                                <p className="text-2xl truncate font-semibold font-serif">
+                                  {learning.course.title}
+                                </p>
+                                <div className="flex justify-between items-end gap-2">
+                                  <p className="text-lg">
+                                    Certification Test:{" "}
+                                  </p>
+                                  <span className="text-pink-600 font-semibold text-xl">
+                                    Completed
+                                  </span>
+                                </div>
+                                <div className="flex gap-2">
+                                  <p>Attendee name:</p>
+                                  <span className="font-medium">
+                                    {user?.name.toUpperCase()}
+                                  </span>
+                                </div>
                               </div>
                             </div>
                             <div>
@@ -609,7 +622,7 @@ function LearningsList() {
               </div>
             )}
           </div>
-        </>
+        </div>
       )}
     </div>
   );

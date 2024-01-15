@@ -129,7 +129,7 @@ function InstructorCourse() {
   ) => {
     const { options } = mcqDetails;
     options[index] = e.target.value;
-    setMcqDetails({...mcqDetails})
+    setMcqDetails({ ...mcqDetails });
     // console.log(mcqDetails);
   };
   const setMcqToArray = () => {
@@ -149,15 +149,15 @@ function InstructorCourse() {
       toast("Enter necessary details");
     } else {
       const mcqs = courseDetails.mcq;
-      const newMCQArr:IMCQ[]=[]
+      const newMCQArr: IMCQ[] = [];
       mcqs.forEach((mcq) => {
-        newMCQArr.push(mcq)
+        newMCQArr.push(mcq);
       });
-      newMCQArr.push(mcqDetails)
-      setCourseDetails({ ...courseDetails,mcq:newMCQArr });
+      newMCQArr.push(mcqDetails);
+      setCourseDetails({ ...courseDetails, mcq: newMCQArr });
       setMcqDetails({
         question: "",
-        options: ["","","",""],
+        options: ["", "", "", ""],
         answer: -1,
       });
     }
@@ -174,23 +174,23 @@ function InstructorCourse() {
       toast("Enter necessary details");
     } else {
       const mcqs = courseDetails.mcq;
-      const newMCQArr:IMCQ[]=[]
+      const newMCQArr: IMCQ[] = [];
       mcqs.forEach((mcq, index) => {
         if (index == selectedMCQ) {
           mcq = mcqDetails;
           // console.log(mcq,"Here its is");
         }
-        newMCQArr.push(mcq)
+        newMCQArr.push(mcq);
       });
       // console.log(newMCQArr,"Updates mcqs");
       setCourseDetails({ ...courseDetails, mcq: newMCQArr });
       // console.log(courseDetails.mcq);
       setMcqDetails({
         question: "",
-        options: ["","","",""],
+        options: ["", "", "", ""],
         answer: -1,
       });
-      setSelectedMCQ(-1)
+      setSelectedMCQ(-1);
     }
   };
   const setLessonToArray = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -460,7 +460,7 @@ function InstructorCourse() {
   // useEffect(() => {
   // }, [courseDetails]);
   return (
-    <div className="p-10">
+    <div className="lg:p-10 min-h-screen">
       {courseDetailView ? (
         <div className="">
           <div className="flex justify-end my-2 gap-2">
@@ -555,8 +555,8 @@ function InstructorCourse() {
           </div>
           {step == 1 ? (
             <div className="border p-5 px-10 mt-6 rounded-lg text-start">
-              <div className="flex justify-between items-start">
-                <div className="w-[30%]">
+              <div className="lg:flex justify-between items-start">
+                <div className="lg:w-[30%]">
                   <div className=" text-end flex gap-1 justify-between items-end">
                     <p className="text-lg font-medium">Add Lessons: </p>
                     {!selectedContent.content && (
@@ -787,13 +787,13 @@ function InstructorCourse() {
                     </div>
                   </div>
                 </div>
-                <div>
+                <div className="mt-3 lg:mt-0">
                   <div
                     className={`${
                       !selectedContent.content && !selectedContent.content
                         ? "bg-white/80"
                         : ""
-                    } h-[55vh] w-[50vw]`}
+                    } h-[30vh] lg:h-[55vh] lg:w-[50vw] `}
                   >
                     {selectedContent.content ? (
                       <ReactPlayer
@@ -1045,8 +1045,8 @@ function InstructorCourse() {
           ) : step == 3 ? (
             ""
           ) : step == 4 ? (
-            <div className="border p-5 px-10 mt-6 rounded-lg text-start flex justify-between gap-6">
-              <div className="border max-w-[20vw] ">
+            <div className="border p-5 px-10 mt-6 rounded-lg text-start lg:flex justify-between gap-6">
+              <div className="border lg:max-w-[20vw] ">
                 <div className="p-1 bg-purple-950 border-b">
                   <p className="text-xl font-medium px-4 ">Questions</p>
                 </div>
@@ -1089,7 +1089,7 @@ function InstructorCourse() {
                       Give a questions to the row.
                     </p>
                   </div>
-                  <div className="p-2 grid grid-cols-2 border mx-2 mt-5 gap-3">
+                  <div className="p-2 grid lg:grid-cols-2 border lg:mx-2 mt-5 gap-3">
                     <div>
                       <input
                         type="text"
@@ -1206,14 +1206,14 @@ function InstructorCourse() {
                   total video length of less than 2 hours. Also, courses with
                   practice tests can not be free.
                 </p>
-                <div className="flex justify-end text-end">
+                {/* <div className="flex justify-end text-end">
                   <button className="flex gap-1 items-center rounded-md bg-purple-600/30 hover:bg-purple-600/70 transition duration-300 px-4 py-1">
                     Save
                   </button>
-                </div>
+                </div> */}
               </div>
-              <div className=" mt-5 flex gap-5">
-                <div className="flex gap-2 items-end">
+              <div className=" mt-5 lg:flex gap-5">
+                <div className="lg:flex gap-2 items-end">
                   <p className="text-lg">Course Price : </p>
                   <select
                     name=""
@@ -1271,7 +1271,7 @@ function InstructorCourse() {
                     </option>
                   </select>
                 </div>
-                <div className="flex gap-2 items-end">
+                <div className="lg:flex gap-2 items-end mt-3 lg:mt-0">
                   <p className="text-lg">Course Offer % (optional) : </p>
                   <input
                     type="number"
@@ -1377,7 +1377,7 @@ function InstructorCourse() {
               )}
             </div>
           ) : (
-            <div className="border p-5 px-10 mt-6 rounded-lg text-start">
+            <div className="border p-5 lg:px-10 mt-6 rounded-lg text-start">
               <div className="">
                 <p className="text-xl font-medium mb-2">Course Title</p>
                 <input
@@ -1420,7 +1420,7 @@ function InstructorCourse() {
               </div>
               <div className="mt-5">
                 <p className="text-xl font-medium mb-2">Basic Info</p>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-col-1 lg:grid-cols-2 gap-2">
                   <select
                     name=""
                     id=""
@@ -1532,12 +1532,6 @@ function InstructorCourse() {
                           }
                           accept="image/*"
                         />
-                        <label
-                          className="button bg-white text-black px-3 py-1 hover:cursor-pointer"
-                          htmlFor="upload"
-                        >
-                          Upload File
-                        </label>
                       </div>
                       <button
                         onClick={() => uploadImage()}
@@ -1589,12 +1583,6 @@ function InstructorCourse() {
                           }
                           accept="video/*"
                         />
-                        <label
-                          className="button bg-white text-black px-3 py-1 hover:cursor-pointer"
-                          htmlFor="upload"
-                        >
-                          Upload File
-                        </label>
                       </div>
                       <button
                         onClick={() => uploadPreview()}
@@ -1610,8 +1598,8 @@ function InstructorCourse() {
           )}
         </div>
       ) : (
-        <div className="border px-5 py-2">
-          <div className="flex justify-between px-5">
+        <div className="border lg:px-5 py-2 h-full">
+          <div className="md:flex  justify-between px-5 ">
             <div className="text-start ">
               <p className="text-2xl font-medium mb-2">Your Courses</p>
               <div className="flex gap-3 items-end">
@@ -1635,33 +1623,9 @@ function InstructorCourse() {
                     Search
                   </button>
                 </div>
-                <div>
-                  <select
-                    name=""
-                    id=""
-                    className="w-[10vw] text-black font-medium outline-none py-1 px-2 transition duration-1000 ease-in-out"
-                  >
-                    <option
-                      value=""
-                      selected
-                      className="bg-gray-800 text-white "
-                    >
-                      Latest
-                    </option>
-                    <option value="" className="bg-gray-800 text-white ">
-                      Top Rated
-                    </option>
-                    <option value="" className="bg-gray-800 text-white ">
-                      Top Enrolled
-                    </option>
-                    <option value="" className="bg-gray-800 text-white ">
-                      Top Enrolled
-                    </option>
-                  </select>
-                </div>
               </div>
             </div>
-            <div className="flex items-start">
+            <div className="flex items-start mt-3 lg:mt-0">
               <button
                 onClick={() => {
                   setCourseDetailview(true);
@@ -1675,38 +1639,42 @@ function InstructorCourse() {
           </div>
           <div className=" mt-4 h-[70vh] overflow-y-auto overflow-x-hidden">
             {courses.map((course) => (
-              <div className="bg-purple-900/30 rounded flex justify-between px-5 mb-2">
-                <div className="text-start flex items-center gap-2">
-                  <div className="bg-slate-950 rounded-t-lg ">
-                    <div className="px-2 text-center">
-                      <p
-                        className={`${
-                          course.isApproved
-                            ? "text-green-500"
-                            : course.isBlock
-                            ? "text-blue-800"
-                            : "text-red-600"
-                        } font-medium text-xs`}
-                      >
-                        {course.isApproved
-                          ? "APPROVED"
-                          : course.isBlock
-                          ? "BLOCKED"
-                          : "PENDING"}
-                      </p>
-                    </div>
+              <div className="bg-purple-900/30 rounded overflow-hidden sm:flex mb-2">
+                <div className="bg-slate-950 rounded-t-lg sm:w-1/3">
+                  <div className="px-2 text-center">
+                    <p
+                      className={`${
+                        course.isBlock
+                          ? "text-blue-800"
+                          : course.isApproved
+                          ? "text-green-500"
+                          : "text-red-600"
+                      } font-medium text-sm py-0.5 `}
+                    >
+                      {course.isBlock
+                        ? "BLOCKED"
+                        : course.isApproved
+                        ? "APPROVED"
+                        : "PENDING"}
+                    </p>
+                  </div>
+                  <div className="flex justify-center h-40 ">
                     <img
                       src={course.cover}
                       alt=""
-                      className="h-[6rem] w-[10rem]"
+                      className="h-full w-full object-cover"
                     />
                   </div>
-                  <div className="">
-                    <div className="pb-2">
+                </div>
+                <div className="sm:w-2/3 px-4 py-2">
+                  <div className="flex justify-between">
+                    <div className=" text-start">
                       <p className="text-xl font-medium">{course.title}</p>
-                      <p className="text-sm">{course.description}</p>
-                      <p className="italic  w-max  mt-1 py-1">
-                        Enrollements :{" "}
+                      <p className="text-sm truncate line-clamp-3">
+                        {course.description}
+                      </p>
+                      <p className="italic mt-1 py-1">
+                        Enrollments :{" "}
                         <b className="text-purple-600 space-x-[0.9px] border p-1">
                           <span className="bg-slate-800 rounded px-1">
                             {course.enrollers.length}
@@ -1714,31 +1682,89 @@ function InstructorCourse() {
                         </b>
                       </p>
                     </div>
-                    <p className=" text-xs font-light">
-                      Updated on 05 Oct 7.5 total hours
-                    </p>
+                    <div className="text-start ">
+                      <div>
+                        <div className="flex justify-end">
+                          {course.reviews.reduce(
+                            (sum, review) => sum + review.rating,
+                            0
+                          ) /
+                            course.reviews?.length ==
+                          1 ? (
+                            <div className="flex items-center">
+                              <IoMdStar size={18} color="orange" />
+                            </div>
+                          ) : course.reviews.reduce(
+                              (sum, review) => sum + review.rating,
+                              0
+                            ) /
+                              course.reviews?.length ==
+                            2 ? (
+                            <div className="flex items-center">
+                              <IoMdStar size={18} color="orange" />
+                              <IoMdStar size={18} color="orange" />
+                            </div>
+                          ) : course.reviews.reduce(
+                              (sum, review) => sum + review.rating,
+                              0
+                            ) /
+                              course.reviews?.length ==
+                            3 ? (
+                            <div className="flex items-center">
+                              <IoMdStar size={18} color="orange" />
+                              <IoMdStar size={18} color="orange" />
+                              <IoMdStar size={18} color="orange" />
+                            </div>
+                          ) : course.reviews.reduce(
+                              (sum, review) => sum + review.rating,
+                              0
+                            ) /
+                              course.reviews?.length ==
+                            4 ? (
+                            <div className="flex items-center">
+                              <IoMdStar size={18} color="orange" />
+                              <IoMdStar size={18} color="orange" />
+                              <IoMdStar size={18} color="orange" />
+                              <IoMdStar size={18} color="orange" />
+                            </div>
+                          ) : course.reviews.reduce(
+                              (sum, review) => sum + review.rating,
+                              0
+                            ) /
+                              course.reviews?.length ==
+                            5 ? (
+                            <div className="flex items-center">
+                              <IoMdStar size={18} color="orange" />
+                              <IoMdStar size={18} color="orange" />
+                              <IoMdStar size={18} color="orange" />
+                              <IoMdStar size={18} color="orange" />
+                              <IoMdStar size={18} color="orange" />
+                            </div>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                      </div>
+                      <div className="text-purple-600 text-lg font-semibold">
+                        &#8377; {course.price}/- &nbsp;
+                        {course.offer && (
+                          <span className="italic text-sm">
+                            {course.offer}% off
+                          </span>
+                        )}
+                      </div>
+                      <button
+                        onClick={() => {
+                          setCourseDetailview(true);
+                          setCourseDetails(course);
+                          setNewCourse(false);
+                        }}
+                        className="border rounded-full px-4 py-1 my-3 text-purple-600 border-purple-600 hover:shadow hover:shadow-violet-800 transition duration-300 hover:bg-purple-600 hover:text-white"
+                      >
+                        Detail/edit
+                      </button>
+                    </div>
                   </div>
-                </div>
-                <div className="text-end ">
-                  <p className="text-sm">rating</p>
-                  <p className="font-semibold text-lg text-purple-600">
-                    &#8377; {course.price}/-
-                  </p>
-                  {course.offer ? (
-                    <p className="italic text-sm">{course.offer}% off</p>
-                  ) : (
-                    ""
-                  )}
-                  <button
-                    onClick={() => {
-                      setCourseDetailview(true);
-                      setCourseDetails(course);
-                      setNewCourse(false);
-                    }}
-                    className="border rounded-full px-4 py-1 my-3 text-purple-600 border-purple-600 hover:shadow hover:shadow-violet-800 transition duration-300 hover:bg-purple-600 hover:text-white"
-                  >
-                    Detail/edit
-                  </button>
                 </div>
               </div>
             ))}

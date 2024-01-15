@@ -29,15 +29,15 @@ function InstructorCommunityList() {
         getCommunities()
     },[])
   return (
-    <div className="p-10 h-[95vh] ">
-      <div className="px-10">
+    <div className="lg:p-10 h-[95vh] ">
+      <div className="lg:px-10">
         <div className="text-2xl font-semibold my-3">
           <p>My Communites</p>
         </div>
         <div className="max-h-[60vh] overflow-y-auto overflow-x-hidden ">
           {communities?.map((comm:any) => (
             <div
-              className="flex items-center gap-4 bg-purple-900/60 rounded-3xl mb-2 py-2 px-8  text-start hover:cursor-pointer hover:bg-purple-900/80 cursor-pointer"
+              className="flex items-center gap-4 bg-purple-900/60 lg:rounded-3xl rounded-xl mb-2 py-1 px-8  text-start hover:cursor-pointer hover:bg-purple-900/80 cursor-pointer"
               onClick={() => navigate(`/community?courseid=${comm._id}`)}
             >
               <div className="h-12 w-12 rounded-full">

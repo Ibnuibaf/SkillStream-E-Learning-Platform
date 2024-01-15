@@ -28,9 +28,9 @@ function StudentsList() {
           <div className="text-2xl font-semibold my-3">
             <p>My Chats</p>
           </div>
-          <div className=" max-h-[60vh] overflow-y-auto overflow-x-hidden grid grid-cols-7 gap-4">
+          <div className=" max-h-[60vh] overflow-y-auto overflow-x-hidden grid grid-cols-2 md:grid-cols-5 lg:grid-cols-7 gap-4">
             {personalChats?.map((personalChat: any) => (
-              <div className="flex flex-col items-center justify-between gap-4 bg-purple-500 rounded-3xl mb-2 px-4 py-5 h-[25vh]  text-start ">
+              <div className="flex flex-col items-center justify-between gap-4 bg-purple-500 rounded-3xl mb-2 px-4 py-2   text-start ">
                 <div className="flex flex-col  items-center">
                   <div className="h-16 w-16 rounded-full">
                     <img

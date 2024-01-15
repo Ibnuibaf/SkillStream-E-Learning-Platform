@@ -96,7 +96,7 @@ function StudentsTable() {
     }
   };
   return (
-    <>
+    <div className="min-h-screen">
       {detailsView ? (
         <div className="h-screen">
           <div className="flex justify-start p-6">
@@ -260,11 +260,11 @@ function StudentsTable() {
         </div>
       ) : (
         <>
-          <div className="flex  bg-slate-950 items-center justify-between px-10 sticky top-0 z-40 h-14">
+          <div className="flex bg-slate-950 items-center justify-between px-4 md:px-10 sticky top-0 z-40 h-14">
             <div className="flex items-center text-2xl font-semibold">
               <p>Students Management</p>
             </div>
-            <div className="relative w-[30vw] flex items-center">
+            <div className="relative w-full md:w-[30vw] flex items-center">
               <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
                 <svg
                   className="w-4 h-4 text-gray-500 dark:text-gray-400"
@@ -305,27 +305,27 @@ function StudentsTable() {
               </button>
             </div>
           </div>
-          <div className="flex justify-center mt-16  w-full">
-            <div className="relative overflow-x-auto shadow-md sm:rounded-lg h-[75vh] w-[70vw]">
+          <div className="flex justify-center mt-4 md:mt-16 w-full">
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full md:w-[70vw]">
               <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 sticky top-0">
                   <tr>
-                    <th scope="col" className="px-6 py-3">
+                    <th scope="col" className="px-4 md:px-6 py-3">
                       Student Email
                     </th>
-                    <th scope="col" className="px-6 py-3">
+                    <th scope="col" className="px-4 md:px-6 py-3">
                       Name
                     </th>
-                    <th scope="col" className="px-6 py-3">
+                    <th scope="col" className="px-4 md:px-6 py-3">
                       Purchased Courses
                     </th>
-                    <th scope="col" className="px-6 py-3">
+                    <th scope="col" className="px-4 md:px-6 py-3">
                       Certificates
                     </th>
-                    <th scope="col" className="px-6 py-3">
+                    <th scope="col" className="px-4 md:px-6 py-3">
                       Role
                     </th>
-                    <th scope="col" className="px-6 py-3">
+                    <th scope="col" className="px-4 md:px-6 py-3">
                       Action
                     </th>
                   </tr>
@@ -337,18 +337,28 @@ function StudentsTable() {
                       className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                     >
                       <td
-                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:cursor-pointer"
+                        className="px-4 md:px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:cursor-pointer"
                         // onClick={() => setDetailsview(student)}
                       >
                         {student.email}
                       </td>
-                      <td className="px-6 py-4 text-red-600">{student.name}</td>
-                      <td className="px-6 py-4">{student.learnings.length}</td>
-                      <td className="px-6 py-4">{(student.learnings.filter((learn)=>learn.certificate==true)).length}</td>
-                      <td className="px-6 py-4">
+                      <td className="px-4 md:px-6 py-4 text-red-600">
+                        {student.name}
+                      </td>
+                      <td className="px-4 md:px-6 py-4">
+                        {student.learnings.length}
+                      </td>
+                      <td className="px-4 md:px-6 py-4">
+                        {
+                          student.learnings.filter(
+                            (learn) => learn.certificate === true
+                          ).length
+                        }
+                      </td>
+                      <td className="px-4 md:px-6 py-4">
                         {student.role.toUpperCase()}
                       </td>
-                      <td className="flex  items-center px-6 py-4">
+                      <td className="flex  items-center px-4 md:px-6 py-4">
                         <button
                           type="button"
                           onClick={() =>
@@ -367,7 +377,7 @@ function StudentsTable() {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 }
 

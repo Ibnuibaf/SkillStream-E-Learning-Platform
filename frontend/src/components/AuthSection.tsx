@@ -49,7 +49,7 @@ function AuthSection() {
                   alt=""
                   className="rounded-full h-8"
                 />
-                <p>{userDetails.user?.name}</p>
+                <p className="hidden md:block">{userDetails.user?.name}</p>
               </div>
             ) : (
               "User"
@@ -111,7 +111,7 @@ function AuthSection() {
                   alt=""
                   className="rounded-full h-8"
                 />
-                <p>{userDetails.user?.name}</p>
+                <p >{userDetails.user?.name}</p>
               </Link>
             </div>
           )}

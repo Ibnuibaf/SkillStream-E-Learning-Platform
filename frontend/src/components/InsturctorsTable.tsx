@@ -124,7 +124,7 @@ function InstructorsTable() {
     }
   };
   return (
-    <>
+    <div className="min-h-screen">
       {detailsView ? (
         <div className="h-screen">
           <div className="flex justify-start p-6">
@@ -238,9 +238,9 @@ function InstructorsTable() {
                             <p className="">
                               {"Rs. "}
                               <span className="text-yellow-600 font-semibold">
-                              {Math.floor(trans.amount as number)}
-                                
-                              </span>{"/- "}
+                                {Math.floor(trans.amount as number)}
+                              </span>
+                              {"/- "}
                             </p>
                           </div>
                         ))}
@@ -254,12 +254,12 @@ function InstructorsTable() {
         </div>
       ) : (
         <>
-          <div className="flex  bg-slate-950 items-center justify-between px-10 sticky top-0 z-40 h-14">
+          <div className="lg:flex py-2  md:justify-between bg-slate-950 items-center px-4 md:px-10 sticky top-0 z-40 ">
             <div className="flex items-center text-2xl font-semibold">
               <p>Instructors Management</p>
             </div>
-            <div className="relative w-[30vw] flex items-center">
-              <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+            <div className="relative w-full md:w-[30vw] flex items-center mt-4 md:mt-0">
+              <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                 <svg
                   className="w-4 h-4 text-gray-500 dark:text-gray-400"
                   aria-hidden="true"
@@ -269,9 +269,9 @@ function InstructorsTable() {
                 >
                   <path
                     stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
                     d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
                   />
                 </svg>
@@ -279,7 +279,7 @@ function InstructorsTable() {
               <input
                 type="search"
                 id="default-search"
-                className="block w-full px-4 py-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                className="block w-full px-4 py-2 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                 placeholder="Search by student's email"
                 value={search}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -293,17 +293,17 @@ function InstructorsTable() {
               <button
                 type="button"
                 onClick={getUsersList}
-                className="text-white absolute end-2.5 top-1/2 transform -translate-y-1/2 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 dark:bg-gray-600 dark:hover:bg-slate-950 dark:focus:ring-slate-950"
+                className="text-white absolute right-2.5 top-1/2 transform -translate-y-1/2 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-1 dark:bg-gray-600 dark:hover:bg-slate-950 dark:focus:ring-slate-950"
               >
                 Search
               </button>
             </div>
           </div>
-          <div className="w-full flex justify-start px-10 py-5">
+          <div className="w-full flex justify-start px-4 md:px-10 py-5">
             <div className="border-2 rounded-full">
               <button
                 type="button"
-                className={`border rounded-s-full px-3 py-1  ${
+                className={`border rounded-l-full px-3 py-1 ${
                   tabView == "approved"
                     ? "bg-slate-600 font-medium"
                     : "bg-transparent"
@@ -314,7 +314,7 @@ function InstructorsTable() {
               </button>
               <button
                 type="button"
-                className={`border rounded-r-full px-4 py-1  ${
+                className={`border rounded-r-full px-4 py-1 ${
                   tabView == "pending"
                     ? "bg-slate-600 font-medium"
                     : "bg-transparent"
@@ -325,8 +325,8 @@ function InstructorsTable() {
               </button>
             </div>
           </div>
-          <div className="flex justify-center mt-16  w-full">
-            <div className="relative overflow-x-auto shadow-md sm:rounded-lg h-[70vh] w-[70vw]">
+          <div className="flex justify-center mt-4 w-full overflow-x-auto">
+            <div className="relative overflow-x-auto shadow-md sm:rounded-lg md:w-[70vw]">
               <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                 <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 sticky top-0">
                   <tr>
@@ -397,7 +397,6 @@ function InstructorsTable() {
                                 >
                                   {instructor.isBlock ? "UnBlock" : "Block"}
                                 </button>
-                               
                               </td>
                             </tr>
                           );
@@ -445,7 +444,9 @@ function InstructorsTable() {
                                 </button>
                                 <button
                                   type="button"
-                                  onClick={() => changeInstructorPending(instructor._id)}
+                                  onClick={() =>
+                                    changeInstructorPending(instructor._id)
+                                  }
                                   className={`border px-3 rounded font-medium text-blue-600 dark:text-blue-500 hover:underline ms-3`}
                                 >
                                   Approve
@@ -493,7 +494,7 @@ function InstructorsTable() {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 }
 

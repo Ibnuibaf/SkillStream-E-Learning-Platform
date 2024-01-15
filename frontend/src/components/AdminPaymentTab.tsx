@@ -45,27 +45,27 @@ function AdminPaymentTab() {
     getPayments();
   }, []);
   return (
-    <div>
-      <div className="flex bg-slate-950 items-center justify-between px-10 sticky top-0 z-40 h-14">
+    <div className="min-h-screen">
+      <div className="flex bg-slate-950 items-center justify-between px-4 md:px-10 sticky top-0 z-40 h-14">
         <div className="flex items-center text-2xl font-semibold">
           <p>Payments Management</p>
         </div>
       </div>
-      <div className="flex justify-center mt-16 w-full">
+      <div className="flex justify-center mt-4 md:mt-16 w-full">
         <div className="relative overflow-x-auto shadow-md sm:rounded-lg w-full md:w-[50vw]">
           <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 sticky top-0">
               <tr>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-4 md:px-6 py-3">
                   Date
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-4 md:px-6 py-3">
                   Instructor
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-4 md:px-6 py-3">
                   Amount
                 </th>
-                <th scope="col" className="px-6 py-3">
+                <th scope="col" className="px-4 md:px-6 py-3">
                   Action
                 </th>
               </tr>
@@ -77,14 +77,14 @@ function AdminPaymentTab() {
                     key={payment._id}
                     className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                   >
-                    <td className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:cursor-pointer">
+                    <td className="px-4 md:px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white hover:cursor-pointer">
                       {new Date(payment.date).toLocaleDateString()}
                     </td>
-                    <td className="px-6 py-4 text-red-600">
+                    <td className="px-4 md:px-6 py-4 text-red-600">
                       {payment.user.name}
                     </td>
-                    <td className="px-6 py-4">{payment.amount}</td>
-                    <td className="flex  items-center px-6 py-4">
+                    <td className="px-4 md:px-6 py-4">{payment.amount}</td>
+                    <td className="flex items-center px-4 md:px-6 py-4">
                       {!payment.checked && (
                         <button
                           type="button"

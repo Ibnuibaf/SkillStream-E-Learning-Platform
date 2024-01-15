@@ -41,15 +41,15 @@ function Landing() {
   return (
     <div className=" ">
       {/* <h1 className="text-3xl font-bold underline ">Hello world!</h1> */}
-      <div className="flex justify-center h-[80vh] items-center">
-        <div className="border-8 rounded-3xl max-w-5xl h-max p-14 ">
+      <div className="flex justify-center lg:h-[80vh] items-center py-4 px-4">
+        <div className="border-2 md:border-4 lg:border-8 rounded-3xl lg:max-w-5xl h-max p-5 md:p-8 lg:p-14 ">
           <div className="flex">
-            <div className="">
+            <div className="hidden lg:block">
               <div className="h-20 w-20">
                 <img src="/graphics-1.png" alt="" className="h-full w-full" />
               </div>
             </div>
-            <p className="text-7xl font-serif">
+            <p className="text-2xl md:text-5xl lg:text-7xl font-serif ">
               Teaching in the Internet age means we must teach{" "}
               <span className="text-violet-600">
                 tomorrow’s skills <span className="text-pink-500">today.</span>
@@ -57,22 +57,22 @@ function Landing() {
             </p>
           </div>
           <div className="mt-6 flex items-center justify-between ">
-            <div className="h-20 w-20">
+            <div className="h-20 w-20 hidden lg:block">
               <img
                 src="/graphics-1.png"
                 alt=""
                 className="h-full w-full rotate-90"
               />
             </div>
-            <div className="flex justify-center gap-10">
+            <div className="flex flex-col lg:flex-row justify-center gap-2 lg:gap-10 w-full">
               <button
-                className="bg-purple-700 px-10 py-3 text-xl font-semibold rounded-full hover:bg-purple-700/60"
+                className="bg-purple-700 px-10 py-1 lg:py-3 md:text-lg lg:text-xl font-semibold rounded-full hover:bg-purple-700/60 "
                 onClick={() => navigate("/login")}
               >
                 Join as Student
               </button>
               <button
-                className="bg-pink-700 px-10 py-3 text-xl font-semibold rounded-full hover:bg-pink-700/60"
+                className="bg-pink-700 px-10 py-1 lg:py-3 md:text-lg lg:text-xl font-semibold rounded-full hover:bg-pink-700/60 "
                 onClick={() => {
                   if (!user) {
                     navigate("/login");
@@ -84,7 +84,7 @@ function Landing() {
                 Join as Instructor
               </button>
             </div>
-            <div className="h-20 w-20">
+            <div className="h-20 w-20 hidden lg:block">
               <img
                 src="/graphics-1.png"
                 alt=""
@@ -95,19 +95,21 @@ function Landing() {
         </div>
       </div>
       <div>
-        <div className="text-start bg-purple-950/70 px-28 py-4">
-          <p className="text-2xl font-medium ">Our Latest Courses</p>
+        <div className="text-start bg-purple-950/70 px-4 lg:px-28 py-2 lg:py-4">
+          <p className="md:text-xl lg:text-2xl font-medium ">
+            Our Latest Courses
+          </p>
         </div>
-        <div className="grid mt-5 grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-7 px-28">
+        <div className="grid mt-5 grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-7 px-3 lg:px-28">
           {courseList.map((course) =>
             !course.isBlock && course.isApproved ? (
               <div
-                className="text-start rounded-3xl bg-white text-black hover:cursor-pointer"
+                className="text-start rounded-3xl bg-white text-black hover:cursor-pointer h-96 flex flex-col justify-between"
                 onClick={() => {
                   navigate("/courses");
                 }}
               >
-                <div className="h-[25vh] rounded-t-3xl">
+                <div className="h-2/4  rounded-t-3xl">
                   <img
                     src={course.cover}
                     alt=""
@@ -204,9 +206,13 @@ function Landing() {
                 </div>
                 <div className="flex items-center justify-between border-t my-2 px-3 pt-2 ">
                   <div className="flex items-center gap-2">
-                    <img src="https://cdn0.iconfinder.com/data/icons/user-interface-vol-3-12/66/68-512.png" alt="" className="h-7 w-7"/>
+                    <img
+                      src="https://cdn0.iconfinder.com/data/icons/user-interface-vol-3-12/66/68-512.png"
+                      alt=""
+                      className="h-7 w-7 hidden lg:block"
+                    />
                     <div className=" flex items-center">
-                      <p className=" font-semibold">
+                      <p className=" font-semibold truncate">
                         {typeof course.instructor == "object"
                           ? course.instructor.name
                           : course.instructor}
@@ -234,13 +240,13 @@ function Landing() {
         </div>
       </div>
       <div className="my-10">
-        <div className="px-28 py-4">
-          <p className="text-2xl font-medium ">Explore Top Categories</p>
+        <div className="lg:px-28 py-4">
+          <p className="md:text-xl lg:text-2xl font-medium ">Explore Top Categories</p>
         </div>
         <div className="px-10 overflow-x-auto flex items-center gap-4">
           {categoriesList.map((cat) => (
             <div
-              className={`border rounded p-4 h-max  flex  justify-between items-center gap-1 cursor-pointer`}
+              className={`border rounded p-4 h-max min-w-[13rem] flex  justify-between items-center gap-1 cursor-pointer`}
               onClick={() => navigate("/courses")}
             >
               <div className="h-12 w-12">

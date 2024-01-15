@@ -6,7 +6,7 @@ import LoginSection from "../components/LoginSection";
 function LoginPage() {
   return (
     <div className=" ">
-      <div className="px-10 py-4 h-screen">
+      <div className=" h-screen">
         <BasicHeader />
         <LoginSection />
       </div>

@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 // import { toast } from "react-toastify";
-const baseURI= import.meta.env.VITE_PUBLIC_BASE_API
+const baseURI = import.meta.env.VITE_PUBLIC_BASE_API;
 import io from "socket.io-client";
 import { selectUser } from "../redux/slices/authSlice";
 import api from "../axios/api";
@@ -33,6 +33,15 @@ function CommunityChat() {
   const [image, setImage] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [chatHistory, setChatHistory] = useState<Message[]>([]);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    // Scroll to the bottom when chat history updates
+    chatContainerRef.current?.scrollTo(
+      0,
+      chatContainerRef.current.scrollHeight
+    );
+  }, [chatHistory]);
 
   const getCommunity = async () => {
     try {
@@ -52,7 +61,7 @@ function CommunityChat() {
       navigate("/mylearning");
     } else {
       getCommunity();
-      const isInstructor=user?.role=="instructor"
+      const isInstructor = user?.role == "instructor";
       const isPurchased = user?.learnings.find(
         (learn) => learn.course == courseId
       );
@@ -67,11 +76,10 @@ function CommunityChat() {
           setChatHistory((prevChatHistory) => [...prevChatHistory, data]);
         });
       } else {
-        if(user?.role=="student"){
+        if (user?.role == "student") {
           navigate("/mylearning");
-
-        }else{
-          navigate("/instructor")
+        } else {
+          navigate("/instructor");
         }
       }
     }
@@ -118,89 +126,80 @@ function CommunityChat() {
     }
   };
   return (
-    <div className="text-start ">
+    <div className="text-start">
       <div className="bg-purple-700 px-4 text-center">
         <p className="text-3xl px-4 py-2 font-bold">
           {communityName} Community
         </p>
       </div>
-      <div className=" flex flex-col justify-between">
-        <div className="px-4 py-5 h-[74vh] overflow-y-auto">
-          {chatHistory.map((chat, index) =>
-            chat.user == user?.name ? (
-              <div key={index} className="px-3 py-2  flex justify-end">
-                <div className="">
-                  {/* <p className="text-xs text-gray-300">{chat.user}</p> */}
-                  <div className="bg-purple-950 w-max pl-4 pr-2 py-1 rounded-l-lg rounded-b-lg">
-                    {chat.image && (
-                      <div className="h-72 w-80">
-                        <img
-                          src={chat.image}
-                          alt=""
-                          className="h-full w-full rounded-md"
-                        />
-                      </div>
-                    )}
-                    <p>{chat.message}</p>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div key={index} className="px-3 py-2">
-                <div>
-                  <p className="text-xs text-gray-300">{chat.user}</p>
-                  <div className="bg-purple-950 w-max pl-4 pr-2 py-1 rounded-r-lg rounded-b-lg">
-                    {chat.image && (
-                      <div className="h-72">
-                        <img
-                          src={chat.image}
-                          alt=""
-                          className="h-full w-full rounded-md"
-                        />
-                      </div>
-                    )}
-                    <p>{chat.message}</p>
-                  </div>
-                </div>
-              </div>
-            )
-          )}
-        </div>
-        <div className="bg-purple-900 ">
-          {image && (
-            <div className="bg-gray-800 px-4 py-1">
-              <p className="">{image?.name}</p>
-            </div>
-          )}
-          <div className="flex px-4 items-center gap-2 pr-10">
-            <input
-              type="text"
-              className="py-3 bg-transparent w-full outline-none"
-              value={message}
-              placeholder="Send Your Message and quries"
-              onChange={(e) => setMessage(e.target.value)}
-            />
-            <label htmlFor="image" title="Send Image">
-              <input
-                type="file"
-                name="image"
-                accept="image/*"
-                id="image"
-                className="hidden "
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                  setImage(e.target.files ? e.target.files[0] : null)
-                }
-              />
-              <FaPlusCircle size={24} className="cursor-pointer" />
-            </label>
-            <button
-              className="bg-violet-600 px-4 py-1 rounded "
-              onClick={sendMessage}
-              disabled={loading}
+      <div className="flex flex-col justify-between h-screen">
+        <div className="px-4 py-5  overflow-y-scroll mb-40" ref={chatContainerRef}>
+          {chatHistory.map((chat, index) => (
+            <div
+              key={index}
+              className={`px-3 py-2 ${
+                chat.user === user?.name ? "flex justify-end" : ""
+              }`}
             >
-              {loading ? "Sending..." : "Send"}
-            </button>
+              <div className="">
+                {chat.user !== user?.name && (
+                  <p className="text-xs text-gray-300">{chat.user}</p>
+                )}
+                <div
+                  className={`bg-purple-950 w-max pl-4 pr-2 py-1 rounded-${
+                    chat.user === user?.name ? "l" : "r"
+                  }-lg rounded-b-lg`}
+                >
+                  {chat.image && (
+                    <div className={`h-${chat.image ? "72" : "0"} w-[75vw]`}>
+                      <img
+                        src={chat.image}
+                        alt=""
+                        className="h-full w-full rounded-md"
+                      />
+                    </div>
+                  )}
+                  <p>{chat.message}</p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="bg-purple-900  absolute w-full bottom-0">
+        {image && (
+          <div className="bg-gray-800 px-4 py-1">
+            <p className="">{image?.name}</p>
           </div>
+        )}
+        <div className="flex  px-4 items-center gap-2 sm:pr-10">
+          <input
+            type="text"
+            className="py-3 bg-transparent w-full outline-none"
+            value={message}
+            placeholder="Send Your Message and queries"
+            onChange={(e) => setMessage(e.target.value)}
+          />
+          <label htmlFor="image" title="Send Image">
+            <input
+              type="file"
+              name="image"
+              accept="image/*"
+              id="image"
+              className="hidden"
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setImage(e.target.files ? e.target.files[0] : null)
+              }
+            />
+            <FaPlusCircle size={24} className="cursor-pointer" />
+          </label>
+          <button
+            className="bg-violet-600 px-4 py-1 rounded"
+            onClick={sendMessage}
+            disabled={loading}
+          >
+            {loading ? "Sending..." : "Send"}
+          </button>
         </div>
       </div>
     </div>

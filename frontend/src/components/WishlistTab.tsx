@@ -105,11 +105,11 @@ function WishlistTab() {
     }
   };
   return (
-    <div className="py-5">
+    <div className="py-5 px-10">
       <div className="flex justify-center">
-        <p className="border rounded-full text-2xl px-20 bg-pink-700 shadow-md shadow-pink-500 flex items-center gap-2 py-0.5"><LuHeart size={28}></LuHeart> My Wishlist</p>
+        <p className="border rounded-full text-lg md:text-xl lg:text-2xl px-20 bg-pink-700 shadow-md shadow-pink-500 flex items-center gap-2 py-0.5"><LuHeart size={28}></LuHeart> My Wishlist</p>
       </div>
-      <div className="grid  grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-7 mt-16">
+      <div className="grid  grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-7 mt-16">
         {wishlist?.map((course) => (
           <div className="text-start rounded-3xl bg-white text-black hover:cursor-pointer">
             <div className="h-[25vh] rounded-t-3xl">

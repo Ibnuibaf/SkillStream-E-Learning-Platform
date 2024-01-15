@@ -6,7 +6,7 @@ import Landing from "../components/Landing";
 function LandingPage() {
   return (
     <div >
-      <div className="px-10 py-4">
+      <div className="">
         <BasicHeader />
       </div>
       <Landing />

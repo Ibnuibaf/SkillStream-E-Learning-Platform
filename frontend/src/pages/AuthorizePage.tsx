@@ -1,10 +1,11 @@
 import axios from "axios";
-import  {  useState } from "react";
+import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import { selectUser } from "../redux/slices/authSlice";
 import { getUser } from "../redux/actions/authActions";
 import { AppDispatch } from "../redux/store";
+import api from "../axios/api";
 const qa = [
   {
     title: "Share Your Knowledge",
@@ -43,7 +44,7 @@ const qa = [
 function AuthorizePage() {
   const [step, setStep] = useState(0);
   const user = useSelector(selectUser).user;
-  const dispatch:AppDispatch = useDispatch();
+  const dispatch: AppDispatch = useDispatch();
   const [Authorization, setAuthorization] = useState<{ [key: string]: string }>(
     {
       "0": "",
@@ -59,8 +60,8 @@ function AuthorizePage() {
     try {
       console.log("Hello are you there");
 
-      const res = await axios.post(
-        "http://localhost:3000/api/user/authorize",
+      const res = await api.post(
+        "/user/authorize",
         { updates: Authorization, id: user?._id },
         {
           headers: {
@@ -82,12 +83,12 @@ function AuthorizePage() {
     }
   };
   return (
-    <div className="h-screen">
-      <h3 className="flex border rounded-3xl px-2 w-max  m-5 bg-white text-slate-950 font-semibold text-sm">
+    <div className="min-h-screen flex flex-col justify-between">
+      <h3 className="flex border rounded-3xl px-2 w-max m-5 bg-white text-slate-950 font-semibold text-sm">
         STEP {step + 1} / 3
       </h3>
       <div className="section flex justify-center items-center h-[85%] text-start">
-        <div className="border p-7 rounded-xl h-min max-w-lg">
+        <div className="border p-7 rounded-xl w-full max-w-md md:max-w-lg lg:max-w-xl">
           <div className="">
             <p className="text-2xl font-bold">{qa[step].title}</p>
             <p className="mt-3 text-sm">{qa[step].desc}</p>
@@ -122,15 +123,15 @@ function AuthorizePage() {
           </div>
         </div>
       </div>
-      <div className="bg-custom-500 py-4 flex justify-between px-10">
+      <div className="bg-custom-500 py-4 flex flex-col md:flex-row justify-between px-4 md:px-10">
         <button
-          className="border rounded-md h-min py-1 px-3 font-semibold duration-300 hover:bg-white hover:text-slate-950"
+          className="border rounded-md h-min py-1 px-3 font-semibold mb-2 md:mb-0 md:mr-2 duration-300 hover:bg-white hover:text-slate-950"
           disabled={step === 0}
           onClick={() => setStep((prevStep) => prevStep - 1)}
         >
           Prev
         </button>
-        {step == 2 ? (
+        {step === 2 ? (
           <button
             className="bg-white border text-slate-950 rounded-md h-min py-1 font-semibold px-3 duration-300 hover:bg-transparent hover:text-white"
             type="button"

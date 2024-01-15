@@ -17,7 +17,7 @@ function ProfilePage() {
   }, [token]);
   return (
     <div className="">
-      <div className="min-h-screen  px-10 py-4">
+      <div className="min-h-screen  ">
         <BasicHeader />
         <ProfileTab />
       </div>

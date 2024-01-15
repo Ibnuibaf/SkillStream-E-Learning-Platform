@@ -69,17 +69,17 @@ function AdminSideBar() {
         <div className=" items-center  h-16 shadow-md py-1">
           <div className="text-3xl flex items-center font-semibold">
             <>
-              <img src="/SkillStream-Logo.png" alt="" className="h-12" />
+              <img src="/SkillStream-Logo-white.png" alt="" className="h-12" />
               {!collapsed && <p>SkillStream</p>}
             </>
           </div>
         </div>
         <div
           className={`flex   ${
-            collapsed ? "justify-start px-2" : "justify-center"
+            collapsed ? "justify-start " : "justify-center"
           } `}
         >
-          <div className="bg-slate-600 flex gap-2 mt-1 items-center px-2 rounded-md">
+          <div className={`${!collapsed && "bg-slate-600"} flex gap-2 mt-1 items-center px-2 rounded-md`}>
             <MdAdminPanelSettings color="orange" size={24} />
             {!collapsed && (
               <p className="text-md text-center text-orange-400 font-bold">
@@ -88,184 +88,186 @@ function AdminSideBar() {
             )}
           </div>
         </div>
-        <ul className="flex flex-col pb-4">
-          <li className="flex px-4">
-            <Link
-              to={"/admin"}
-              className={`flex items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 ${
-                collapsed ? "justify-center" : ""
-              } text-gray-500 hover:text-gray-300`}
-            >
-              <span
-                className={`inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-gray-300 ${
-                  collapsed ? "w-full" : ""
-                }`}
+        <div className="flex lg:block justify-center">
+          <ul className="flex flex-col pb-4">
+            <li className="flex px-2">
+              <Link
+                to={"/admin"}
+                className={`flex items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 ${
+                  collapsed ? "justify-center" : ""
+                } text-gray-500 hover:text-gray-300`}
               >
-                <MdDashboard size={24} />
-              </span>
-              {!collapsed && (
-                <span className="text-sm font-medium">Dashboard</span>
-              )}
-            </Link>
-          </li>
-          <li className="flex px-4">
-            <Link
-              to={"/admin/students"}
-              className={`flex items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 ${
-                collapsed ? "justify-center" : ""
-              } text-gray-500 hover:text-gray-300`}
-            >
-              <span
-                className={`inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-gray-300 ${
-                  collapsed ? "w-full" : ""
-                }`}
+                <span
+                  className={`inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-gray-300 ${
+                    collapsed ? "w-full" : ""
+                  }`}
+                >
+                  <MdDashboard size={24} />
+                </span>
+                {!collapsed && (
+                  <span className="text-sm font-medium">Dashboard</span>
+                )}
+              </Link>
+            </li>
+            <li className="flex px-2">
+              <Link
+                to={"/admin/students"}
+                className={`flex items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 ${
+                  collapsed ? "justify-center" : ""
+                } text-gray-500 hover:text-gray-300`}
               >
-                <FaUserFriends size={24} />
-              </span>
-              {!collapsed && (
-                <span className="text-sm font-medium">Students</span>
-              )}
-            </Link>
-          </li>
-          <li className="flex px-4">
-            <Link
-              to={"/admin/instructors"}
-              className={`flex items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 ${
-                collapsed ? "justify-center" : ""
-              } text-gray-500 hover:text-gray-300`}
-            >
-              <span
-                className={`inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-gray-300 ${
-                  collapsed ? "w-full" : ""
-                }`}
+                <span
+                  className={`inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-gray-300 ${
+                    collapsed ? "w-full" : ""
+                  }`}
+                >
+                  <FaUserFriends size={24} />
+                </span>
+                {!collapsed && (
+                  <span className="text-sm font-medium">Students</span>
+                )}
+              </Link>
+            </li>
+            <li className="flex px-2">
+              <Link
+                to={"/admin/instructors"}
+                className={`flex items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 ${
+                  collapsed ? "justify-center" : ""
+                } text-gray-500 hover:text-gray-300`}
               >
-                <FaUserGraduate size={24} />
-              </span>
-              {!collapsed && (
-                <span className="text-sm font-medium">Instructors</span>
-              )}
-            </Link>
-          </li>
-          <li className="flex px-4">
-            <Link
-              to={"/admin/courses"}
-              className={`flex items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 ${
-                collapsed ? "justify-center" : ""
-              } text-gray-500 hover:text-gray-300`}
-            >
-              <span
-                className={`inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-gray-300 ${
-                  collapsed ? "w-full" : ""
-                }`}
+                <span
+                  className={`inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-gray-300 ${
+                    collapsed ? "w-full" : ""
+                  }`}
+                >
+                  <FaUserGraduate size={24} />
+                </span>
+                {!collapsed && (
+                  <span className="text-sm font-medium">Instructors</span>
+                )}
+              </Link>
+            </li>
+            <li className="flex px-2">
+              <Link
+                to={"/admin/courses"}
+                className={`flex items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 ${
+                  collapsed ? "justify-center" : ""
+                } text-gray-500 hover:text-gray-300`}
               >
-                <MdPlayLesson size={24} />
-              </span>
-              {!collapsed && (
-                <span className="text-sm font-medium">Courses</span>
-              )}
-            </Link>
-          </li>
-          <li className="flex px-4">
-            <Link
-              to={"/admin/categories"}
-              className={`flex items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 ${
-                collapsed ? "justify-center" : ""
-              } text-gray-500 hover:text-gray-300`}
-            >
-              <span
-                className={`inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-gray-300 ${
-                  collapsed ? "w-full" : ""
-                }`}
+                <span
+                  className={`inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-gray-300 ${
+                    collapsed ? "w-full" : ""
+                  }`}
+                >
+                  <MdPlayLesson size={24} />
+                </span>
+                {!collapsed && (
+                  <span className="text-sm font-medium">Courses</span>
+                )}
+              </Link>
+            </li>
+            <li className="flex px-2">
+              <Link
+                to={"/admin/categories"}
+                className={`flex items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 ${
+                  collapsed ? "justify-center" : ""
+                } text-gray-500 hover:text-gray-300`}
               >
-                <MdCategory size={24} />
-              </span>
-              {!collapsed && (
-                <span className="text-sm font-medium">Categories</span>
-              )}
-            </Link>
-          </li>
-          <li className="flex px-4">
-            <Link
-              to={"/admin/payments"}
-              className={`flex items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 ${
-                collapsed ? "justify-center" : ""
-              } text-gray-500 hover:text-gray-300`}
-            >
-              <span
-                className={`inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-gray-300 ${
-                  collapsed ? "w-full" : ""
-                }`}
+                <span
+                  className={`inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-gray-300 ${
+                    collapsed ? "w-full" : ""
+                  }`}
+                >
+                  <MdCategory size={24} />
+                </span>
+                {!collapsed && (
+                  <span className="text-sm font-medium">Categories</span>
+                )}
+              </Link>
+            </li>
+            <li className="flex px-2">
+              <Link
+                to={"/admin/payments"}
+                className={`flex items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 ${
+                  collapsed ? "justify-center" : ""
+                } text-gray-500 hover:text-gray-300`}
               >
-                <FaMoneyCheckAlt size={24} />
-              </span>
-              {!collapsed && (
-                <span className="text-sm font-medium">Payments</span>
-              )}
-            </Link>
-          </li>
-          <li className="flex px-4">
-            <Link
-              to={"/admin/reports"}
-              className={`flex items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 ${
-                collapsed ? "justify-center" : ""
-              } text-gray-500 hover:text-gray-300`}
-            >
-              <span
-                className={`inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-gray-300 ${
-                  collapsed ? "w-full" : ""
-                }`}
+                <span
+                  className={`inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-gray-300 ${
+                    collapsed ? "w-full" : ""
+                  }`}
+                >
+                  <FaMoneyCheckAlt size={24} />
+                </span>
+                {!collapsed && (
+                  <span className="text-sm font-medium">Payments</span>
+                )}
+              </Link>
+            </li>
+            <li className="flex px-2">
+              <Link
+                to={"/admin/reports"}
+                className={`flex items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 ${
+                  collapsed ? "justify-center" : ""
+                } text-gray-500 hover:text-gray-300`}
               >
-                <FaClipboardList size={24} />
-              </span>
-              {!collapsed && (
-                <span className="text-sm font-medium">Reports</span>
-              )}
-            </Link>
-          </li>
-          <li className="flex px-4">
-            <Link
-              to={"/profile"}
-              className={`flex items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 ${
-                collapsed ? "justify-center" : ""
-              } text-gray-500 hover:text-gray-300`}
-            >
-              <span
-                className={`inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-gray-300 ${
-                  collapsed ? "w-full" : ""
-                }`}
+                <span
+                  className={`inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-gray-300 ${
+                    collapsed ? "w-full" : ""
+                  }`}
+                >
+                  <FaClipboardList size={24} />
+                </span>
+                {!collapsed && (
+                  <span className="text-sm font-medium">Reports</span>
+                )}
+              </Link>
+            </li>
+            <li className="flex px-2  md:px-5">
+              <Link
+                to={"/profile"}
+                className={`flex gap-3 items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 ${
+                  collapsed ? "justify-center" : ""
+                } text-gray-500 hover:text-gray-300`}
               >
-                <img
-                  src="https://cdn0.iconfinder.com/data/icons/user-interface-vol-3-12/66/68-512.png"
-                  alt=""
-                  className="h-6"
-                />
-              </span>
-              {!collapsed && (
-                <span className="text-sm font-medium">Profile</span>
-              )}
-            </Link>
-          </li>
-          <li className="flex px-4">
-            <button
-              type="button"
-              onClick={logoutUser}
-              className={`flex items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 ${
-                collapsed ? "justify-center" : ""
-              } text-gray-500 hover:text-red-700`}
-            >
-              <span
-                className={`inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-red-700 ${
-                  collapsed ? "w-full" : ""
-                }`}
+                <span
+                  className={`inline-flex items-center justify-center h-6 w-6 text-lg text-gray-400 hover:text-gray-300 ${
+                    collapsed ? "w-full" : ""
+                  }`}
+                >
+                  <img
+                    src="https://cdn0.iconfinder.com/data/icons/user-interface-vol-3-12/66/68-512.png"
+                    alt=""
+                    className="h-full w-full"
+                  />
+                </span>
+                {!collapsed && (
+                  <span className="text-sm font-medium">Profile</span>
+                )}
+              </Link>
+            </li>
+            <li className="flex px-2">
+              <button
+                type="button"
+                onClick={logoutUser}
+                className={`flex items-center h-12 transform hover:translate-x-2 transition-transform ease-in duration-200 ${
+                  collapsed ? "justify-center" : ""
+                } text-gray-500 hover:text-red-700`}
               >
-                <MdLogout size={24} />
-              </span>
-              {!collapsed && (
-                <span className="text-sm font-medium">Logout</span>
-              )}
-            </button>
-          </li>
-        </ul>
+                <span
+                  className={`inline-flex items-center justify-center h-12 w-12 text-lg text-gray-400 hover:text-red-700 ${
+                    collapsed ? "w-full" : ""
+                  }`}
+                >
+                  <MdLogout size={24} />
+                </span>
+                {!collapsed && (
+                  <span className="text-sm font-medium">Logout</span>
+                )}
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   );

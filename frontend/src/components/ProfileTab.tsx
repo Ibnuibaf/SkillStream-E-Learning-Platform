@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 
 function ProfileTab() {
   const dispatch: AppDispatch = useDispatch();
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
   const passwordRegex =
@@ -198,10 +198,10 @@ function ProfileTab() {
           <div className="mt-8 flex justify-center items-center">
             <div className="border rounded max-w-6xl text-start">
               <div>
-                <div className="flex flex-col items-center p-4">
+                <div className="flex flex-col items-center  p-4">
                   <label
                     htmlFor="avatar"
-                    className="cursor-pointer"
+                    className="cursor-pointer h-[10vh]"
                     title="Change Avatar"
                   >
                     <input
@@ -215,7 +215,7 @@ function ProfileTab() {
                       }
                     />
                     {loading ? (
-                      <div className="h-24 bg-slate-300 w-24 rounded-full flex items-center justify-center">
+                      <div className="h-24  bg-slate-300 w-24 rounded-full flex items-center justify-center">
                         <div role="status">
                           <svg
                             aria-hidden="true"
@@ -240,7 +240,7 @@ function ProfileTab() {
                       <img
                         src={user.avatar}
                         alt=""
-                        className="h-[10vh] w-[5vw] rounded-full"
+                        className="h-full w-full rounded-full"
                       />
                     )}
                   </label>
@@ -261,27 +261,31 @@ function ProfileTab() {
                 <div className="p-4">
                   <div className="border flex justify-between">
                     <div className="flex gap-2 w-full">
-                      <div className="bg-white text-black px-6 flex items-center text-xl font-medium">
+                      <div className="bg-white text-black px-3 lg:px-6 flex items-center lg:text-xl font-medium ">
                         <p>Wallet</p>
                       </div>
                       <div className="flex w-full items-center justify-end px-2">
                         <div className="flex items-end">
                           <p>Balance:</p>&nbsp;
                           <p className="font-bold text-violet-500 text-xl">
-                            &#8377; {user.wallet.balance}/-
+                            &#8377; {Math.floor(user.wallet.balance as number)}
+                            /-
                           </p>
                         </div>
                       </div>
                     </div>
                     <div>
-                      <button className="bg-purple-900 px-4 py-2 hover:bg-purple-700" onClick={()=>navigate('/mywithdrawals')}>
+                      <button
+                        className="bg-purple-900 px-4 py-1 lg:py-2 hover:bg-purple-700"
+                        onClick={() => navigate("/mywithdrawals")}
+                      >
                         Withdraw
                       </button>
                     </div>
                   </div>
                 </div>
               )}
-              <div className="flex justify-center">
+              <div className="flex flex-col lg:flex-row justify-center">
                 <div className="border flex justify-center p-2   m-3">
                   <div className="bg-slate-800 p-2 rounded w-full flex flex-col justify-between">
                     <p className="text-lg">Personal Details</p>
@@ -290,7 +294,7 @@ function ProfileTab() {
                         <div className="">
                           <input
                             type="text"
-                            className="my-1 pt-2 pr-8 pl-2 border-2 w-[20vw] bg-transparent"
+                            className="my-1 pt-2 pr-8 pl-2 border-2 w-full bg-transparent"
                             value={userDetails.email}
                             onChange={(
                               e: React.ChangeEvent<HTMLInputElement>
@@ -299,7 +303,7 @@ function ProfileTab() {
                           <br />
                           <input
                             type="text"
-                            className="my-1 pt-2 pr-8 pl-2 border-2 w-[20vw] bg-transparent"
+                            className="my-1 pt-2 pr-8 pl-2 border-2 w-full bg-transparent"
                             value={userDetails.name}
                             onChange={(
                               e: React.ChangeEvent<HTMLInputElement>
@@ -427,7 +431,7 @@ function ProfileTab() {
                     <div className="">
                       <input
                         type="password"
-                        className="my-1 pt-2 pr-8 pl-2 border-2 w-[20vw] bg-transparent"
+                        className="my-1 pt-2 pr-8 pl-2 border-2 w-full bg-transparent"
                         value={passwordDetails.password}
                         placeholder="Update your password"
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -441,7 +445,7 @@ function ProfileTab() {
                       <input
                         type="password"
                         placeholder="Confirm updated new password"
-                        className="my-1 pt-2 pr-8 pl-2 border-2 w-[20vw] bg-transparent"
+                        className="my-1 pt-2 pr-8 pl-2 border-2 w-full bg-transparent"
                         value={passwordDetails.confirmPassword}
                         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                           setPasswordDetails({

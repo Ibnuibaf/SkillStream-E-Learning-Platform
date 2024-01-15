@@ -136,54 +136,61 @@ function InstructorDashboard() {
     ],
   };
   return (
-    <div className="p-10 min-h-screen">
-      <div className="flex justify-center px-40">
-        <div className="flex justify-between  bg-white text-black px-6 py-2 rounded-2xl w-max text-xl font-medium gap-6 shadow-md shadow-purple-400 ">
-          <div className="flex items-center gap-6 truncate ">
-            <div className="flex items-center gap-1">
+    <div className="p-5 sm:p-10 lg:p-16 xl:p-20 min-h-screen">
+      <div className="flex flex-col sm:flex-row justify-center sm:justify-between px-4 lg:px-10 xl:px-20">
+        <div className="mb-6 sm:mb-0">
+          <div className="flex items-center gap-6">
+            <div className="flex items-center">
               <FaAddressCard size={34} />
               <p>Total Enrollers</p>
             </div>
-            <p className="font-bold text-violet-500 underline text-2xl">{enrollersCount}</p>
+            <p className="font-bold text-violet-500 bg-slate-800 px-2 rounded-md text-2xl">
+              {enrollersCount}
+            </p>
           </div>
-          <div className="flex items-center gap-6 truncate  ">
-            <div className="flex items-center gap-1">
+        </div>
+        <div>
+          <div className="flex items-center gap-6">
+            <div className="flex items-center">
               <MdPlayLesson size={34} />
               <p>Total Courses</p>
             </div>
-            <p className="font-bold text-violet-500 underline text-2xl">{coursesCount}</p>
+            <p className="font-bold text-violet-500 bg-slate-800 px-2 rounded-md text-2xl">
+              {coursesCount}
+            </p>
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-6 pt-5 h-[60vh]">
-        <div className=" border rounded-md">
-          <div className="flex items-center border rounded-t-md py-2 px-6 text-lg font-medium text-purple-600 ">
-            <p>Revenue Analyse</p>
+
+      <div className="lg:px-10 xl:px-26 pt-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="p-2">
+            <p className="text-xl font-medium py-2">Revenue Analyse</p>
+            <div className="border p-2 md:min-h-[50vh]">
+              <Line data={revenueData} />
+            </div>
           </div>
-          <div>
-            <Line data={revenueData}/>
+
+          <div className="p-2">
+            <p className="text-xl font-medium py-2">Enrollement Analyse</p>
+            <div className="border p-2 md:min-h-[50vh]">
+              <Bar data={enrollData} />
+            </div>
           </div>
         </div>
-        <div className=" border rounded-md">
-          <div className="flex items-center border rounded-t-md py-2 px-6 text-lg font-medium text-purple-600 ">
-            <p>Enrollement Analyse</p>
-          </div>
-          <div>
-            <Bar data={enrollData}/>
-          </div>
+
+        <div className="pt-5 text-lg px-4 md:px-0 line-clamp-5">
+          <p>
+            Welcome,{" "}
+            <span className="font-medium text-purple-500 text-lg">
+              {user?.name}!
+            </span>{" "}
+            Your dedication to education drives our platform's success. Navigate
+            seamlessly through your courses, engage with your students, and
+            watch your impact unfold. Thank you for being a vital part of our
+            e-learning community.
+          </p>
         </div>
-      </div>
-      <div className="mt-5 px-28">
-        <p>
-          Welcome,{" "}
-          <span className="font-medium text-purple-500 text-lg">
-            {user?.name} !
-          </span>{" "}
-          Your dedication to education drives our platform's success. Navigate
-          seamlessly through your courses, engage with your students, and watch
-          your impact unfold. Thank you for being a vital part of our e-learning
-          community.
-        </p>
       </div>
     </div>
   );

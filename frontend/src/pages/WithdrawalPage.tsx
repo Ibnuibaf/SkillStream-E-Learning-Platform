@@ -23,7 +23,7 @@ function WithdrawalPage() {
   },[])
   return (
     <div>
-      <div className="h-screen px-10 py-4">
+      <div className="h-screen ">
         <BasicHeader />
         <WithdrawTab />
       </div>

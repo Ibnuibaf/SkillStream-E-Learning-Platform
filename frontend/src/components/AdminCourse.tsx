@@ -863,7 +863,66 @@ function AdminCourse() {
                   </div>
                   <div className="text-start ">
                     <div>
-                      <p className="text-sm">Rating</p>
+                      <div className="flex justify-end">
+                        {course.reviews.reduce(
+                          (sum, review) => sum + review.rating,
+                          0
+                        ) /
+                          course.reviews?.length ==
+                        1 ? (
+                          <div className="flex items-center">
+                            <IoMdStar size={18} color="orange" />
+                          </div>
+                        ) : course.reviews.reduce(
+                            (sum, review) => sum + review.rating,
+                            0
+                          ) /
+                            course.reviews?.length ==
+                          2 ? (
+                          <div className="flex items-center">
+                            <IoMdStar size={18} color="orange" />
+                            <IoMdStar size={18} color="orange" />
+                          </div>
+                        ) : course.reviews.reduce(
+                            (sum, review) => sum + review.rating,
+                            0
+                          ) /
+                            course.reviews?.length ==
+                          3 ? (
+                          <div className="flex items-center">
+                            <IoMdStar size={18} color="orange" />
+                            <IoMdStar size={18} color="orange" />
+                            <IoMdStar size={18} color="orange" />
+                          </div>
+                        ) : course.reviews.reduce(
+                            (sum, review) => sum + review.rating,
+                            0
+                          ) /
+                            course.reviews?.length ==
+                          4 ? (
+                          <div className="flex items-center">
+                            <IoMdStar size={18} color="orange" />
+                            <IoMdStar size={18} color="orange" />
+                            <IoMdStar size={18} color="orange" />
+                            <IoMdStar size={18} color="orange" />
+                          </div>
+                        ) : course.reviews.reduce(
+                            (sum, review) => sum + review.rating,
+                            0
+                          ) /
+                            course.reviews?.length ==
+                          5 ? (
+                          <div className="flex items-center">
+                            <IoMdStar size={18} color="orange" />
+                            <IoMdStar size={18} color="orange" />
+                            <IoMdStar size={18} color="orange" />
+                            <IoMdStar size={18} color="orange" />
+                            <IoMdStar size={18} color="orange" />
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                      </div>
                     </div>
                     <div className="text-purple-600 text-lg font-semibold">
                       &#8377; {course.price}/- &nbsp;

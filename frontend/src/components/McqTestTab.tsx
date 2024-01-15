@@ -121,12 +121,12 @@ function McqTestTab({ learning }: { learning: ILearnings }) {
           </p>
         </div>
       )}
-      <div className="border flex rounded-md">
-        <div className="border max-w-[20vw] rounded-l-md">
-          <div className="p-1 bg-purple-950 border-b">
+      <div className="border md:flex rounded-md">
+        <div className="border md:max-w-[20vw] md:rounded-l-md rounded-md m-5">
+          <div className="p-1 bg-purple-950 border-b md:rounded-tl-md rounded-t-md">
             <p className="text-xl font-medium px-4 ">Questions</p>
           </div>
-          <div className="w-[20vw] h-[70vh] px-4 py-2 overflow-y-auto">
+          <div className="md:w-[20vw] h-[40vh] md:h-[70vh] px-4 py-2 overflow-y-auto">
             {learning.course.mcq.map((mc, index) => (
               <div
                 className={`flex bg-purple-700 px-4 py-1 rounded-md gap-2 cursor-pointer items-center mb-2 ${
@@ -150,7 +150,7 @@ function McqTestTab({ learning }: { learning: ILearnings }) {
             ))}
           </div>
         </div>
-        <div className="w-full text-start px-10 py-5">
+        <div className="w-full text-start px-3 lg:px-10 py-5">
           <div className="h-full flex flex-col justify-between  w-full">
             <div>
               <div className="flex justify-end">
@@ -189,10 +189,10 @@ function McqTestTab({ learning }: { learning: ILearnings }) {
                 )}
               </div>
               <div className="flex items-end gap-3">
-                <p className="text-2xl">Question:</p>
-                <p className="text-3xl font-medium">{mcqDetails.question} ?</p>
+                <p className="text-lg md:text-xl lg:text-2xl">Question:</p>
+                <p className="text-xl md:text-2xl lg:text-3xl font-medium">{mcqDetails.question} ?</p>
               </div>
-              <div className="text-center my-5">
+              <div className="text-center text-sm lg:text-md my-5">
                 <p className="font-medium text-violet-300">
                   Great job on completing the test! You're one step closer to
                   earning your certificate. Finish strong, submit your answers,
@@ -200,7 +200,7 @@ function McqTestTab({ learning }: { learning: ILearnings }) {
                   your well-earned recognition!
                 </p>
               </div>
-              <div className=" my-3 text-lg">
+              <div className=" my-3 md:text-lg">
                 {mcqDetails.options.map((option, index) => (
                   <div
                     className={`border gap-2 flex p-2 items-center my-1 cursor-pointer ${

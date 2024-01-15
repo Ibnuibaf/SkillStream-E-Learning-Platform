@@ -89,17 +89,17 @@ function InstructorsList() {
     getPersonalChats();
   }, []);
   return (
-    <div className="px-10">
-      <div className="text-2xl font-semibold my-3">
+    <div className="lg:px-10 px-3">
+      <div className="text-lg md:text-xl lg:text-2xl font-semibold my-3">
         <p>My Instructors</p>
       </div>
-      <div className=" max-h-[60vh] overflow-y-auto overflow-x-hidden grid grid-cols-7 gap-4">
+      <div className=" max-h-[60vh] overflow-y-auto overflow-x-hidden grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 lg:gap-4 gap-2">
         {instructors?.map(
           (instructor) =>
             instructor._id != user?._id &&
             (personalChats.find((chat) => chat.instructor == instructor._id) ? (
               <div
-                className="flex flex-col items-center justify-between gap-4 bg-purple-500 rounded-3xl mb-2 px-4 py-5 h-[32vh]  text-start "
+                className="flex flex-col items-center justify-between gap-2 bg-purple-500 rounded-3xl mb-2 px-4 lg:py-5 py-2   text-start "
                 // onClick={() =>
                 //   navigate(`/personal/chat?instructor=${instructor._id}`)
                 // }
@@ -146,7 +146,7 @@ function InstructorsList() {
               </div>
             ) : (
               <div
-                className="flex flex-col items-center justify-between gap-4 bg-purple-500 rounded-3xl mb-2 px-4 py-5 h-[32vh]  text-start "
+                className="flex flex-col items-center justify-between gap-2 bg-purple-500 rounded-3xl mb-2 px-4 lg:py-5 py-2 text-start "
                 // onClick={() =>
                 //   navigate(`/personal/chat?instructor=${instructor._id}`)
                 // }

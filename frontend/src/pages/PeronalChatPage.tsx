@@ -13,7 +13,7 @@ function PeronalChatPage() {
     }, [token]);
     return (
       <div className="h-screen overflow-hidden">
-        <div className="px-10 py-4">
+        <div className="">
           <BasicHeader />
         </div>
         <div >
