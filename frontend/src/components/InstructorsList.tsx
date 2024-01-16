@@ -114,6 +114,11 @@ function InstructorsList() {
                   </div>
                   <p className="text-xl mt-5">{instructor.name}</p>
                 </div>
+                {personalChats.some(
+                  (chat) =>
+                    chat.instructor === instructor._id &&
+                    new Date(chat.validity) < new Date()
+                )}
                 <div className="flex flex-col w-full">
                   <div className="font-medium text-lg">
                     <p className="text-sm text-start ">Validity upto </p>
@@ -125,23 +130,34 @@ function InstructorsList() {
                       ).toLocaleDateString()}
                     </p>
                   </div>
-
-                  <button
-                    type="button"
-                    onClick={() =>
-                      navigate(`/personal/chat?instructor=${instructor._id}`)
-                    }
-                    disabled={
-                      new Date(
-                        personalChats.find(
-                          (chat) => chat.instructor === instructor._id
-                        )?.validity as Date
-                      ) < new Date()
-                    }
-                    className="bg-white text-purple-500 px-4 py-1 rounded-3xl hover:bg-purple-800 hover:text-white cursor-pointer"
-                  >
-                    Chat
-                  </button>
+                  {personalChats.some(
+                    (chat) =>
+                      chat.instructor === instructor._id &&
+                      new Date(chat.validity) < new Date()
+                  ) ? (
+                    <button
+                      type="button"
+                      onClick={() => makePayment(instructor._id as string)}
+                      className="bg-white text-purple-500 px-4 py-1 rounded-3xl hover:bg-purple-800 hover:text-white cursor-pointer"
+                    >
+                      Renew
+                    </button>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() =>
+                        navigate(`/personal/chat?instructor=${instructor._id}`)
+                      }
+                      disabled={personalChats.some(
+                        (chat) =>
+                          chat.instructor === instructor._id &&
+                          new Date(chat.validity) < new Date()
+                      )}
+                      className="bg-white text-purple-500 px-4 py-1 rounded-3xl hover:bg-purple-800 hover:text-white cursor-pointer"
+                    >
+                      Chat
+                    </button>
+                  )}
                 </div>
               </div>
             ) : (

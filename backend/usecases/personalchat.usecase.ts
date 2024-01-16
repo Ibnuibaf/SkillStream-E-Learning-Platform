@@ -31,12 +31,13 @@ class PersonalchatUsecase {
       };
     }
   }
-  async findPersonalchat(
-    query: { student: string; instructor: string },
-  ) {
+  async findPersonalchat(query: { student: string; instructor: string }) {
     try {
       const { student, instructor } = query;
-      const response = await this.personalchatRepository.findPersonalchat({student, instructor });
+      const response = await this.personalchatRepository.findPersonalchat({
+        student,
+        instructor,
+      });
       return {
         status: response.success ? 200 : 500,
         data: {
@@ -84,19 +85,40 @@ class PersonalchatUsecase {
       const today = new Date();
       const validity = new Date(today);
       validity.setDate(today.getDate() + 30);
-      const response = await this.personalchatRepository.createPersonalchat({
+      const isExist = await this.personalchatRepository.findPersonalchat({
         student,
         instructor,
-        chats: [],
-        validity: validity,
       });
-      return {
-        status: response.success ? 200 : 500,
-        data: {
-          success: response.success,
-          message: response.message,
-        },
-      };
+      if (isExist.success) {
+        const response = await this.personalchatRepository.updateChatValidity({
+          student,
+          instructor,
+          validity,
+        });
+
+        return {
+          status: response.success ? 200 : 500,
+          data: {
+            success: response.success,
+            message: response.message,
+          },
+        };
+      } else {
+        const response = await this.personalchatRepository.createPersonalchat({
+          student,
+          instructor,
+          chats: [],
+          validity: validity,
+        });
+
+        return {
+          status: response.success ? 200 : 500,
+          data: {
+            success: response.success,
+            message: response.message,
+          },
+        };
+      }
     } catch (error) {
       return {
         status: 500,

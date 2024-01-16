@@ -37,7 +37,7 @@ class PersonalchatRepository {
       return {
         success: true,
         message: "Personalchat Added",
-        personalchats
+        personalchats,
       };
     } catch (error) {
       return {
@@ -68,7 +68,9 @@ class PersonalchatRepository {
       const personalchat = await PersonalChats.findOne({
         student: student,
         instructor: instructor,
-      }).populate("student","name avatar").populate("instructor","name avatar");
+      })
+        .populate("student", "name avatar")
+        .populate("instructor", "name avatar");
       if (!personalchat) {
         return {
           success: false,
@@ -91,10 +93,33 @@ class PersonalchatRepository {
     try {
       const personalchats = await PersonalChats.find({
         instructor: id,
-      }).populate("student","name avatar")
+      }).populate("student", "name avatar");
       return {
         success: true,
         message: "Personalchat found",
+        personalchats,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message: `Failed to fetch ${error}`,
+      };
+    }
+  }
+  async updateChatValidity(details: {
+    student: string;
+    instructor: string;
+    validity: Date;
+  }) {
+    try {
+      const personalchats = await PersonalChats.updateOne(
+        { student: details.student, instructor: details.instructor },
+        { $set: { validity: details.validity } },
+        {new:true}
+      );
+      return {
+        success: true,
+        message: "Personalchat updated validity",
         personalchats,
       };
     } catch (error) {
