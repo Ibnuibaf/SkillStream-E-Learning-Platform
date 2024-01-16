@@ -14,6 +14,7 @@ function LogoutSection() {
         toast("User Logged Out!")
         navigate('/')
     }
+    
   return (
     <div className="flex justify-end py-3 w-full px-5">
       <button className="text-red-700 flex gap-1 items-center border px-2 py-1 rounded-2xl border-red-700 duration-300 hover:text-white hover:border-white hover:bg-red-700" onClick={logoutUser}>

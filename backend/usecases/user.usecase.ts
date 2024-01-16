@@ -485,6 +485,7 @@ class UserUsecase {
             },
           };
         }
+        
         if (response.data.isBlock) {
           return {
             status: HttpStatus.NotFound,

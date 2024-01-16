@@ -1,6 +1,7 @@
 import AuthSection from "./AuthSection";
 import { Link } from "react-router-dom";
 function BasicHeader() {
+  
   return (
     <div className="lg:px-10 lg:py-4 py-1 px-2">
       <nav className="flex justify-between w-full  items-center ">

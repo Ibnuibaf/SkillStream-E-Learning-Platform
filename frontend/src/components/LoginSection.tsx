@@ -12,6 +12,7 @@ import api from "../axios/api";
 import { useGoogleLogin } from "@react-oauth/google";
 // import { selectUser } from "../redux/slices/authSlice";
 
+
 const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const passwordRegex =
   /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;

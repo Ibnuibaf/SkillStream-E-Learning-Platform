@@ -16,6 +16,7 @@ import { FaRegCirclePlay } from "react-icons/fa6";
 import { IoMdStar } from "react-icons/io";
 
 interface ICoupon {
+  
   code: string;
   value: number;
   from: Date;

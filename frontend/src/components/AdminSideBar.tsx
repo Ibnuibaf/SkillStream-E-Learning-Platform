@@ -59,6 +59,7 @@ function AdminSideBar() {
       navigate("/");
     }
   }, [token, user, navigate]);
+  
   return (
     <div className={`sticky top-0 z-50 ${collapsed ? "w-[10vw]" : "w-60"}`}>
       <div

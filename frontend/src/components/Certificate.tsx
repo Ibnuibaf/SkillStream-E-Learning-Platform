@@ -8,6 +8,7 @@ import {
   Image,
 } from "@react-pdf/renderer";
 
+
 const styles = StyleSheet.create({
   page: {
     flexDirection: "row",

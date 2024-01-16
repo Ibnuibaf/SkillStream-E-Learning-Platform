@@ -7,6 +7,7 @@ class CategoryUsecase {
     this.categoryRepository = categoryRepository;
   }
 
+  
   async createCategory(data: ICategory) {
     try {
       let { name } = data;

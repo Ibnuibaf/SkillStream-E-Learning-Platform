@@ -8,6 +8,7 @@ interface IMCQ{
     options:string[]
     answer:number
 }
+
 interface ICourse{
     _id?:string|ObjectId
     title:string

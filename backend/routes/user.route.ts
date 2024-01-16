@@ -13,6 +13,7 @@ const userUsecase = new UserUsecase(userRepository);
 const userController = new UserController(userUsecase);
 const stripePayments = new StripePayments(userRepository);
 
+
 Router.get(
   "/",
   (req: Request, res: Response, next: NextFunction) =>

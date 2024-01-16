@@ -6,4 +6,5 @@ interface MyJWTPayLoad extends JwtPayload{
     role:string
 }
 
+
 export default MyJWTPayLoad

@@ -172,6 +172,7 @@ function InstructorSideBar() {
                       collapsed ? "justify-center" : ""
                     } text-gray-500 hover:text-gray-300`}
                   >
+                    
                     <span
                       className={`inline-flex items-center justify-center h-6 w-6 text-lg text-gray-400 hover:text-gray-300 ${
                         collapsed ? "w-full" : ""

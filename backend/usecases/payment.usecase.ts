@@ -3,6 +3,7 @@ import MyJWTPayLoad from "../interfaces/jwt";
 import PaymentRepository from "../repositories/payment.repository";
 import { HttpStatus } from "../enums/HttpStatus.enum";
 
+
 class PaymentUsecase {
   private paymentRepository: PaymentRepository;
   private decodeToken(token: string): MyJWTPayLoad {

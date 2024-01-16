@@ -15,6 +15,7 @@ interface IWallet {
   }[];
 }
 
+
 interface IUser {
   id: string;
   name?: string;

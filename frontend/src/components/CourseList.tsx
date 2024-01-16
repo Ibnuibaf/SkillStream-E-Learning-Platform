@@ -842,6 +842,7 @@ function CourseList() {
                     ""
                   )
                 )}
+                
           </div>
         </div>
       )}

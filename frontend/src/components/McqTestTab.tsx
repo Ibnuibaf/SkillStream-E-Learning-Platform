@@ -214,6 +214,7 @@ function McqTestTab({ learning }: { learning: ILearnings }) {
                       <FaArrowAltCircleRight />
                       {option}
                     </p>
+                    
                   </div>
                 ))}
               </div>

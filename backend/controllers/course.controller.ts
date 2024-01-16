@@ -22,6 +22,7 @@ class CourseController {
       });
     }
   }
+  
   async getCourses(req: Request, res: Response) {
     try {
       const response = await this.courseUsecase.getCourses(req.query);

@@ -17,6 +17,7 @@ class PaymentController {
       });
     }
   }
+  
   async createPayment(req: Request, res: Response) {
     try {
       const response = await this.paymentUsecase.createPayment(

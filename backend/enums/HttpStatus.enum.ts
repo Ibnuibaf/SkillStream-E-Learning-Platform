@@ -3,3 +3,4 @@ export enum HttpStatus {
     ServerError = 500,
     NotFound = 404,
 }
+

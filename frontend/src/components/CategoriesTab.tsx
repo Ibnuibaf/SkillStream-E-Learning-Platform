@@ -9,6 +9,7 @@ import { getCategories } from "../redux/actions/categoriesActions";
 import { selectCategories } from "../redux/slices/categorySlice";
 import axios from "axios";
 function CategoriesTab() {
+  
   const dispatch: AppDispatch = useDispatch();
   const token = localStorage.getItem("SkillStreamToken");
   const categories = useSelector(selectCategories).categories;

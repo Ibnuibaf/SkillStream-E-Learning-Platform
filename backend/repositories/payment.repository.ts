@@ -16,6 +16,7 @@ class PaymentRepository {
       };
     }
   }
+  
   async createPayment(userId: string, amount: number) {
     try {
       const payments = await Payments.create({

@@ -9,6 +9,7 @@ import {
 } from "@stripe/react-stripe-js";
 import  { useEffect, useState } from "react";
 
+
 // type Props = {};
 const CheckoutForm = () => {
   const stripe = useStripe();

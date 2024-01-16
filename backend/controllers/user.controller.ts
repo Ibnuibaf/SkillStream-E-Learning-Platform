@@ -195,6 +195,7 @@ class UserController {
       });
     }
   }
+  
   async removeFromWishlist(req: Request, res: Response) {
     try {
       const response = await this.userUsecase.removeFromWishlist(req.body,req.headers["authorization"] as string);

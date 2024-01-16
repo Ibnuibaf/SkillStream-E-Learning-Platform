@@ -18,6 +18,7 @@ class CategoryController {
       });
     }
   }
+  
   async getCategories(req: Request, res: Response) {
     try {
         const response=await this.categoryUsecase.getCategories(req.query)

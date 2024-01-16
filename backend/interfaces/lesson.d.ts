@@ -4,4 +4,5 @@ interface ILesson{
     content:string
     duration:string
 }
+
 export default ILesson

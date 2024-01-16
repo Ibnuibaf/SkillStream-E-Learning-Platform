@@ -11,6 +11,7 @@ const connectDB = async () => {
       console.log("Database Connected successfullY");
     });
   } catch (error:any) {
+    
     console.log(error.message);
     setTimeout(connectDB, 5000);
   }

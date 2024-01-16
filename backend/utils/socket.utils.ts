@@ -13,6 +13,7 @@ class SocketUtils {
     this.personalchatRepository = personalchatRepository;
   }
 
+  
   configureSocketIO = async (io: Server) => {
     io.on("connection", (socket: Socket) => {
       // console.log("A user connected");

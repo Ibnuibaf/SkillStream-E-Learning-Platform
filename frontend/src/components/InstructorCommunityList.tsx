@@ -22,6 +22,7 @@ function InstructorCommunityList() {
             }
         } catch (error) {
             console.log(error);
+            
         }
     }
 

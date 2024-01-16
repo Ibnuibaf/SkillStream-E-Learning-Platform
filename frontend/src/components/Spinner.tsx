@@ -14,6 +14,7 @@ function Spinner() {
       </path>
     </svg>
     </div>
+    
   );
 }
 

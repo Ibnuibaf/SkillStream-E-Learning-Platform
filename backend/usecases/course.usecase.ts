@@ -5,6 +5,7 @@ import CourseRepository from "../repositories/course.repository";
 import jwt from "jsonwebtoken";
 import UserRepository from "../repositories/user.repository";
 
+
 class CourseUsecase {
   private decodeToken(token: string): MyJWTPayLoad {
     return jwt.verify(token, "itssecret") as MyJWTPayLoad;

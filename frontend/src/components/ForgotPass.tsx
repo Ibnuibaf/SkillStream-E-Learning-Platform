@@ -18,6 +18,7 @@ function ForgotPass() {
     password: "",
     confirmPassword: "",
   });
+  
   const [counter, setCounter] = useState(30);
   const [OTP, setOTP] = useState("");
   const [otpVeified, setOtpVerifed] = useState(false);

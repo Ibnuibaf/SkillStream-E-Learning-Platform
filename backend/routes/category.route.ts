@@ -11,6 +11,7 @@ const categoryRepository = new CategoryRepository();
 const categoryUsecase = new CategoryUsecase(categoryRepository);
 const categoryController = new CategoryController(categoryUsecase);
 
+
 const Router = express.Router();
 
 Router.get("/", (req: Request, res: Response) =>

@@ -76,6 +76,7 @@ class StripePayments {
 
     res.send({ url: session.url });
   }
+  
   async paymentIntent(req: Request, res: Response) {
     const { instructor, user } = req.body;
     const payment = await stripe.paymentIntents.create({

@@ -260,6 +260,7 @@ function LearningsList() {
               My Learnings
             </p>
           </div>
+          
           <div className="grid grid-cols-2 md:grid-cols-5 lg:grid-cols-7 gap-1 px-6">
             <button
               type="button"

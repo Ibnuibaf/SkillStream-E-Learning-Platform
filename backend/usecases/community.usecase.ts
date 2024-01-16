@@ -1,5 +1,6 @@
 import CommunityRepository from "../repositories/community.repository";
 
+
 class CommunityUsecase {
   private communityRepository: CommunityRepository;
   constructor(communityRepository: CommunityRepository) {

@@ -68,6 +68,7 @@ function ChatWithInstructor() {
     }
   };
 
+  
   useEffect(() => {
     if (!query.size || !instructorId) {
       navigate("/mylearning");

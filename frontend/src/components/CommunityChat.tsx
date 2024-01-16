@@ -141,6 +141,7 @@ function CommunityChat() {
                 chat.user === user?.name ? "flex justify-end" : ""
               }`}
             >
+              
               <div className="">
                 {chat.user !== user?.name && (
                   <p className="text-xs text-gray-300">{chat.user}</p>

@@ -9,6 +9,7 @@ import api from "../axios/api";
 
 function StudentsList() {
   const user = useSelector(selectUser).user;
+  
   const navigate = useNavigate();
   const [personalChats, setPersonalChats] = useState<any>([]);
   const getPersonalChats = async () => {

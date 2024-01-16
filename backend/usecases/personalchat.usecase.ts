@@ -2,6 +2,7 @@ import jwt from "jsonwebtoken";
 import PersonalchatRepository from "../repositories/personalchat.repository";
 import MyJWTPayLoad from "../interfaces/jwt";
 
+
 class PersonalchatUsecase {
   private personalchatRepository: PersonalchatRepository;
   private decodeToken(token: string): MyJWTPayLoad {

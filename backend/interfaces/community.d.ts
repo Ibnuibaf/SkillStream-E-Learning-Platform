@@ -6,6 +6,7 @@ export interface IChat{
     image:string
 }
 
+
 interface ICommunity{
     course:string|ObjectId
     chats:IChat[]

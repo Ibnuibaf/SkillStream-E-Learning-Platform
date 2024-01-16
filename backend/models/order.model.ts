@@ -23,4 +23,5 @@ const orderSchema=new mongoose.Schema<IOrder>({
 
 const orderModel= mongoose.model("Order",orderSchema)
 
+
 export default orderModel

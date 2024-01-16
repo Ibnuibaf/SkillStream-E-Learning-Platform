@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { IPersonalChat } from "../interfaces/personalchat";
 
+
 const PersonalchatShcema = new mongoose.Schema<IPersonalChat>({
   student: {
     type: mongoose.Types.ObjectId,

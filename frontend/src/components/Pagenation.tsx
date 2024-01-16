@@ -17,6 +17,7 @@ function Pagenation({
       <ul className="flex space-x-2">
         {pages.map((page) => (
           <li key={page}>
+            
             <button
               className={`px-4 py-2 ${
                 currentPage === page

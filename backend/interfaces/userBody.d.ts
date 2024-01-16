@@ -6,5 +6,6 @@ interface IUserBody {
     avatar?:string
   }
   
+  
   export default IUserBody
   

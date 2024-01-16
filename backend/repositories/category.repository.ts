@@ -1,6 +1,7 @@
 import ICategory from "../interfaces/category";
 import Categories from "../models/category.model";
 
+
 class CategoryRepository {
   async createCategory(data: ICategory) {
     try {

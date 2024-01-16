@@ -7,6 +7,7 @@ import { AppDispatch } from "../redux/store";
 import { useEffect } from "react";
 import { getUser } from "../redux/actions/authActions";
 
+
 function AuthSection() {
   const userDetails = useSelector(selectUser);
   const token = localStorage.getItem("SkillStreamToken");

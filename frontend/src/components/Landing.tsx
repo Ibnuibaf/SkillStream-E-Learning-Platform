@@ -57,6 +57,7 @@ function Landing() {
             </p>
           </div>
           <div className="mt-6 flex items-center justify-between ">
+            
             <div className="h-20 w-20 hidden lg:block">
               <img
                 src="/graphics-1.png"

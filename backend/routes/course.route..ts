@@ -18,6 +18,7 @@ const courseUsecase = new CourseUsecase(
 );
 const courseController = new CourseController(courseUsecase);
 
+
 Router.get("/", (req: Request, res: Response) =>
   courseController.getCourses(req, res)
 );

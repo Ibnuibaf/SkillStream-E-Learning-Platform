@@ -15,6 +15,7 @@ function ReportTab() {
   const getEnrollmentReports = async () => {
     try {
       const res = await api.get(`/order`);
+      
       console.log(res.data.orders);
       setEnrollementsList(res.data.orders);
     } catch (error: any) {

@@ -13,6 +13,7 @@ const communityController = new CommunityController(communityUsecase);
 
 const Router = express.Router();
 
+
 Router.get(
   "/find",
   (req: Request, res: Response, next: NextFunction) =>

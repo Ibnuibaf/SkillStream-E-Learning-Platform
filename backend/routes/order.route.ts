@@ -17,6 +17,7 @@ const orderUsecase = new OrderUsecase(
   userRepository,
   courseRepository
 );
+
 const orderController = new OrderController(orderUsecase);
 
 const Router = express.Router();

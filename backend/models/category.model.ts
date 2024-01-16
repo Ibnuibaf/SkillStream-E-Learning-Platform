@@ -12,6 +12,7 @@ const categoryShema=new mongoose.Schema<ICategory>({
     }
 })
 
+
 const categoryModel= mongoose.model("Category",categoryShema)
 
 export default categoryModel

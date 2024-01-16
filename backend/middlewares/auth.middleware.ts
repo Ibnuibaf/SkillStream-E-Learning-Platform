@@ -4,6 +4,7 @@ import MyJWTPayLoad from "../interfaces/jwt";
 import UserRepository from '../repositories/user.repository'
 import { UserRole } from "../enums/UserRole.enum";
 
+
 class AuthMiddleware {
   private userRepository: UserRepository;
   private decodeToken(token: string): MyJWTPayLoad {

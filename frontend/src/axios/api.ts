@@ -8,6 +8,7 @@ const api=axios.create({
     headers:{
         Authorization:token||"" 
     }
+    
 })
 
 export default api

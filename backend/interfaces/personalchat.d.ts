@@ -6,6 +6,7 @@ export interface IChat{
     image:string
 }
 
+
 export interface IPersonalChat{
     student:string|ObjectId
     instructor:string|ObjectId
