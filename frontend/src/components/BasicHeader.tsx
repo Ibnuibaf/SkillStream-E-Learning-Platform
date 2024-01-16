@@ -1,7 +1,7 @@
 import AuthSection from "./AuthSection";
 import { Link } from "react-router-dom";
 function BasicHeader() {
-  
+
   return (
     <div className="lg:px-10 lg:py-4 py-1 px-2">
       <nav className="flex justify-between w-full  items-center ">
@@ -19,9 +19,9 @@ function BasicHeader() {
             </Link>
           </div>
           <div className="flex mt-2 w-full gap-2 lg:gap-7 text-sm lg:text-md">
-            <Link to={"/"}>Home</Link>
-            <Link to={"/courses"}>Courses</Link>
-            <Link to={"/instructor"} className="flex w-max truncate">
+            <Link to={"/"} className="hover:text-pink-600">Home</Link>
+            <Link to={"/courses"}  className="hover:text-pink-600">Courses</Link>
+            <Link to={"/instructor"} className="flex w-max truncate hover:text-pink-600">
               Teach On SkillStream
             </Link>
           </div>
