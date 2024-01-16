@@ -150,6 +150,7 @@ function ChatWithInstructor() {
                 </div>
               </div>
             ) : (
+              
               <div key={index} className="px-3 py-2 ">
                 <div>
                   {/* <p className="text-xs text-gray-300">{chat.user}</p> */}
