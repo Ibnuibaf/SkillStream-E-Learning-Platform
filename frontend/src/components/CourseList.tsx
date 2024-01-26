@@ -368,7 +368,7 @@ function CourseList() {
                 <div className="px-2 py-1 border my-5">
                   <div className="flex items-center justify-between">
                     <p className="text-xl font-medium">Price: </p>
-                    <b className="text-2xl">&#8377; {courseDetails.price} /-</b>
+                    <b className="text-2xl">$ {courseDetails.price} /-</b>
                   </div>
                   {courseDetails.offer ? (
                     <div className="flex items-center justify-between ">
