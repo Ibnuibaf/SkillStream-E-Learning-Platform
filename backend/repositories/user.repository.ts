@@ -87,7 +87,6 @@ class UserRepository {
       )
         .populate("learnings.course")
         .exec();
-      console.log(userLearnings);
 
       return {
         success: true,
@@ -114,7 +113,6 @@ class UserRepository {
         },
         { new: true }
       );
-      console.log(userLearnings);
 
       return {
         success: true,
@@ -234,23 +232,6 @@ class UserRepository {
       return false;
     }
   }
-  // async blockUser(id: string, status: boolean) {
-  //   try {
-  //     const userDetails = await Users.findByIdAndUpdate(id, {
-  //       isBlock: !status,
-  //     });
-  //     return {
-  //       success: true,
-  //       message: "user has been blocked",
-  //       data: userDetails,
-  //     };
-  //   } catch (error) {
-  //     return {
-  //       success: false,
-  //       message: `Failed to block ${error}`,
-  //     };
-  //   }
-  // }
   async updateUserDetails(userId: string, updates: any) {
     try {
       const userDetails = await Users.findByIdAndUpdate(userId, updates, {

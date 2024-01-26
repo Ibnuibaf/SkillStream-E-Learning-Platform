@@ -181,7 +181,7 @@ function InstructorsList() {
                 <div className="flex flex-col w-full">
                   <div className="font-medium text-lg">
                     <p className="text-sm text-start ">Subscribe for </p>
-                    <p className="text-center">&#8377; 130/month</p>
+                    <p className="text-center">$ 130/month</p>
                   </div>
                   <button
                     type="button"

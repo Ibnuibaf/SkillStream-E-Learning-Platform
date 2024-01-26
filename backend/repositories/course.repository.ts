@@ -38,7 +38,6 @@ class CourseRepository {
             .populate("category", "name")
             .populate("reviews.user", "name")
             .sort({ _id: -1 });
-      // console.log(courses);
 
       return {
         success: true,
@@ -58,7 +57,6 @@ class CourseRepository {
         {},
         { title: 1, enrollers: 1, instructor: 1 }
       ).populate("instructor", "name");
-      // console.log(courses);
 
       return {
         success: true,
@@ -78,7 +76,6 @@ class CourseRepository {
         { instructor: id },
         { title: 1, enrollers: 1, instructor: 1 }
       );
-      // console.log(courses);
 
       return {
         success: true,
@@ -95,7 +92,6 @@ class CourseRepository {
   async findCourse(id: string) {
     try {
       const course = await Courses.findById(id);
-      // console.log(course);
 
       return {
         success: true,

@@ -4,6 +4,7 @@ import CourseRepository from "../repositories/course.repository";
 import OrderRepository from "../repositories/order.repository";
 import UserRepository from "../repositories/user.repository";
 import MyJWTPayLoad from "../interfaces/jwt";
+import { ObjectId } from "mongoose";
 
 
 class OrderUsecase {
@@ -66,6 +67,17 @@ class OrderUsecase {
       }
       const userRes = await this.userRepository.updateUserDirect(userId, {
         $addToSet: { learnings: { course: courseId, progress: [] } },
+      });
+      if (!userRes.success) {
+        return {
+          status: 500,
+          data: {
+            success: false,
+            message: "Order not saved",
+          },
+        };
+      }
+      const instructorRes = await this.userRepository.updateUserDirect(response.course.instructor as string, {
         $inc: { "wallet.balance": 0.8 * orderRes.order?.price },
         $push: {
           "wallet.transactions": {
@@ -76,7 +88,7 @@ class OrderUsecase {
           },
         },
       });
-      if (!userRes.success) {
+      if (!instructorRes.success) {
         return {
           status: 500,
           data: {

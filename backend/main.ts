@@ -9,11 +9,9 @@ import communityRoute from "./routes/community.route";
 import personalchatRoute from "./routes/personalchat.route";
 import paymentRoute from "./routes/payment.route";
 
-// import configureSocketIO from './utils/socket.utils';
 import SocketUtils from "./utils/socket.utils";
 import CommunityRepository from "./repositories/community.repository";
 import PersonalchatRepository from "./repositories/personalchat.repository";
-// const app=createServer()
 const { app, server, io } = createServer();
 const communityRepository = new CommunityRepository();
 const personalchatRepository = new PersonalchatRepository();

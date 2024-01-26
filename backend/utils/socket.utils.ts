@@ -16,7 +16,6 @@ class SocketUtils {
   
   configureSocketIO = async (io: Server) => {
     io.on("connection", (socket: Socket) => {
-      // console.log("A user connected");
 
       // Joining a Room
       socket.on("join", async (details) => {
@@ -25,7 +24,6 @@ class SocketUtils {
         );
         if (chatDetails.personalchat) {
           socket.join(`${chatDetails.personalchat?._id}`);
-          console.log(`User joined room ${chatDetails.personalchat?._id} `);
         } else {
           socket.join(`${details}`);
         }
@@ -34,7 +32,6 @@ class SocketUtils {
       // Leaving a Room
       socket.on("leave", (roomId) => {
         socket.leave(roomId);
-        console.log(`User left room ${roomId}`);
       });
 
       // Sending and Receiving Messages
@@ -59,7 +56,6 @@ class SocketUtils {
             data,
             data.roomId
           );
-        console.log(data);
 
         if (result.success) {
           io.to(data.roomId).emit("receive_personal_message", {
@@ -74,7 +70,7 @@ class SocketUtils {
 
       // Disconnect
       socket.on("disconnect", () => {
-        console.log("User disconnected");
+        // console.log("User disconnected");
       });
     });
   };

@@ -50,7 +50,6 @@ function ForgotPass() {
         return;
       }
 
-      localStorage.setItem("otp", res.data.otp);
       toast.success(`OTP send to your email`);
       setTimeout(() => {
         setOtpWait(false);
@@ -78,6 +77,22 @@ function ForgotPass() {
     }
     setUserDetails({ ...userDetails, password: e.target.value });
   };
+  const verifyOTP = async () => {
+    try {
+      await api.post("/user/otp/verify", {
+        email: userDetails.email,
+        otp: OTP,
+      });
+      setOtpVerifed(true);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
+      setOtpVerifed(false);
+    }
+  };
   const submitForm = async (e: React.FormEvent) => {
     try {
       e.preventDefault();
@@ -98,7 +113,7 @@ function ForgotPass() {
       if (userDetails.password != userDetails.confirmPassword) {
         return toast("Password and confirm Password should match ");
       }
-      if (OTP != localStorage.getItem("otp")) {
+      if (!otpVeified) {
         return toast("OTP is incorrect Try Again");
       }
       //   const formData = new FormData();
@@ -126,11 +141,11 @@ function ForgotPass() {
     }
   };
 
-  const verifyOTP = () => {
-    if (OTP == localStorage.getItem("otp")) {
-      setOtpVerifed(true);
-    }
-  };
+  // const verifyOTP = () => {
+  //   if (OTP == localStorage.getItem("otp")) {
+  //     setOtpVerifed(true);
+  //   }
+  // };
 
   useEffect(() => {
     if (token) {
@@ -171,9 +186,10 @@ function ForgotPass() {
                     placeholder="Enter OTP"
                     value={OTP}
                     className=" bg-transparent outline-none"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setOTP(e.target.value)
-                    }
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setOTP(e.target.value);
+                      setOtpVerifed(false);
+                    }}
                   />
                   {otpVeified ? <TiTick color="green" size={22} /> : ""}
                 </div>

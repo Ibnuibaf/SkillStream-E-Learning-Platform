@@ -203,7 +203,6 @@ class CourseUsecase {
   async updateCourse(data: ICourse) {
     try {
       let { _id } = data;
-      console.log(data);
 
       const res = await this.courseRepository.updateCourse(_id as string, data);
       return {

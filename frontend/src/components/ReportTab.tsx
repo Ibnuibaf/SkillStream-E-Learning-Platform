@@ -77,10 +77,10 @@ function ReportTab() {
                       {enroll.userId.name}
                     </td>
                     <td className="px-4 md:px-6 py-4">
-                      &#8377; {enroll.price}/-
+                      $ {enroll.price}/-
                     </td>
                     <td className="px-4 md:px-6 py-4 text-pink-700 font-bold">
-                      &#8377; {Math.floor(0.2 * enroll.price)}/-
+                      $ {Math.floor(0.2 * enroll.price)}/-
                     </td>
                   </tr>
                 ))}

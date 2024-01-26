@@ -1232,43 +1232,43 @@ function InstructorCourse() {
                       --Select Course Price--
                     </option>
                     <option value="199" className="text-black">
-                      &#8377; 199/-
+                      $ 199/-
                     </option>
                     <option value="299" className="text-black">
-                      &#8377; 299/-
+                      $ 299/-
                     </option>
                     <option value="399" className="text-black">
-                      &#8377; 399/-
+                      $ 399/-
                     </option>
                     <option value="459" className="text-black">
-                      &#8377; 459/-
+                      $ 459/-
                     </option>
                     <option value="499" className="text-black">
-                      &#8377; 499/-
+                      $ 499/-
                     </option>
                     <option value="599" className="text-black">
-                      &#8377; 599/-
+                      $ 599/-
                     </option>
                     <option value="639" className="text-black">
-                      &#8377; 639/-
+                      $ 639/-
                     </option>
                     <option value="699" className="text-black">
-                      &#8377; 699/-
+                      $ 699/-
                     </option>
                     <option value="799" className="text-black">
-                      &#8377; 799/-
+                      $ 799/-
                     </option>
                     <option value="809" className="text-black">
-                      &#8377; 809/-
+                      $ 809/-
                     </option>
                     <option value="1549" className="text-black">
-                      &#8377; 1549/-
+                      $ 1549/-
                     </option>
                     <option value="1909" className="text-black">
-                      &#8377; 1909/-
+                      $ 1909/-
                     </option>
                     <option value="2109" className="text-black">
-                      &#8377; 2109/-
+                      $ 2109/-
                     </option>
                   </select>
                 </div>
@@ -1747,7 +1747,7 @@ function InstructorCourse() {
                         </div>
                       </div>
                       <div className="text-purple-600 text-lg font-semibold">
-                        &#8377; {course.price}/- &nbsp;
+                        $ {course.price}/- &nbsp;
                         {course.offer && (
                           <span className="italic text-sm">
                             {course.offer}% off

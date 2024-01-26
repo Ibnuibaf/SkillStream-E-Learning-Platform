@@ -12,16 +12,19 @@ import IUserBody from "../interfaces/userBody";
 import { IncomingHttpHeaders } from "http";
 import { HttpStatus } from "../enums/HttpStatus.enum";
 import { UserRole } from "../enums/UserRole.enum";
+import OtpRepository from "../repositories/otp.repository";
 
 dotenv.config();
 
 class UserUsecase {
   private userRepository: UserRepository;
+  private otpRepository: OtpRepository;
   private decodeToken(token: string): MyJWTPayLoad {
     return jwt.verify(token, "itssecret") as MyJWTPayLoad;
   }
-  constructor(userRepository: UserRepository) {
+  constructor(userRepository: UserRepository, otpRepository: OtpRepository) {
     this.userRepository = userRepository;
+    this.otpRepository = otpRepository;
   }
   async getUsers(query: any) {
     try {
@@ -111,41 +114,7 @@ class UserUsecase {
       };
     }
   }
-  // async googleRegistration() {
-  //   try {
-  //     passport.use(
-  //       new GoogleStrategy(
-  //         {
-  //           clientID: process.env.GOOGLE_CLIENT_ID as string,
-  //           clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-  //           callbackURL: "/api/user/google/callback",
-  //           scope: ["profile", "email"],
-  //         },
-  //         async (
-  //           _accessToken: string,
-  //           _refreshToken: string,
-  //           profile: any,
-  //           done
-  //         ) => {
-  //           const res =await  this.userRepository.findUser(profile.id);
-  //           if(res.data){
-  //             return done(null,res.data)
-  //           }else{
-  //             const newUser= await this.userRepository.createUser({name:profile.displayName,email:profile.email[0].value,})
-  //           }
-  //         }
-  //       )
-  //     );
-  //   } catch (error) {
-  //     return {
-  //       status: HttpStatus.ServerError,
-  //       data: {
-  //         success: false,
-  //         message: "server error",
-  //       },
-  //     };
-  //   }
-  // }
+
   async updateLearningsProgress(token: string, body: any) {
     try {
       const user = this.decodeToken(token);
@@ -275,6 +244,7 @@ class UserUsecase {
           };
         }
         const token = jwt.sign(response.data, "itssecret");
+        await this.otpRepository.deleteOtp(email);
 
         return {
           status: response.success
@@ -338,7 +308,7 @@ class UserUsecase {
           },
         };
       }
-
+      await this.otpRepository.deleteOtp(email);
       return {
         status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {
@@ -373,6 +343,17 @@ class UserUsecase {
         }
       }
       const otp: string = `${Math.floor(1000 + Math.random() * 9000)}`;
+      await this.otpRepository.deleteOtp(email);
+      const response = await this.otpRepository.storeOtp({ email, otp });
+      if (!response.success) {
+        return {
+          status: HttpStatus.ServerError,
+          data: {
+            success: false,
+            message: response.message,
+          },
+        };
+      }
       let transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
@@ -408,6 +389,27 @@ class UserUsecase {
           success: true,
           message: "OTP generated and send",
           otp: otp,
+        },
+      };
+    } catch (error) {
+      return {
+        status: HttpStatus.ServerError,
+        data: {
+          success: false,
+          message: "server error",
+        },
+      };
+    }
+  }
+  async verifyOTP(body: any) {
+    try {
+      const { email, otp } = body;
+      const isValid = await this.otpRepository.checkOtp({ email, otp });
+      return {
+        status: isValid.success ? HttpStatus.Success : HttpStatus.ServerError,
+        data: {
+          success: isValid.success,
+          message: isValid.message,
         },
       };
     } catch (error) {
@@ -485,7 +487,7 @@ class UserUsecase {
             },
           };
         }
-        
+
         if (response.data.isBlock) {
           return {
             status: HttpStatus.NotFound,
@@ -582,29 +584,6 @@ class UserUsecase {
       };
     }
   }
-  // async blockUser(query:any) {
-  //   try {
-  //     let { id,isBlock } = query;
-  //     isBlock=Boolean(isBlock)
-  //     const response = await this.userRepository.blockUser(id,isBlock);
-  //     return {
-  //       status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
-  //       data: {
-  //         success: response.success,
-  //         message: response.message,
-  //         user: response.data,
-  //       },
-  //     };
-  //   } catch (error) {
-  //     return {
-  //       status: HttpStatus.ServerError,
-  //       data: {
-  //         success: false,
-  //         message: "server error",
-  //       },
-  //     };
-  //   }
-  // }
   async updateUserDetails(details: any, token: string) {
     try {
       const user = this.decodeToken(token);
@@ -612,12 +591,11 @@ class UserUsecase {
       if (password) {
         details.password = await bcrypt.hash(password, 10);
       }
-      // console.log(user,details);
       const response = await this.userRepository.updateUserDetails(
         user.id,
         details
       );
-      // console.log(response);
+      details.email && (await this.otpRepository.deleteOtp(details.email));
       return {
         status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {
@@ -638,12 +616,10 @@ class UserUsecase {
   async userWalletWithdraw(details: any) {
     try {
       let { user, amount } = details;
-      // console.log(user,details);
       const response = await this.userRepository.userWalletWithdraw(
         user,
         amount
       );
-      // console.log(response);
       return {
         status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {
@@ -765,16 +741,16 @@ class UserUsecase {
       };
     }
   }
-  async getWishlist(token:string) {
+  async getWishlist(token: string) {
     try {
-      const user=this.decodeToken(token)
+      const user = this.decodeToken(token);
       const response = await this.userRepository.getWishlist(user.id);
       return {
         status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {
           success: response.success,
           message: response.message,
-          wishlist: response.data
+          wishlist: response.data,
         },
       };
     } catch (error) {
@@ -787,11 +763,11 @@ class UserUsecase {
       };
     }
   }
-  async addToWishlist(body: any,token:string) {
+  async addToWishlist(body: any, token: string) {
     try {
       const { course } = body;
-      const user=this.decodeToken(token)
-      const response = await this.userRepository.addToWishlist(user.id,course);
+      const user = this.decodeToken(token);
+      const response = await this.userRepository.addToWishlist(user.id, course);
       return {
         status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {
@@ -809,11 +785,14 @@ class UserUsecase {
       };
     }
   }
-  async removeFromWishlist(body: any,token:string) {
+  async removeFromWishlist(body: any, token: string) {
     try {
       const { course } = body;
-      const user=this.decodeToken(token)
-      const response = await this.userRepository.removeFromWishlist(user.id,course);
+      const user = this.decodeToken(token);
+      const response = await this.userRepository.removeFromWishlist(
+        user.id,
+        course
+      );
       return {
         status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {

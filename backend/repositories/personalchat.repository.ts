@@ -46,17 +46,6 @@ class PersonalchatRepository {
       };
     }
   }
-  //   async getChatHistory(roomId: string) {
-  //     try {
-  //       const response = await PersonalChats.findOne({ course: roomId });
-  //       return response?.chats;
-  //     } catch (error) {
-  //       return {
-  //         success: false,
-  //         message: `Failed to fetch ${error}`,
-  //       };
-  //     }
-  //   }
   async findPersonalchat({
     student,
     instructor,

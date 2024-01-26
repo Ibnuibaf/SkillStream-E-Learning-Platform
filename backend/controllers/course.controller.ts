@@ -9,7 +9,6 @@ class CourseController {
 
   async createCourse(req: Request, res: Response) {
     try {
-      console.log(req.body);
       const response = await this.courseUsecase.createCourse(
         req.body,
         req.headers["authorization"] as string

@@ -212,7 +212,7 @@ function WishlistTab() {
                   </div>
                   <div className="p-1">
                     <p className="text-purple-900 font-semibold text-xl">
-                      &#8377;{course.price}/-
+                      ${course.price}/-
                     </p>
                     <p className="text-sm italic">
                       Off{" "}

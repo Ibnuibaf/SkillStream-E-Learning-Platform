@@ -538,7 +538,7 @@ function AdminCourse() {
                     className="bg-transparent font-semibold border px-4 py-2"
                   >
                     <option value={courseDetails.price}>
-                      &#8377; {courseDetails.price} /-
+                      $ {courseDetails.price} /-
                     </option>
                   </select>
                 </div>
@@ -926,7 +926,7 @@ function AdminCourse() {
                       </div>
                     </div>
                     <div className="text-purple-600 text-lg font-semibold">
-                      &#8377; {course.price}/- &nbsp;
+                      $ {course.price}/- &nbsp;
                       {course.offer && (
                         <span className="italic text-sm">
                           {course.offer}% off

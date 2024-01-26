@@ -118,7 +118,6 @@ class OrderRepository {
           message: `server error`,
         };
       }
-      console.log(monthlyCount);
 
       return {
         success: true,
@@ -201,8 +200,6 @@ class OrderRepository {
           message: `server error`,
         };
       }
-      console.log(monthlyCount);
-      console.log(monthlyRevenue);
 
       return {
         success: true,

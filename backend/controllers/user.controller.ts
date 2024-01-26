@@ -84,6 +84,17 @@ class UserController {
       });
     }
   }
+  async verifyOTP(req: Request, res: Response) {
+    try {
+      const response = await this.userUsecase.verifyOTP(req.body);
+      res.status(response.status).send(response.data);
+    } catch (error) {
+      res.status(500).send({
+        success: false,
+        message: "server error",
+      });
+    }
+  }
   async loginUser(req: Request, res: Response) {
     try {
       const response = await this.userUsecase.loginUser(req.body);
@@ -118,17 +129,6 @@ class UserController {
       });
     }
   }
-  // async blockUser(req: Request, res: Response) {
-  //   try {
-  //     const response = await this.userUsecase.blockUser(req.query);
-  //     res.status(response.status).send(response.data);
-  //   } catch (error) {
-  //     res.status(500).send({
-  //       success: false,
-  //       message: "server error",
-  //     });
-  //   }
-  // }
   async updateUserDetails(req: Request, res: Response) {
     try {
       const response = await this.userUsecase.updateUserDetails(req.body,req.headers["authorization"] as string);

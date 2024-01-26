@@ -13,7 +13,6 @@ import { useGoogleLogin } from "@react-oauth/google";
 // import { getUser } from "../redux/actions/authActions";
 // // import { selectUser, setUser } from "../redux/slices/authSlice";
 
-
 interface IUserDetails {
   name: string;
   email: string;
@@ -59,7 +58,7 @@ function SignupSection() {
       }, 1000);
       const res = await api.post("/user/otp", {
         email: userDetails.email,
-        isRegistration:true
+        isRegistration: true,
       });
       if (!res.data.otp) {
         setCounter(30);
@@ -69,8 +68,6 @@ function SignupSection() {
         return;
       }
 
-      console.log(res.data.otp);
-      localStorage.setItem("otp", res.data.otp);
       toast.success(`OTP send to your email`);
       setTimeout(() => {
         setOtpWait(false);
@@ -98,6 +95,22 @@ function SignupSection() {
     }
     setUserDetails({ ...userDetails, password: e.target.value });
   };
+  const verifyOTP = async () => {
+    try {
+      await api.post("/user/otp/verify", {
+        email: userDetails.email,
+        otp: OTP,
+      });
+      setOtpVerifed(true);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
+      setOtpVerifed(false);
+    }
+  };
   const submitForm = async (e: React.FormEvent) => {
     try {
       e.preventDefault();
@@ -123,7 +136,7 @@ function SignupSection() {
       if (userDetails.password != userDetails.confirmPassword) {
         return toast("Password and confirm Password should match ");
       }
-      if (OTP != localStorage.getItem("otp")) {
+      if (!otpVeified) {
         return toast("OTP is incorrect Try Again");
       }
       //   const formData = new FormData();
@@ -172,11 +185,11 @@ function SignupSection() {
     }
   };
 
-  const verifyOTP = () => {
-    if (OTP == localStorage.getItem("otp")) {
-      setOtpVerifed(true);
-    }
-  };
+  // const verifyOTP = () => {
+  //   if (OTP == localStorage.getItem("otp")) {
+  //     setOtpVerifed(true);
+  //   }
+  // };
   const login = useGoogleLogin({ onSuccess: handleGoogleLoginSuccess });
   useEffect(() => {
     if (token) {
@@ -293,9 +306,10 @@ function SignupSection() {
                     placeholder="Enter OTP"
                     value={OTP}
                     className=" bg-transparent outline-none"
-                    onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                      setOTP(e.target.value)
-                    }
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setOTP(e.target.value);
+                      setOtpVerifed(false);
+                    }}
                   />
                   {otpVeified ? <TiTick color="green" size={22} /> : ""}
                 </div>
@@ -348,7 +362,8 @@ function SignupSection() {
                 onClick={() => login()}
                 className="flex items-center  gap-2 mt-9 bg-gradient-to-tr from-red-500 to-red-600 py-2 px-10 rounded-md"
               >
-                <FaGoogle/>Sign Up with Google
+                <FaGoogle />
+                Sign Up with Google
               </button>
             </div>
           </form>

@@ -4,12 +4,14 @@ import UserUsecase from "../usecases/user.usecase";
 import UserController from "../controllers/user.controller";
 import AuthMiddleware from "../middlewares/auth.middleware";
 import StripePayments from "../utils/stripe.payment";
+import OtpRepository from "../repositories/otp.repository";
 // import passport from "passport";
 
 const Router = express.Router();
 const userRepository = new UserRepository();
+const otpRepository= new OtpRepository()
 const authMiddleware = new AuthMiddleware(userRepository);
-const userUsecase = new UserUsecase(userRepository);
+const userUsecase = new UserUsecase(userRepository,otpRepository);
 const userController = new UserController(userUsecase);
 const stripePayments = new StripePayments(userRepository);
 
@@ -75,6 +77,9 @@ Router.post("/register", (req: Request, res: Response) =>
 
 Router.post("/otp", (req: Request, res: Response) =>
   userController.sendOTP(req, res)
+);
+Router.post("/otp/verify", (req: Request, res: Response) =>
+  userController.verifyOTP(req, res)
 );
 Router.post("/login", (req: Request, res: Response) =>
   userController.loginUser(req, res)

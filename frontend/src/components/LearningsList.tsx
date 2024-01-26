@@ -188,7 +188,7 @@ function LearningsList() {
                 <button
                   className={`px-4 py-1 border-2 hover:bg-white hover:text-black `}
                   onClick={() => setIsTestView(true)}
-                  disabled={learningsDetails?.certificate}
+                  disabled={learningsDetails?.certificate || !(learningsDetails?.course.mcq.length)}
                 >
                   Take Certificate
                 </button>

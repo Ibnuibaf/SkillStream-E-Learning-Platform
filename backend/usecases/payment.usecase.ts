@@ -15,7 +15,6 @@ class PaymentUsecase {
   async getPayments() {
     try {
       const response = await this.paymentRepository.getPayments();
-      // console.log(response);
       return {
         status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {
@@ -38,12 +37,10 @@ class PaymentUsecase {
     try {
       const user = this.decodeToken(token);
       let { amount } = details;
-      // console.log(user,details);
       const response = await this.paymentRepository.createPayment(
         user.id,
         amount
       );
-      // console.log(response);
       return {
         status: response.success ? HttpStatus.Success : HttpStatus.ServerError,
         data: {
@@ -64,7 +61,6 @@ class PaymentUsecase {
   async proceedPayment(details: any) {
     try {
       let { id } = details;
-      // console.log(user,details);
       const response = await this.paymentRepository.proceedPayment(id);
       if (!response.payment) {
         return {

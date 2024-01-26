@@ -38,7 +38,7 @@ function WithdrawTab() {
           <div className="flex bg-gray-300 text-black rounded-lg md:py-2 px-4 lg:pr-12 my-2 items-end w-max gap-6 hover:shadow-md cursor-pointer  hover:shadow-pink-400 transition duration-300 lg:hover:pr-14">
             <p className=" md:text-lg lg:text-xl font-medium">Balance: </p>
             <p className="text-lg md:text-xl lg:text-2xl font-semibold text-violet-600">
-              &#8377; {Math.floor(user?.wallet.balance as number)}/-{" "}
+              $ {Math.floor(user?.wallet.balance as number)}/-{" "}
             </p>
           </div>
         </div>
@@ -46,7 +46,7 @@ function WithdrawTab() {
           <div className="border flex items-center   justify-between">
             <div className="flex items-center w-full px-0.5">
               <p className="text-xl px-2 bg-white text-black rounded">
-                &#8377;
+                $
               </p>
               <input
                 type="text"
@@ -66,7 +66,7 @@ function WithdrawTab() {
             </button>
           </div>
           <p className="text-xs text-violet-300">
-            Minimum withdrawal amount is &#8377;150/-
+            Minimum withdrawal amount is $150/-
           </p>
         </div>
         <div>
@@ -88,7 +88,7 @@ function WithdrawTab() {
                     {transac.type.toUpperCase()}
                   </p>
                   <p className="">
-                    &#8377; {Math.floor(transac.amount as number)}/-
+                    $ {Math.floor(transac.amount as number)}/-
                   </p>
                 </div>
               </div>

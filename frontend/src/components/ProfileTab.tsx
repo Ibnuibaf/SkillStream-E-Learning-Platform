@@ -67,7 +67,6 @@ function ProfileTab() {
         return;
       }
 
-      localStorage.setItem("otp", res.data.otp);
       toast.success(`OTP send to your email`);
       setTimeout(() => {
         setOtpWait(false);
@@ -183,13 +182,29 @@ function ProfileTab() {
     localStorage.removeItem("otp");
     setUserDetails({ ...userDetails, email: e.target.value });
   };
-  const verifyOTP = () => {
-    if (OTP == localStorage.getItem("otp")) {
-      setOtpVerifed(true);
-    }
-    console.log(OTP);
-  };
+  // const verifyOTP = () => {
+  //   if (OTP == localStorage.getItem("otp")) {
+  //     setOtpVerifed(true);
+  //   }
+  //   console.log(OTP);
+  // };
 
+  const verifyOTP = async () => {
+    try {
+      await api.post("/user/otp/verify", {
+        email: userDetails.email,
+        otp: OTP,
+      });
+      setOtpVerifed(true);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error)) {
+        toast(error?.response?.data?.message);
+      } else {
+        toast("An unexpected error occurred");
+      }
+      setOtpVerifed(false);
+    }
+  };
   return (
     <div>
       {user ? (
@@ -268,7 +283,7 @@ function ProfileTab() {
                         <div className="flex items-end">
                           <p>Balance:</p>&nbsp;
                           <p className="font-bold text-violet-500 text-xl">
-                            &#8377; {Math.floor(user.wallet.balance as number)}
+                            $ {Math.floor(user.wallet.balance as number)}
                             /-
                           </p>
                         </div>
@@ -325,9 +340,10 @@ function ProfileTab() {
                                     placeholder="Enter OTP"
                                     value={OTP}
                                     className=" bg-transparent outline-none"
-                                    onChange={(
-                                      e: React.ChangeEvent<HTMLInputElement>
-                                    ) => setOTP(e.target.value)}
+                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                                      setOTP(e.target.value);
+                                      setOtpVerifed(false);
+                                    }}
                                   />
                                   {otpVeified ? (
                                     <TiTick color="green" size={22} />
