@@ -16,6 +16,7 @@ import ReactPlayer from "react-player";
 import { FaRegCirclePlay } from "react-icons/fa6";
 import swal from "sweetalert";
 import { getUser } from "../../redux/actions/authActions";
+import { useLocation, useNavigate } from "react-router-dom";
 
 interface ICoupon {
   code: string;
@@ -63,6 +64,11 @@ interface ICourse {
 function CourseList() {
   const token = localStorage.getItem("SkillStreamToken");
   const dispatch: AppDispatch = useDispatch();
+  const navigate=useNavigate()
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const id = searchParams.get('id');
+  const cat = searchParams.get('cat');
   const categories = useSelector(selectCategories).categories;
   const user = useSelector(selectUser).user;
   let courses = useSelector(selectcourses).courses;
@@ -223,6 +229,20 @@ function CourseList() {
   useEffect(() => {
     dispatch(getCategories(""));
     dispatch(getCourses({ search: "", isInstructor: false }));
+    if (id) {
+      const selected = courses.find((course) => course._id == id);
+      if (selected) {
+        setSelectedCourse(id);
+        setCourseDetails(selected);
+      }
+    }
+    if(cat){
+      const selected = categories.find((categ) => categ._id == cat);
+      if (selected) {
+        setSelectedCategory({ id: selected._id, name: selected.name });
+      }
+
+    }
   }, [dispatch]);
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -230,9 +250,6 @@ function CourseList() {
       (course) => course.category == selectedCategory.id
     );
   }, [selectCategories]);
-  useEffect(() => {
-    console.log(review);
-  }, [review]);
   return (
     <div>
       <div className=" flex  bordre-2 bg-slate-900 justify-between text-md overflow-x-auto font-medium">
@@ -262,7 +279,7 @@ function CourseList() {
           <div className="text-start mt-3 mx-6">
             <button
               className="border rounded-md px-6 py-1 hover:bg-slate-500 transition duration-300"
-              onClick={() => setSelectedCourse("")}
+              onClick={() => {setSelectedCourse("");navigate("/courses");}}
             >
               Back
             </button>
@@ -522,7 +539,9 @@ function CourseList() {
                           )}
                         </div>
                       </div>
-                      <p className="text-gray-300 text-xs md:text-sm lg:text-md">{review.feedback}</p>
+                      <p className="text-gray-300 text-xs md:text-sm lg:text-md">
+                        {review.feedback}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -842,7 +861,6 @@ function CourseList() {
                     ""
                   )
                 )}
-                
           </div>
         </div>
       )}

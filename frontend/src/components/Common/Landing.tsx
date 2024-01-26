@@ -107,7 +107,7 @@ function Landing() {
               <div
                 className="text-start rounded-3xl bg-white text-black hover:cursor-pointer h-96 flex flex-col justify-between"
                 onClick={() => {
-                  navigate("/courses");
+                  navigate(`/courses?id=${course._id}`);
                 }}
               >
                 <div className="h-2/4  rounded-t-3xl">
@@ -248,7 +248,7 @@ function Landing() {
           {categoriesList.map((cat) => (
             <div
               className={`border rounded p-4 h-max min-w-[13rem] flex  justify-between items-center gap-1 cursor-pointer`}
-              onClick={() => navigate("/courses")}
+              onClick={() => navigate(`/courses?cat=${cat._id}`)}
             >
               <div className="h-12 w-12">
                 <img src="/graphics-1.png" alt="" className="h-full w-full" />
