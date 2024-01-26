@@ -1,10 +1,10 @@
 // import React from 'react'
 import { useNavigate } from "react-router-dom";
-import BasicHeader from "../components/BasicHeader";
+import BasicHeader from "../components/Headers/BasicHeader";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
-import ProfileTab from "../components/ProfileTab";
-import Footer from "../components/Footer";
+import ProfileTab from "../components/Profile/ProfileTab";
+import Footer from "../components/Footer/Footer";
 
 function ProfilePage() {
   const token = localStorage.getItem("SkillStreamToken");

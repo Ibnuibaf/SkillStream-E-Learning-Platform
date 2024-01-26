@@ -1,7 +1,7 @@
 // import React from 'react'
-import BasicHeader from "../components/BasicHeader";
-import Footer from "../components/Footer";
-import SignupSection from "../components/SignupSection";
+import BasicHeader from "../components/Headers/BasicHeader";
+import Footer from "../components/Footer/Footer";
+import SignupSection from "../components/Auth/SignupSection";
 
 function SignupPage() {
   return (

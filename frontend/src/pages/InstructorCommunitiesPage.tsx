@@ -1,6 +1,6 @@
-import InstructorSideBar from "../components/InstructorSideBar";
-import InstructorCommunityList from "../components/InstructorCommunityList";
-import Footer from "../components/Footer";
+import InstructorSideBar from "../components/Sidebar/InstructorSideBar";
+import InstructorCommunityList from "../components/Chat&Community/InstructorCommunityList";
+import Footer from "../components/Footer/Footer";
 
 function InstructorCommunitiesPage() {
 

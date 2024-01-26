@@ -1,7 +1,7 @@
 // import React from 'react'
-import AdminSideBar from "../components/AdminSideBar";
-import AdminCourse from "../components/AdminCourse";
-import Footer from "../components/Footer";
+import AdminSideBar from "../components/Sidebar/AdminSideBar";
+import AdminCourse from "../components/Lists/AdminCourse";
+import Footer from "../components/Footer/Footer";
 
 function AdminCoursePage() {
   return (

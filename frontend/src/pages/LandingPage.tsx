@@ -1,7 +1,7 @@
 // import React from 'react'
-import BasicHeader from "../components/BasicHeader";
-import Footer from "../components/Footer";
-import Landing from "../components/Landing";
+import BasicHeader from "../components/Headers/BasicHeader";
+import Footer from "../components/Footer/Footer";
+import Landing from "../components/Common/Landing";
 
 function LandingPage() {
   return (

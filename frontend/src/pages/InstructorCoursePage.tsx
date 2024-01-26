@@ -1,6 +1,6 @@
-import Footer from "../components/Footer";
-import InstructorCourse from "../components/InstructorCourse";
-import InstructorSideBar from "../components/InstructorSideBar";
+import Footer from "../components/Footer/Footer";
+import InstructorCourse from "../components/Lists/InstructorCourse";
+import InstructorSideBar from "../components/Sidebar/InstructorSideBar";
 
 function InstructorCoursePage() {
   return (

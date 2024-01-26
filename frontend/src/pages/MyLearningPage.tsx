@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import BasicHeader from "../components/BasicHeader";
+import BasicHeader from "../components/Headers/BasicHeader";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import LearningsList from "../components/LearningsList";
-import Footer from "../components/Footer";
+import LearningsList from "../components/Lists/LearningsList";
+import Footer from "../components/Footer/Footer";
 
 function MyLearningPage() {
   const token = localStorage.getItem("SkillStreamToken");

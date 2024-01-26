@@ -1,7 +1,7 @@
 import  { useEffect } from "react";
-import WithdrawTab from "../components/WithdrawTab";
-import Footer from "../components/Footer";
-import BasicHeader from "../components/BasicHeader";
+import WithdrawTab from "../components/Profile/WithdrawTab";
+import Footer from "../components/Footer/Footer";
+import BasicHeader from "../components/Headers/BasicHeader";
 import { useSelector } from "react-redux";
 import { selectUser } from "../redux/slices/authSlice";
 import { useNavigate } from "react-router-dom";

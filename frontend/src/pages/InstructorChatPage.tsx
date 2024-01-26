@@ -1,5 +1,5 @@
 import  { useEffect } from "react";
-import ChatWithStudent from "../components/ChatWithStudent";
+import ChatWithStudent from "../components/Chat&Community/ChatWithStudent";
 import { useNavigate } from "react-router-dom";
 
 function InstructorChatPage() {

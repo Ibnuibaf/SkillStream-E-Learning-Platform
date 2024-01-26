@@ -1,7 +1,7 @@
 // import React from 'react'
-import AdminSideBar from '../components/AdminSideBar'
-import Footer from '../components/Footer'
-import ReportTab from '../components/ReportTab'
+import AdminSideBar from '../components/Sidebar/AdminSideBar'
+import Footer from '../components/Footer/Footer'
+import ReportTab from '../components/Tables/ReportTab'
 
 function AdminReportsPage() {
   return (

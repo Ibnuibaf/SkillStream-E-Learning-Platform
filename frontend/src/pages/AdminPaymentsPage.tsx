@@ -1,7 +1,7 @@
 // import React from "react";
-import AdminPaymentTab from "../components/AdminPaymentTab";
-import Footer from "../components/Footer";
-import AdminSideBar from "../components/AdminSideBar";
+import AdminPaymentTab from "../components/Tables/AdminPaymentTab";
+import Footer from "../components/Footer/Footer";
+import AdminSideBar from "../components/Sidebar/AdminSideBar";
 
 function AdminPaymentsPage() {
   return (

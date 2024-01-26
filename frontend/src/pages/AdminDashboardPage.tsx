@@ -1,7 +1,7 @@
 // import React from 'react'
-import AdminDashboard from "../components/AdminDashboard";
-import AdminSideBar from "../components/AdminSideBar";
-import Footer from "../components/Footer";
+import AdminDashboard from "../components/Dashboard/AdminDashboard";
+import AdminSideBar from "../components/Sidebar/AdminSideBar";
+import Footer from "../components/Footer/Footer";
 
 function AdminDashboardPage() {
   return (

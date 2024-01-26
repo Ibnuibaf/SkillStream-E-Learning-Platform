@@ -1,7 +1,7 @@
 // import React from "react";
-import StudentsTable from "../components/StudentsTable";
-import AdminSideBar from "../components/AdminSideBar";
-import Footer from "../components/Footer";
+import StudentsTable from "../components/Tables/StudentsTable";
+import AdminSideBar from "../components/Sidebar/AdminSideBar";
+import Footer from "../components/Footer/Footer";
 
 function AdminStudentPage() {
   return (

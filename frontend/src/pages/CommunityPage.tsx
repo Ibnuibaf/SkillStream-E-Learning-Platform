@@ -1,8 +1,8 @@
 // import React from 'react'
 import { useEffect } from "react";
-import CommunityChat from "../components/CommunityChat";
+import CommunityChat from "../components/Chat&Community/CommunityChat";
 import { useNavigate } from "react-router-dom";
-import BasicHeader from "../components/BasicHeader";
+import BasicHeader from "../components/Headers/BasicHeader";
 
 function CommunityPage() {
   const token = localStorage.getItem("SkillStreamToken");

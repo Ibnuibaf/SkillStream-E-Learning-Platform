@@ -1,7 +1,7 @@
 // import React from 'react'
-import InsturctorsTable from '../components/InsturctorsTable'
-import AdminSideBar from '../components/AdminSideBar'
-import Footer from '../components/Footer'
+import InsturctorsTable from '../components/Tables/InsturctorsTable'
+import AdminSideBar from '../components/Sidebar/AdminSideBar'
+import Footer from '../components/Footer/Footer'
 
 function AdminInstructorPage() {
   return (

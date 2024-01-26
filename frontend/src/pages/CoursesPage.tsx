@@ -1,7 +1,7 @@
 // import React from 'react'
-import BasicHeader from "../components/BasicHeader";
-import CourseList from "../components/CourseList";
-import Footer from "../components/Footer";
+import BasicHeader from "../components/Headers/BasicHeader";
+import CourseList from "../components/Lists/CourseList";
+import Footer from "../components/Footer/Footer";
 
 function CoursesPage() {
   return (

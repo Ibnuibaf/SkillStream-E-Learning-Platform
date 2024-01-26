@@ -1,7 +1,7 @@
 
-import Footer from '../components/Footer';
-import InstructorSideBar from '../components/InstructorSideBar'
-import StudentsList from '../components/StudentsList'
+import Footer from '../components/Footer/Footer';
+import InstructorSideBar from '../components/Sidebar/InstructorSideBar'
+import StudentsList from '../components/Chat&Community/StudentsList'
 
 function InstructorStudentsList() {
     

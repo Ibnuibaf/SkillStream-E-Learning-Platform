@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import BasicHeader from "../components/BasicHeader";
-import Footer from "../components/Footer";
-import WishlistTab from "../components/WishlistTab";
+import BasicHeader from "../components/Headers/BasicHeader";
+import Footer from "../components/Footer/Footer";
+import WishlistTab from "../components/Lists/WishlistTab";
 
 function WishlistPage() {
   const token = localStorage.getItem("SkillStreamToken");

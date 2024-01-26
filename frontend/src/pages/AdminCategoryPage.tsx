@@ -1,6 +1,6 @@
-import AdminSideBar from "../components/AdminSideBar";
-import CategoriesTab from "../components/CategoriesTab";
-import Footer from "../components/Footer";
+import AdminSideBar from "../components/Sidebar/AdminSideBar";
+import CategoriesTab from "../components/Lists/CategoriesTab";
+import Footer from "../components/Footer/Footer";
 
 function AdminCategoryPage() {
   return (

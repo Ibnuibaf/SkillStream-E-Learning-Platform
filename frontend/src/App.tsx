@@ -32,7 +32,7 @@ const WithdrawalPage = lazy(() => import('./pages/WithdrawalPage'));
 const AdminPaymentsPage = lazy(() => import('./pages/AdminPaymentsPage'));
 const AdminReportsPage = lazy(() => import('./pages/AdminReportsPage'));
 const SubscribeConfirmPage = lazy(() => import('./pages/SubscribeConfirmPage'));
-import Spinner from "./components/Spinner";
+import Spinner from "./components/Common/Spinner";
 import WishlistPage from "./pages/WishlistPage";
 
 function App() {

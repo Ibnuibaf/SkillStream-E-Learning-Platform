@@ -1,7 +1,7 @@
 import  { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom';
-import BasicHeader from '../components/BasicHeader';
-import ChatWithInstructor from '../components/ChatWithInstructor';
+import BasicHeader from '../components/Headers/BasicHeader';
+import ChatWithInstructor from '../components/Chat&Community/ChatWithInstructor';
 
 function PeronalChatPage() {
     const token = localStorage.getItem("SkillStreamToken");
