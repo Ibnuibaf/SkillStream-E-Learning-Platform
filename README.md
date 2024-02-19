@@ -28,6 +28,7 @@ SkillStream is an innovative E-Learning web application designed to provide a co
 - Node.js: JavaScript runtime environment.
 - React: JavaScript library for building user interfaces.
 - Redux: State management library for React applications.
+- Tailwind CSS: Utility-first CSS framework for building custom designs.
 - JWT (JSON Web Tokens): Authentication mechanism.
 - TypeScript: Superset of JavaScript with static typing.
 - Clean Architecture: Design principle for scalable and maintainable applications.
