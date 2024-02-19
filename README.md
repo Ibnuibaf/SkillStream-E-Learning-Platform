@@ -35,6 +35,12 @@ SkillStream is an innovative E-Learning web application designed to provide a co
 - Google Auth: Authentication service provided by Google.
 - Socket.IO: Real-time communication library.
 - Stripe: Payment gateway for processing transactions.
+- Nodemailer: Node.js module for sending emails, used for OTPs and order notifications.
+- Chart.js: JavaScript library for creating charts and graphs.
+- Axios: Promise-based HTTP client for making requests from the browser and Node.js.
+- Restful API: Architectural style for designing networked applications.
+- NGINX: Web server software for reverse proxying, load balancing, and more.
+- AWS: Cloud computing services for hosting and more.
 
 ## Usage
 To get started with SkillStream:
